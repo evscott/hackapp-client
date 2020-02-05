@@ -1,0 +1,20 @@
+# Mac file with attributes of a folder
+.DS_STORE
+
+# Dependencies
+node_modules/
+
+# Compiled code
+build/
+
+# Distribution directory
+dist/
+
+# Logs
+*.log*
+
+# Intellij files
+.idea
+
+# Environment variables
+.env
