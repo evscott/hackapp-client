@@ -5,7 +5,9 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import RightButtonBar from "../buttons/RightButtonBar";
+import SetupAdminForm from "./SetupAdminForm";
 import { makeStyles } from "@material-ui/core/styles";
+import SetupOrgForm from "./SetupOrgForm";
 
 const REGISTER_ADMIN_PAGE = 0;
 const SET_ORGANIZATION = 1;
@@ -31,7 +33,7 @@ const useStyles = makeStyles(theme => {
       justifyContent: "center"
     },
     animatable: {
-      position: "fixed",
+
       margin: 0,
       padding: 0
     },
@@ -49,7 +51,8 @@ const useStyles = makeStyles(theme => {
     slide: {
       margin: 0,
       padding: 0,
-      width: "100%"
+      width: "100%",
+        position: "fixed"
     }
   };
 });
@@ -85,71 +88,25 @@ export default function SetupPage() {
         </Typography>
       </Container>
       <Container className={classes.animatingBox}>
-        <Container maxWidth={"xs"} className={classes.animatable}>
-          <Slide
-            in={currPage === REGISTER_ADMIN_PAGE}
-            direction={currPage === REGISTER_ADMIN_PAGE ? "left" : "right"}
-            className={classes.slide}
-          >
-            <form className={classes.form} noValidate>
-              <TextField
-                variant={"outlined"}
-                required
-                fullWidth
-                id={"email"}
-                label={"Email Address"}
-                name={"email"}
-                margin={"normal"}
-              />
-              <TextField
-                variant={"outlined"}
-                required
-                fullWidth
-                id={"password"}
-                label={"Password"}
-                name={"password"}
-                margin={"normal"}
-              />
-              <RightButtonBar>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleCreateAdmin}
-                >
-                  Create Admin
-                </Button>
-              </RightButtonBar>
-            </form>
-          </Slide>
-        </Container>
-        <Container maxWidth={"xs"} className={classes.animatable}>
-          <Slide
-            in={currPage === SET_ORGANIZATION}
-            direction={currPage === SET_ORGANIZATION ? "left" : "right"}
-            className={classes.slide}
-          >
-            <form className={classes.form} noValidate>
-              <TextField
-                variant={"outlined"}
-                required
-                fullWidth
-                id={"org-name"}
-                label={"Organization Name"}
-                name={"org-name"}
-                margin={"normal"}
-              />
-              <RightButtonBar>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleCreateOrg}
-                >
-                  Create Organization
-                </Button>
-              </RightButtonBar>
-            </form>
-          </Slide>
-        </Container>
+        <Slide
+          in={currPage === REGISTER_ADMIN_PAGE}
+          direction={currPage === REGISTER_ADMIN_PAGE ? "left" : "right"}
+          className={classes.slide}
+        >
+          <Container maxWidth={"xs"}>
+            <SetupAdminForm handleCreateAdmin={handleCreateAdmin} />
+          </Container>
+        </Slide>
+
+        <Slide
+          in={currPage === SET_ORGANIZATION}
+          direction={currPage === SET_ORGANIZATION ? "left" : "right"}
+          className={classes.slide}
+        >
+          <Container maxWidth={"xs"}>
+            <SetupOrgForm handleCreateOrg={handleCreateOrg} />
+          </Container>
+        </Slide>
       </Container>
     </Container>
   );
