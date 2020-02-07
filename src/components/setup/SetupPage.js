@@ -17,16 +17,14 @@ const SET_ORGANIZATION = 1;
  */
 const useStyles = makeStyles(theme => {
   return {
-    form: {
-      width: "100%",
-      marginTop: theme.spacing(1)
-    },
     main: {
-      padding: "0"
+      padding: "0",
+      maxWidth: "none"
     },
     megaHeader: {
       paddingTop: "150px",
       paddingBottom: "20px",
+      maxWidth: "none",
       backgroundColor: theme.palette.primary.main,
       color: "#FFF"
     },
