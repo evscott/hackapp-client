@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import RightButtonBar from "../buttons/RightButtonBar";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
 /**
@@ -54,6 +54,6 @@ export default function SetupOrgForm(props) {
 }
 
 SetupOrgForm.propTypes = {
-    // Function for what to do when creating the organization
-    handleCreateOrg: PropTypes.func.isRequired,
+  // Function for what to do when creating the organization
+  handleCreateOrg: PropTypes.func.isRequired
 };
