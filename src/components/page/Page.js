@@ -4,7 +4,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "./Drawer";
-import { drawerWidth } from "./Drawer";
+import { largeDrawerWidth } from "./Drawer";
 import PropTypes from "prop-types";
 import DrawerList from "./DrawerList";
 
@@ -17,10 +17,15 @@ const useStyles = makeStyles(theme => {
     },
     content: {
       marginTop: 75,
+      maxWidth: 700,
       [theme.breakpoints.up("md")]: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth
+        width: `calc(100% - ${largeDrawerWidth}px)`,
+        marginLeft: `calc(${largeDrawerWidth}px + ((50% - ${0.5 * largeDrawerWidth}px) - 350px))`
       }
+    },
+    title: {
+      paddingTop: 50,
+      marginBottom: 25
     }
   };
 });
@@ -50,6 +55,13 @@ export default function Page(props) {
         />
       </Drawer>
       <Container className={classes.content}>
+        <Typography
+          variant="h2"
+          component="h1"
+          className={classes.title}
+        >
+          {props.title}
+        </Typography>
         {props.children}
       </Container>
     </div>

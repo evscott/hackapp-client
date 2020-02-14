@@ -8,7 +8,8 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => {
   return {
     root: {
-      width: "100%"
+      width: `calc(100% - 20px)`,
+      margin: 10
     }
   };
 });
@@ -20,6 +21,9 @@ export default function HackathonCard(props) {
       <CardContent>
         <Typography variant="h5" component="h2">
           Hackathon Name
+        </Typography>
+        <Typography variant="p" component="p">
+          This is a hackathon! Wow!
         </Typography>
       </CardContent>
     </Card>

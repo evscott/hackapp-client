@@ -5,11 +5,15 @@ import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 
 export const drawerWidth = 240;
+export const largeDrawerWidth = 320;
 
 const useStyles = makeStyles(theme => {
   return {
     drawerPaper: {
-      width: drawerWidth
+      width: drawerWidth,
+      [theme.breakpoints.up("md")]: {
+        width: largeDrawerWidth
+      }
     }
   };
 });
