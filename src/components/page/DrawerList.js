@@ -6,14 +6,20 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
 const useStyles = makeStyles(theme => {
   return {
     spacer: theme.mixins.toolbar,
     header: {
-      height: 150,
-      backgroundColor: theme.palette.primary.light
+      height: 200,
+      backgroundColor: theme.palette.primary.light,
+      color: "white",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "flex-end",
+      padding: 20
     }
   };
 });
@@ -23,7 +29,9 @@ export default function DrawerList(props) {
   return (
     <div>
       <div className={classes.spacer} />
-      <div className={classes.header} />
+      <div className={classes.header}>
+        {props.header}
+      </div>
       <List>
         {props.primaryButtons.map(button => (
           <ListItem button key={button.text}>
@@ -46,6 +54,7 @@ export default function DrawerList(props) {
 }
 
 DrawerList.propTypes = {
+  header: PropTypes.any,
   primaryButtons: PropTypes.array,
   secondaryButtons: PropTypes.array
 };

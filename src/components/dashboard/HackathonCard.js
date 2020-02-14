@@ -13,8 +13,8 @@ import { largeDrawerWidth } from "../page/Drawer";
 const useStyles = makeStyles(theme => {
   return {
     root: {
-      width: `calc(100% - 20px)`,
-      margin: 10
+      width: "100%",
+      margin: "20px 0"
     },
     media: {
       height: 200

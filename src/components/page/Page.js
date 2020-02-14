@@ -24,8 +24,7 @@ const useStyles = makeStyles(theme => {
       }
     },
     title: {
-      paddingTop: 50,
-      marginBottom: 25
+      paddingTop: 50
     }
   };
 });
@@ -50,6 +49,7 @@ export default function Page(props) {
         setIsOpen={toggleMenu}
       >
         <DrawerList
+          header={props.drawerHeader}
           primaryButtons={props.drawerPrimary}
           secondaryButtons={props.drawerSecondary}
         />
@@ -69,6 +69,7 @@ export default function Page(props) {
 }
 
 Drawer.propTypes = {
+  drawerHeader: PropTypes.any,
   drawerPrimary: PropTypes.array,
   drawerSecondary: PropTypes.array,
   title: PropTypes.string
