@@ -7,6 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 import UserPopover from "./UserPopover";
 
@@ -85,8 +86,8 @@ export default function AppBarComponent(props) {
    * Opens/closes the popover
    * @param event The event triggering the toggle with an anchor to use.
    */
-  const togglePopover = (event) => {
-    if(popoverAnchor === null) {
+  const togglePopover = event => {
+    if (popoverAnchor === null) {
       setPopoverAnchor(event.currentTarget);
     } else {
       setPopoverAnchor(null);
@@ -126,13 +127,15 @@ export default function AppBarComponent(props) {
             </Fade>
           </div>
           <div className={classes.appBarRight}>
-            <IconButton
-              color="inherit"
-              aria-label="account of the current user"
-              onClick={togglePopover}
-            >
-              <AccountCircle />
-            </IconButton>
+            <Tooltip title="User Information" arrow>
+              <IconButton
+                color="inherit"
+                aria-label="account of the current user"
+                onClick={togglePopover}
+              >
+                <AccountCircle />
+              </IconButton>
+            </Tooltip>
             <UserPopover
               anchor={popoverAnchor}
               closePopover={closePopover}

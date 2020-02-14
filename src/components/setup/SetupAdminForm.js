@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import RightButtonBar from "../buttons/RightButtonBar";
@@ -59,6 +59,6 @@ export default function SetupAdminForm(props) {
 }
 
 SetupAdminForm.propTypes = {
-    // Function for what to do when want to create an admin
-    handleCreateAdmin: PropTypes.func.isRequired
+  // Function for what to do when want to create an admin
+  handleCreateAdmin: PropTypes.func.isRequired
 };

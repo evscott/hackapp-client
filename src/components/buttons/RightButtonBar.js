@@ -25,8 +25,6 @@ const useStyles = makeStyles(() => {
 export default function RightButtonBar(props) {
   const classes = useStyles();
   return (
-    <Container className={classes.rightButtonBox}>
-      {props.children}
-    </Container>
+    <Container className={classes.rightButtonBox}>{props.children}</Container>
   );
-};
+}

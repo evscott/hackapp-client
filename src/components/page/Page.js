@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => {
       maxWidth: 650,
       [theme.breakpoints.up("md")]: {
         width: `calc(100% - ${largeDrawerWidth}px)`,
-        marginLeft: `calc(${largeDrawerWidth}px + ((50% - ${0.5 * largeDrawerWidth}px) - 325px))`
+        marginLeft: `calc(${largeDrawerWidth}px + ((50% - ${0.5 *
+          largeDrawerWidth}px) - 325px))`
       }
     },
     title: {
@@ -68,11 +69,7 @@ export default function Page(props) {
         />
       </Drawer>
       <Container className={classes.content}>
-        <Typography
-          variant="h2"
-          component="h1"
-          className={classes.title}
-        >
+        <Typography variant="h2" component="h1" className={classes.title}>
           {props.title}
         </Typography>
         {props.children}
