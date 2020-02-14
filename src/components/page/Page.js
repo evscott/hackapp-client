@@ -8,6 +8,9 @@ import { largeDrawerWidth } from "./Drawer";
 import PropTypes from "prop-types";
 import DrawerList from "./DrawerList";
 
+/**
+ * The styles for a page in the UI.
+ */
 const useStyles = makeStyles(theme => {
   return {
     appBarContainer: {
@@ -29,24 +32,34 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * A default template for a page in the application. It features a toolbar, a drawer,
+ * and content that adapt to different screen sizes. Content gets injected using props.
+ * @param props Contains drawerHeader, drawerPrimary, drawerSecondary, title, and
+ * children.
+ */
 export default function Page(props) {
   const classes = useStyles();
 
+  // Keep track of whether the drawer is open (mobile only)
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-  const toggleMenu = () => {
+  /**
+   * Toggles whether the drawer is open or not.
+   */
+  const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
 
   return (
     <div>
       <Container className={classes.appBarContainer}>
-        <AppBar title={props.title} onClickMenu={toggleMenu} />
+        <AppBar title={props.title} onClickMenu={toggleDrawer} />
       </Container>
       <Drawer
         className={classes.drawer}
         isOpen={drawerOpen}
-        setIsOpen={toggleMenu}
+        setIsOpen={toggleDrawer}
       >
         <DrawerList
           header={props.drawerHeader}
@@ -69,8 +82,15 @@ export default function Page(props) {
 }
 
 Drawer.propTypes = {
+  // A page must have some content
+  children: PropTypes.any.isRequired,
+  // The header components in the drawer
   drawerHeader: PropTypes.any,
+  // A list of all primary (important) buttons.
+  // Each button has the format {button: string,icon: component}
   drawerPrimary: PropTypes.array,
+  // A list of all the secondary (less important) buttons.
   drawerSecondary: PropTypes.array,
+  // The title of the page.
   title: PropTypes.string
 };

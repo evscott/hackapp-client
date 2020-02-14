@@ -8,8 +8,12 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import { makeStyles } from "@material-ui/core/styles";
 
 import hackathonImg from "../../img/hackathon-default.jpg";
-import { largeDrawerWidth } from "../page/Drawer";
 
+/**
+ * The styles for the hackathon information card.
+ * There are a lot of them because it needs to adapt for
+ * different screen sizes (mobile <=> desktop).
+ */
 const useStyles = makeStyles(theme => {
   return {
     root: {
@@ -67,6 +71,11 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * The hackathon information card component which shows information about
+ * a hackathon.
+ * @param props Has a startDate, endDate, and title for the hackathon.
+ */
 export default function HackathonCard(props) {
   const classes = useStyles();
   return (
@@ -106,7 +115,11 @@ export default function HackathonCard(props) {
 }
 
 HackathonCard.propTypes = {
+  // A string representing when the hackathon starts.
+  // Format: "6:00PM Feb 8"
   startDate: PropTypes.string.isRequired,
+  // String representing when the hackathon ends.
   endDate: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  // The title for the hackathon
+  title: PropTypes.string.isRequired
 };

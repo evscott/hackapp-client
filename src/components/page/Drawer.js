@@ -4,9 +4,16 @@ import Hidden from "@material-ui/core/Hidden";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 
+// The width of the drawer on mobile
 export const drawerWidth = 240;
+// The width of the drawer for desktop
 export const largeDrawerWidth = 320;
 
+/**
+ * The styles for a drawer menu on the left side of the screen.
+ * Adapts to different screen sizes, and stays behind the app bar.
+ * Enlarges when the screen size is big enough.
+ */
 const useStyles = makeStyles(theme => {
   return {
     drawerPaper: {
@@ -18,6 +25,11 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * The drawer menu on the left side of the screen. The items contained in it should
+ * be passed as children, typically a DrawerList.
+ * @param props Contains children, isOpen, setIsOpen.
+ */
 export default function DrawerMenu(props) {
   const classes = useStyles();
   return (
@@ -57,6 +69,11 @@ export default function DrawerMenu(props) {
 }
 
 DrawerMenu.propTypes = {
+  // Must have content in the drawer
+  children: PropTypes.any.isRequired,
+  // Whether the drawer is open or not. This is controlled within a Page component
+  // so that a menu button can toggle it.
   isOpen: PropTypes.bool.isRequired,
+  // The setter method to open/close the drawer.
   setIsOpen: PropTypes.func.isRequired
 };

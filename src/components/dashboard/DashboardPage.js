@@ -7,6 +7,11 @@ import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import HackathonCard from "./HackathonCard";
 
+/**
+ * Temporary list of past hackathons.
+ * @TODO: Connect this to the information store
+ * @type {*[]}
+ */
 const pastHackathons = [
   {
     title: "MtA Hacks 2018",
@@ -20,6 +25,11 @@ const pastHackathons = [
   }
 ];
 
+/**
+ * Temporary list of upcoming hackathons.
+ * @TODO: Connect this to the information store
+ * @type {*[]}
+ */
 const upcomingHackathons = [
   {
     title: "MtA Hacks 2020",
@@ -38,6 +48,9 @@ const upcomingHackathons = [
   }
 ];
 
+/**
+ * The styles for the React component.
+ */
 const useStyles = makeStyles(theme => {
   return {
     fab: {
@@ -46,7 +59,12 @@ const useStyles = makeStyles(theme => {
       bottom: 20
     },
     drawerHeaderText: {
-      textAlign: "center"
+      textAlign: "left",
+      marginBottom: 10
+    },
+    drawerSmallTest: {
+      textAlign: "left",
+      marginLeft: 10
     },
     subheader: {
       margin: "40px 0px 10px 0px",
@@ -55,6 +73,10 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * The primary settings for the page drawer.
+ * @type {{icon: *, text: string}[]}
+ */
 const drawerPrimary = [
   {
     icon: <SettingsIcon />,
@@ -62,20 +84,50 @@ const drawerPrimary = [
   }
 ];
 
+/**
+ * The secondary settings for the page drawer.
+ * @type {Array}
+ */
 const drawerSecondary = [];
 
+/**
+ * The first page a hackathon manager sees upon logging in. It features
+ * a list of all hackathons being managed and standard navigation items.
+ * @returns {*} The page for the dashboard.
+ */
 export default function DashboardPage() {
   const classes = useStyles();
 
+  // Creates the drawer header content which is injected into the page
+  // based on the hackathon statistics.
   const drawerHeader = (
     <div>
-      <Typography className={classes.drawerHeaderText} variant="h5" component="p">
+      <Typography
+        className={classes.drawerHeaderText}
+        variant="h4"
+        component="p"
+      >
+        Hacker Stats
+      </Typography>
+      <Typography
+        className={classes.drawerSmallTest}
+        variant="body1"
+        component="p"
+      >
         <b>{upcomingHackathons.length}</b> upcoming
       </Typography>
-      <Typography className={classes.drawerHeaderText} variant="h5" component="p">
+      <Typography
+        className={classes.drawerSmallTest}
+        variant="body1"
+        component="p"
+      >
         <b>{pastHackathons.length}</b> done
       </Typography>
-      <Typography className={classes.drawerHeaderText} variant="h5" component="p">
+      <Typography
+        className={classes.drawerSmallTest}
+        variant="body1"
+        component="p"
+      >
         <b>Infinite</b> potential
       </Typography>
     </div>
@@ -101,7 +153,7 @@ export default function DashboardPage() {
         <HackathonCard {...hackathon} />
       ))}
       <Fab className={classes.fab} color="primary">
-        <AddIcon/>
+        <AddIcon />
       </Fab>
     </Page>
   );

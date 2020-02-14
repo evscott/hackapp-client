@@ -6,9 +6,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
 
+/**
+ * The styles for the list of items in the drawer.
+ */
 const useStyles = makeStyles(theme => {
   return {
     spacer: theme.mixins.toolbar,
@@ -24,14 +25,17 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * A component which can be injected into a drawer that has two sections of list items
+ * and one header.
+ * @param props A header, a list of primaryButtons, and a list of secondaryButtons.
+ */
 export default function DrawerList(props) {
   const classes = useStyles();
   return (
     <div>
       <div className={classes.spacer} />
-      <div className={classes.header}>
-        {props.header}
-      </div>
+      <div className={classes.header}>{props.header}</div>
       <List>
         {props.primaryButtons.map(button => (
           <ListItem button key={button.text}>
@@ -54,7 +58,11 @@ export default function DrawerList(props) {
 }
 
 DrawerList.propTypes = {
+  // The component with all the items to inject in the header of the drawer.
   header: PropTypes.any,
+  // A list of all primary (important) buttons.
+  // Each button has the format {button: string,icon: component}
   primaryButtons: PropTypes.array,
+  // A list of all secondary (less important) buttons.
   secondaryButtons: PropTypes.array
 };

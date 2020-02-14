@@ -9,8 +9,13 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 
+// The theshold scroll value where the app bar gets a title
+// (it is hidden before since the title is elsewhere on the page).
 const scrollThreshold = 130;
 
+/**
+ * The styles for the app bar.
+ */
 const useStyles = makeStyles(theme => {
   return {
     appBar: {
@@ -42,19 +47,30 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * The app bar at the top of the page most of the time in the application.
+ * @param props The title and onClickMenu (what clicking the menu button does).
+ */
 export default function AppBarComponent(props) {
-  const [expanded, setExpanded] = useState(true);
+  // Keep track of whether we have scrolled or not
+  const [scrolled, setScrolled] = useState(false);
 
+  // Whenever we scroll, have an effect
   useEffect(() => {
+    /**
+     * When scroll down, set that we have scrolled beyond the threshold.
+     * When scroll up, set that we have scrolled back before the threshold.
+     */
     const handleScroll = () => {
       let scrollTop = window.pageYOffset;
-      if (scrollTop > scrollThreshold && expanded) {
-        setExpanded(false);
-      } else if (scrollTop <= scrollThreshold) {
-        setExpanded(true);
+      if (scrollTop > scrollThreshold && !scrolled) {
+        setScrolled(true);
+      } else if (scrollTop <= scrollThreshold && scrolled) {
+        setScrolled(false);
       }
     };
     window.addEventListener("scroll", handleScroll);
+    // When component dismounts, remove listener
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -74,7 +90,7 @@ export default function AppBarComponent(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Fade in={!expanded}>
+            <Fade in={scrolled}>
               <Typography
                 component="h6"
                 variant="h6"
@@ -100,6 +116,8 @@ export default function AppBarComponent(props) {
 }
 
 AppBarComponent.propTypes = {
+  // The page's title (only visible after scrolling)
   title: PropTypes.string,
+  // A function with what clicking the menu button does (i.e., open a drawer).
   onClickMenu: PropTypes.func.isRequired
 };

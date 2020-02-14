@@ -13,7 +13,6 @@ const SET_ORGANIZATION = 1;
 
 /**
  * This defines the styles for the React component.
- * @type {*} The style classes for the React component.
  */
 const useStyles = makeStyles(theme => {
   return {
@@ -50,7 +49,6 @@ const useStyles = makeStyles(theme => {
  * The page used for setting up a hackathon. This page will only
  * be seen upon first launching the application on the server; after
  * that, users can make modifications on their dashboard.
- * @returns {*} The page for setting up HackApp.
  */
 export default function SetupPage() {
   const classes = useStyles();
