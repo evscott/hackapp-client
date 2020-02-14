@@ -10,7 +10,6 @@ import Button from "@material-ui/core/Button";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PropTypes from "prop-types";
-import { largeDrawerWidth } from "./Drawer";
 import hackathonImg from "../../img/hackathon-default.jpg";
 
 /**
@@ -70,7 +69,7 @@ export default function UserPopover(props) {
           <Typography variant="h6" component="p">
             {props.name}
           </Typography>
-          <Typography variant="p" component="p">
+          <Typography variant="body1" component="p">
             {props.userType}
           </Typography>
         </CardContent>
@@ -91,7 +90,7 @@ export default function UserPopover(props) {
 
 UserPopover.propTypes = {
   // The element to which the popover is anchored/positioned
-  anchor: PropTypes.object.isRequired,
+  anchor: PropTypes.object,
   // The function that closes the popover
   closePopover: PropTypes.func.isRequired,
   // The name of the popover

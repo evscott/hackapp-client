@@ -145,13 +145,13 @@ export default function DashboardPage() {
         Upcoming Hackathons
       </Typography>
       {upcomingHackathons.map(hackathon => (
-        <HackathonCard {...hackathon} />
+        <HackathonCard {...hackathon} key={hackathon.title + hackathon.startDate + hackathon.endDate} />
       ))}
       <Typography className={classes.subheader} variant="h4" component="h2">
         Past Hackathons
       </Typography>
       {pastHackathons.map(hackathon => (
-        <HackathonCard {...hackathon} />
+        <HackathonCard {...hackathon} key={hackathon.title + hackathon.startDate + hackathon.endDate} />
       ))}
       <Tooltip title="Create New Hackathon" arrow placement="top">
         <Fab className={classes.fab} color="primary">
