@@ -5,6 +5,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
 
 /**
@@ -152,9 +153,11 @@ export default function DashboardPage() {
       {pastHackathons.map(hackathon => (
         <HackathonCard {...hackathon} />
       ))}
-      <Fab className={classes.fab} color="primary">
-        <AddIcon />
-      </Fab>
+      <Tooltip title="Create New Hackathon" arrow placement="top">
+        <Fab className={classes.fab} color="primary">
+          <AddIcon />
+        </Fab>
+      </Tooltip>
     </Page>
   );
 }

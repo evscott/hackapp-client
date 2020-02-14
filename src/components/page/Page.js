@@ -20,10 +20,10 @@ const useStyles = makeStyles(theme => {
     },
     content: {
       marginTop: 75,
-      maxWidth: 700,
+      maxWidth: 650,
       [theme.breakpoints.up("md")]: {
         width: `calc(100% - ${largeDrawerWidth}px)`,
-        marginLeft: `calc(${largeDrawerWidth}px + ((50% - ${0.5 * largeDrawerWidth}px) - 350px))`
+        marginLeft: `calc(${largeDrawerWidth}px + ((50% - ${0.5 * largeDrawerWidth}px) - 325px))`
       }
     },
     title: {

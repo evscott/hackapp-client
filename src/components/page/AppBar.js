@@ -8,6 +8,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
+import UserPopover from "./UserPopover";
 
 // The theshold scroll value where the app bar gets a title
 // (it is hidden before since the title is elsewhere on the page).
@@ -76,6 +77,29 @@ export default function AppBarComponent(props) {
     };
   });
 
+  // For storing the state of whethr the popover is open and what element
+  // it is attached to
+  const [popoverAnchor, setPopoverAnchor] = React.useState(null);
+
+  /**
+   * Opens/closes the popover
+   * @param event The event triggering the toggle with an anchor to use.
+   */
+  const togglePopover = (event) => {
+    if(popoverAnchor === null) {
+      setPopoverAnchor(event.currentTarget);
+    } else {
+      setPopoverAnchor(null);
+    }
+  };
+
+  /**
+   * Closes the popover.
+   */
+  const closePopover = () => {
+    setPopoverAnchor(null);
+  };
+
   const classes = useStyles();
   return (
     <AppBar className={classes.appBar} position="static">
@@ -105,9 +129,16 @@ export default function AppBarComponent(props) {
             <IconButton
               color="inherit"
               aria-label="account of the current user"
+              onClick={togglePopover}
             >
               <AccountCircle />
             </IconButton>
+            <UserPopover
+              anchor={popoverAnchor}
+              closePopover={closePopover}
+              name="Graeme Zinck"
+              userType="Admin"
+            />
           </div>
         </Toolbar>
       </div>
