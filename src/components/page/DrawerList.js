@@ -23,7 +23,7 @@ export default function DrawerList(props) {
   return (
     <div>
       <div className={classes.spacer} />
-      <Container className={classes.header} />
+      <div className={classes.header} />
       <List>
         {props.primaryButtons.map(button => (
           <ListItem button key={button.text}>
@@ -46,6 +46,6 @@ export default function DrawerList(props) {
 }
 
 DrawerList.propTypes = {
-  primaryButtons: PropTypes.array.isRequired,
-  secondaryButtons: PropTypes.array.isRequired
+  primaryButtons: PropTypes.array,
+  secondaryButtons: PropTypes.array
 };

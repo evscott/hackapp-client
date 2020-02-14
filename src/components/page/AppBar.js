@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
@@ -8,11 +8,19 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 
+const scrollThreshold = 100;
+
 const useStyles = makeStyles(theme => {
   return {
     appBar: {
-      position: "relative",
+      position: "fixed",
+      top: 0,
       zIndex: 1301 // Ensures it is in front of any drawers
+    },
+    container: {
+      position: "relative",
+      overflow: "hidden",
+      height: 120
     },
     appBarLeft: {
       marginLeft: "20px",
@@ -24,10 +32,14 @@ const useStyles = makeStyles(theme => {
       position: "absolute",
       right: 0
     },
-    appBarItem: {
+    title: {
       display: "inline-block",
       padding: "0 10px",
       verticalAlign: "middle"
+    },
+    megaTitle: {
+      display: "none",
+      marginLeft: 25
     },
     menu: {
       display: "inline-block",
@@ -39,11 +51,28 @@ const useStyles = makeStyles(theme => {
 });
 
 export default function AppBarComponent(props) {
+  const [expanded, setExpanded] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = event => {
+      let scrollTop = window.pageYOffset;
+      if (scrollTop > scrollThreshold && expanded) {
+        setExpanded(false);
+      } else if (scrollTop <= scrollThreshold) {
+        setExpanded(true);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
+
   const classes = useStyles();
   return (
-    <div className={classes.appBar}>
-      <AppBar className={classes.appBar} position="static">
-        <Toolbar>
+    <AppBar className={classes.appBar} position="static">
+      <div className={classes.container}>
+        <Toolbar className={classes.toolbar}>
           <div className={classes.appBarLeft}>
             <IconButton
               color="inherit"
@@ -56,7 +85,7 @@ export default function AppBarComponent(props) {
             <Typography
               component="h6"
               variant="h6"
-              className={classes.appBarItem}
+              className={classes.title}
               nowrap="true"
             >
               {props.title ? props.title : "HackApp"}
@@ -71,8 +100,16 @@ export default function AppBarComponent(props) {
             </IconButton>
           </div>
         </Toolbar>
-      </AppBar>
-    </div>
+        <Typography
+          component="p"
+          variant="h6"
+          className={expanded ? classes.megaTitleExpanded : classes.megaTitle}
+          nowrap="true"
+        >
+          {props.title ? props.title : "HackApp"}
+        </Typography>
+      </div>
+    </AppBar>
   );
 }
 

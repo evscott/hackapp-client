@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => {
     drawerPaper: {
       width: drawerWidth
     }
-  }
+  };
 });
 
 export default function DrawerMenu(props) {
@@ -41,7 +41,7 @@ export default function DrawerMenu(props) {
           variant="permanent"
           anchor="left"
           classes={{
-            paper: classes.drawerPaper,
+            paper: classes.drawerPaper
           }}
           open
         >
@@ -54,5 +54,5 @@ export default function DrawerMenu(props) {
 
 DrawerMenu.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  setIsOpen: PropTypes.func.isRequired,
+  setIsOpen: PropTypes.func.isRequired
 };

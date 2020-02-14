@@ -1,6 +1,7 @@
 import React from "react";
 import AppBar from "./AppBar";
 import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "./Drawer";
 import { drawerWidth } from "./Drawer";
@@ -15,9 +16,10 @@ const useStyles = makeStyles(theme => {
       padding: 0
     },
     content: {
-      [theme.breakpoints.up('md')]: {
+      marginTop: 75,
+      [theme.breakpoints.up("md")]: {
         width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
+        marginLeft: drawerWidth
       }
     }
   };
@@ -35,10 +37,17 @@ export default function Page(props) {
   return (
     <div>
       <Container className={classes.appBarContainer}>
-        <AppBar title="Dashboard" onClickMenu={toggleMenu} />
+        <AppBar title={props.title} onClickMenu={toggleMenu} />
       </Container>
-      <Drawer className={classes.drawer} isOpen={drawerOpen} setIsOpen={toggleMenu}>
-        <DrawerList primaryButtons={props.drawerPrimary} secondaryButtons={props.drawerSecondary}/>
+      <Drawer
+        className={classes.drawer}
+        isOpen={drawerOpen}
+        setIsOpen={toggleMenu}
+      >
+        <DrawerList
+          primaryButtons={props.drawerPrimary}
+          secondaryButtons={props.drawerSecondary}
+        />
       </Drawer>
       <Container className={classes.content}>
         {props.children}
@@ -48,6 +57,7 @@ export default function Page(props) {
 }
 
 Drawer.propTypes = {
-  drawerPrimary: PropTypes.array.isRequired,
-  drawerSecondary: PropTypes.array.isRequired
+  drawerPrimary: PropTypes.array,
+  drawerSecondary: PropTypes.array,
+  title: PropTypes.string
 };
