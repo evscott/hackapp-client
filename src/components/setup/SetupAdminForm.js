@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import RightButtonBar from "../buttons/RightButtonBar";
@@ -7,7 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 /**
  * This defines the styles for the React component.
- * @type {*} The style classes for the React component.
  */
 const useStyles = makeStyles(theme => {
   return {
@@ -21,8 +20,7 @@ const useStyles = makeStyles(theme => {
 /**
  * The form for creating an administrator when first setting up
  * the web application.
- * @param props The properties paassed in
- * @returns {*} The form (JSX)
+ * @param props The properties passed in
  */
 export default function SetupAdminForm(props) {
   const classes = useStyles();
@@ -61,6 +59,6 @@ export default function SetupAdminForm(props) {
 }
 
 SetupAdminForm.propTypes = {
-    // Function for what to do when want to create an admin
-    handleCreateAdmin: PropTypes.func.isRequired
+  // Function for what to do when want to create an admin
+  handleCreateAdmin: PropTypes.func.isRequired
 };
