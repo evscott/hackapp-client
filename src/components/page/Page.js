@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => {
     content: {
       marginTop: 75,
       maxWidth: 650,
+      marginBottom: 100,
       [theme.breakpoints.up("md")]: {
         width: `calc(100% - ${largeDrawerWidth}px)`,
         marginLeft: `calc(${largeDrawerWidth}px + ((50% - ${0.5 *

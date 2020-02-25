@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Card from "@material-ui/core/Card";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,7 +10,9 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 const useStyles = makeStyles(theme => {
   return {
     card: {
-      position: "relative"
+      position: "relative",
+      marginTop: 20,
+      marginBottom: 20
     },
     content: {
       float: "left",
@@ -43,10 +46,31 @@ export default function ReorderableCard(props) {
         {props.children}
       </div>
       <div className={classes.sidebar}>
-        <IconButton className={classes.icon}><KeyboardArrowUpIcon /></IconButton>
-        <IconButton className={classes.icon}><DeleteIcon /></IconButton>
-        <IconButton className={classes.icon}><KeyboardArrowDownIcon /></IconButton>
+        <IconButton
+          className={classes.icon}
+          onClick={props.onMoveUp}
+        >
+          <KeyboardArrowUpIcon />
+        </IconButton>
+        <IconButton
+          className={classes.icon}
+          onClick={props.onDelete}
+        >
+          <DeleteIcon />
+        </IconButton>
+        <IconButton
+          className={classes.icon}
+          onClick={props.onMoveDown}
+        >
+          <KeyboardArrowDownIcon />
+        </IconButton>
       </div>
     </Card>
   );
 }
+
+ReorderableCard.propTypes = {
+  onMoveUp: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onMoveDown: PropTypes.func.isRequired
+};
