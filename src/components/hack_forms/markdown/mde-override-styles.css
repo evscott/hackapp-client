@@ -1,0 +1,35 @@
+.mde-header ul.mde-header-group li.mde-header-item button {
+    height: auto;
+}
+
+/*
+ Remove the default options for previewing and writing
+ (we use custom options).
+ */
+.mde-header .mde-tabs {
+    display: none;
+}
+
+/*
+ Make the gripper at the bottom bigger.
+ */
+.react-mde .grip {
+    height: 19px;
+}
+
+.mde-header ul.mde-header-group li.mde-header-item button.mde-mui-button {
+    opacity: 1;
+    transition: all 0.2s;
+}
+
+.mde-header ul.mde-header-group li.mde-header-item button.mde-mui-button:hover {
+    opacity: 0.5;
+}
+
+.mde-preview .mde-preview-content {
+    padding: 30px;
+}
+
+.mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown li {
+    padding: 5px;
+}

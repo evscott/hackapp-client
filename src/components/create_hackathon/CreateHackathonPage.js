@@ -7,6 +7,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
 import HackathonOverviewForm from "../hack_forms/HackathonOverviewForm";
+import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
 
 /**
  * The styles for the React component.
@@ -90,6 +91,10 @@ export default function CreateHackathonPage() {
   );
 
   const currPage = () => {
+    return (<HackathonDetailsForm
+      prvPage={() => setPage(PAGES.OVERVIEW)}
+      nextPage={() => setPage(PAGES.REGISTRATION)}
+    />);
     switch (page) {
       case PAGES.OVERVIEW:
         return (
@@ -98,6 +103,13 @@ export default function CreateHackathonPage() {
             setOverview={setOverview}
             nextPage={() => setPage(PAGES.DETAILS)}
             discardAndExit={() => console.log("Exit...")}
+          />
+        );
+      case PAGES.DETAILS:
+        return (
+          <HackathonDetailsForm
+            prvPage={() => setPage(PAGES.OVERVIEW)}
+            nextPage={() => setPage(PAGES.REGISTRATION)}
           />
         );
       default:
