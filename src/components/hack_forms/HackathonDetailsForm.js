@@ -37,16 +37,25 @@ const useStyles = makeStyles(theme => {
       marginRight: 10
     },
     spacer: {
-      marginBottom: 75
+      marginBottom: 40
     },
     speedDial: {
       position: "relative",
-      top: -37,
+      top: -20,
       right: -25,
-      marginBottom: -75
+      marginBottom: -40
+    },
+    speedDialHidden: {
+      position: "relative",
+      top: -40,
+      right: -25,
+      marginBottom: -80
     },
     speedDialFab: {
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.secondary.main,
+      height: 45,
+      width: 45,
+      marginLeft: -10
     }
   };
 });
@@ -144,7 +153,7 @@ export default function HackathonDetailsForm(props) {
           </ReorderableCard>
           <SpeedDial
             ariaLabel="Add Component"
-            className={classes.speedDial}
+            className={viewMode ? classes.speedDialHidden : classes.speedDial}
             classes={{
               fab: classes.speedDialFab
             }}
@@ -152,6 +161,7 @@ export default function HackathonDetailsForm(props) {
             onClose={() => setOptionsOpen(false)}
             onOpen={() => setOptionsOpen(true)}
             open={optionsOpen}
+            hidden={viewMode}
             direction="left"
           >
             <SpeedDialAction
@@ -170,7 +180,7 @@ export default function HackathonDetailsForm(props) {
             <SpeedDialAction
               icon={<ImageIcon />}
               tooltipTitle="Add Image"
-              onClick={() => console.log("WOO")}
+              onClick={() => console.log("Not implemented yet.")}
             />
           </SpeedDial>
         </React.Fragment>
