@@ -41,9 +41,9 @@ const useStyles = makeStyles(theme => {
     },
     speedDial: {
       position: "relative",
-      top: -20,
+      top: -30,
       right: -25,
-      marginBottom: -40
+      marginBottom: -60
     },
     speedDialHidden: {
       position: "relative",
@@ -52,10 +52,7 @@ const useStyles = makeStyles(theme => {
       marginBottom: -80
     },
     speedDialFab: {
-      backgroundColor: theme.palette.secondary.main,
-      height: 45,
-      width: 45,
-      marginLeft: -10
+      backgroundColor: theme.palette.secondary.main
     }
   };
 });
