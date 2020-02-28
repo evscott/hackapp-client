@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +9,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
 import HackathonOverviewForm from "../hack_forms/HackathonOverviewForm";
 import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
+import { DASHBOARD_ROUTE } from "../../routes";
 
 /**
  * The styles for the React component.
@@ -21,6 +23,11 @@ const PAGES = {
   PREVIEW: 4
 };
 
+const REDIRECT = {
+  NONE: "",
+  DASHBOARD: <Redirect to={DASHBOARD_ROUTE} />
+};
+
 const overviewState = {
   name: "",
   startDate: new Date(),
@@ -30,20 +37,10 @@ const overviewState = {
   regDeadline: new Date()
 };
 
-const drawerSecondary = [
-  {
-    icon: <SaveIcon />,
-    text: "Save and Exit"
-  },
-  {
-    icon: <DeleteIcon />,
-    text: "Discard and Exit"
-  }
-];
-
 export default function CreateHackathonPage() {
   const [overview, setOverview] = useState(overviewState);
   const [page, setPage] = useState(PAGES.OVERVIEW);
+  const [redirect, setRedirect] = useState(REDIRECT.NONE);
 
   const drawerPrimary = [
     {
@@ -53,7 +50,8 @@ export default function CreateHackathonPage() {
         ) : (
           <RadioButtonUncheckedIcon />
         ),
-      text: "Hackathon Overview"
+      text: "Hackathon Overview",
+      onClick: () => setPage(PAGES.OVERVIEW)
     },
     {
       icon:
@@ -62,7 +60,8 @@ export default function CreateHackathonPage() {
         ) : (
           <RadioButtonUncheckedIcon />
         ),
-      text: "Hackathon Details"
+      text: "Hackathon Details",
+      onClick: () => setPage(PAGES.DETAILS)
     },
     {
       icon:
@@ -71,11 +70,29 @@ export default function CreateHackathonPage() {
         ) : (
           <RadioButtonUncheckedIcon />
         ),
-      text: "Registration Details"
+      text: "Registration Details",
+      onClick: () => setPage(PAGES.REGISTRATION)
     },
     {
       icon: <RadioButtonUncheckedIcon />,
-      text: "Preview"
+      text: "Preview",
+      onClick: () => setPage(PAGES.PREVIEW)
+    }
+  ];
+
+  const drawerSecondary = [
+    {
+      icon: <SaveIcon />,
+      text: "Save and Exit",
+      onClick: () => {
+        // @TODO: Actually save
+        setRedirect(REDIRECT.DASHBOARD);
+      }
+    },
+    {
+      icon: <DeleteIcon />,
+      text: "Discard and Exit",
+      onClick: () => setRedirect(REDIRECT.DASHBOARD)
     }
   ];
 
@@ -91,10 +108,6 @@ export default function CreateHackathonPage() {
   );
 
   const currPage = () => {
-    return (<HackathonDetailsForm
-      prvPage={() => setPage(PAGES.OVERVIEW)}
-      nextPage={() => setPage(PAGES.REGISTRATION)}
-    />);
     switch (page) {
       case PAGES.OVERVIEW:
         return (
@@ -102,7 +115,7 @@ export default function CreateHackathonPage() {
             overview={overview}
             setOverview={setOverview}
             nextPage={() => setPage(PAGES.DETAILS)}
-            discardAndExit={() => console.log("Exit...")}
+            discardAndExit={() => setRedirect(REDIRECT.DASHBOARD)}
           />
         );
       case PAGES.DETAILS:
@@ -124,6 +137,7 @@ export default function CreateHackathonPage() {
       drawerPrimary={drawerPrimary}
       drawerSecondary={drawerSecondary}
     >
+      {redirect}
       {currPage()}
     </Page>
   );

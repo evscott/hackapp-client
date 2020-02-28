@@ -38,7 +38,7 @@ export default function DrawerList(props) {
       <div className={classes.header}>{props.header}</div>
       <List>
         {props.primaryButtons.map(button => (
-          <ListItem button key={button.text}>
+          <ListItem button key={button.text} onClick={button.onClick}>
             <ListItemIcon>{button.icon}</ListItemIcon>
             <ListItemText primary={button.text} />
           </ListItem>
@@ -47,7 +47,7 @@ export default function DrawerList(props) {
       <Divider />
       <List>
         {props.secondaryButtons.map(button => (
-          <ListItem button key={button.text}>
+          <ListItem button key={button.text} onClick={button.onClick}>
             <ListItemIcon>{button.icon}</ListItemIcon>
             <ListItemText primary={button.text} />
           </ListItem>
@@ -61,7 +61,7 @@ DrawerList.propTypes = {
   // The component with all the items to inject in the header of the drawer.
   header: PropTypes.any,
   // A list of all primary (important) buttons.
-  // Each button has the format {button: string,icon: component}
+  // Each button has the format {button: string, icon: component, onClick: func}
   primaryButtons: PropTypes.array,
   // A list of all secondary (less important) buttons.
   secondaryButtons: PropTypes.array

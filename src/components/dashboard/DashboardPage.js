@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import Page from "../page/Page";
 import { makeStyles } from "@material-ui/core/styles";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -7,6 +8,13 @@ import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
+import { CREATE_HACKATHON_ROUTE } from "../../routes";
+
+/** The routes that we might redirect to by clicking a button. */
+const REDIRECT = {
+  NONE: "",
+  CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />
+};
 
 /**
  * Temporary list of past hackathons.
@@ -81,7 +89,8 @@ const useStyles = makeStyles(theme => {
 const drawerPrimary = [
   {
     icon: <SettingsIcon />,
-    text: "Settings"
+    text: "Settings",
+    onClick: () => console.log("Settings go here")
   }
 ];
 
@@ -98,6 +107,7 @@ const drawerSecondary = [];
  */
 export default function DashboardPage() {
   const classes = useStyles();
+  const [redirect, setRedirect] = React.useState(REDIRECT.NONE);
 
   // Creates the drawer header content which is injected into the page
   // based on the hackathon statistics.
@@ -141,6 +151,7 @@ export default function DashboardPage() {
       drawerPrimary={drawerPrimary}
       drawerSecondary={drawerSecondary}
     >
+      {redirect}
       <Typography className={classes.subheader} variant="h4" component="h2">
         Upcoming Hackathons
       </Typography>
@@ -154,7 +165,7 @@ export default function DashboardPage() {
         <HackathonCard {...hackathon} key={hackathon.title + hackathon.startDate + hackathon.endDate} />
       ))}
       <Tooltip title="Create New Hackathon" arrow placement="top">
-        <Fab className={classes.fab} color="primary">
+        <Fab className={classes.fab} color="primary" onClick={() => setRedirect(REDIRECT.CREATE)} >
           <AddIcon />
         </Fab>
       </Tooltip>

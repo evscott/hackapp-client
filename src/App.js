@@ -9,6 +9,7 @@ import { theme } from "./theme";
 import SetupPage from "./components/setup/SetupPage";
 import DashboardPage from "./components/dashboard/DashboardPage";
 import CreateHackathonPage from "./components/create_hackathon/CreateHackathonPage";
+import { CREATE_HACKATHON_ROUTE, DASHBOARD_ROUTE, SETUP_ROUTE } from "./routes";
 
 /**
  * The application. Has a theme and routes.
@@ -21,13 +22,13 @@ function App() {
         <MuiPickersUtilsProvider utils={DayJsUtils}>
           <CssBaseline />
           <Switch>
-            <Route path="/setup">
+            <Route path={SETUP_ROUTE}>
               <SetupPage />
             </Route>
-            <Route path="/dashboard">
+            <Route path={DASHBOARD_ROUTE}>
               <DashboardPage />
             </Route>
-            <Route path="/create">
+            <Route path={CREATE_HACKATHON_ROUTE}>
               <CreateHackathonPage />
             </Route>
           </Switch>

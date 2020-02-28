@@ -2,14 +2,21 @@ import React from "react";
 import Slide from "@material-ui/core/Slide";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import { Redirect } from "react-router-dom";
 import SetupAdminForm from "./SetupAdminForm";
 import SetupOrgForm from "./SetupOrgForm";
 import { makeStyles } from "@material-ui/core/styles";
+import { DASHBOARD_ROUTE } from "../../routes";
 
 /** The index for the register a new admin page. */
 const REGISTER_ADMIN_PAGE = 0;
 /** The index for the set organization name page. */
 const SET_ORGANIZATION = 1;
+/** The index for the redirect to the dashboard. */
+const REDIRECT = {
+  NONE: "",
+  DASHBOARD: <Redirect to={DASHBOARD_ROUTE} />
+};
 
 /**
  * This defines the styles for the React component.
@@ -56,6 +63,7 @@ export default function SetupPage() {
   // Sets the current page to the admin registration page.
   // This will animate to the next page upon clicking a button.
   const [currPage, setCurrPage] = React.useState(REGISTER_ADMIN_PAGE);
+  const [redirect, setRedirect] = React.useState(REDIRECT.NONE);
 
   /**
    * Validates the administrator's credentials, communicates with the
@@ -74,11 +82,12 @@ export default function SetupPage() {
   const handleCreateOrg = () => {
     // @TODO: Validate org name
     // @TODO: Communicate with database and update state
-    // @TODO: Push a route
+    setRedirect(REDIRECT.DASHBOARD);
   };
 
   return (
     <Container component={"main"} className={classes.main} color="primary">
+      {redirect}
       <Container className={classes.megaHeader}>
         <Typography
           component="h1"
