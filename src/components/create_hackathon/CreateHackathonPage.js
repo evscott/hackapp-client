@@ -10,6 +10,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import HackathonOverviewForm from "../hack_forms/HackathonOverviewForm";
 import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
 import { DASHBOARD_ROUTE } from "../../routes";
+import RegistrationDetailsForm from "../hack_forms/RegistrationDetailsForm";
 
 /**
  * The styles for the React component.
@@ -39,7 +40,7 @@ const overviewState = {
 
 export default function CreateHackathonPage() {
   const [overview, setOverview] = useState(overviewState);
-  const [page, setPage] = useState(PAGES.OVERVIEW);
+  const [page, setPage] = useState(PAGES.REGISTRATION);
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
 
   const drawerPrimary = [
@@ -125,6 +126,25 @@ export default function CreateHackathonPage() {
             nextPage={() => setPage(PAGES.REGISTRATION)}
           />
         );
+      case PAGES.REGISTRATION:
+        return (
+          <RegistrationDetailsForm/>
+        );
+      default:
+        return "";
+    }
+  };
+
+  const currPageTitle = () => {
+    switch(page) {
+      case PAGES.OVERVIEW:
+        return "Hackathon Overview";
+      case PAGES.DETAILS:
+        return "Hackathon Details";
+      case PAGES.REGISTRATION:
+        return "Registration Details";
+      case PAGES.PREVIEW:
+        return "Preview";
       default:
         return "";
     }
@@ -132,7 +152,7 @@ export default function CreateHackathonPage() {
 
   return (
     <Page
-      title="Hackathon Overview"
+      title={currPageTitle()}
       drawerHeader={drawerHeader}
       drawerPrimary={drawerPrimary}
       drawerSecondary={drawerSecondary}

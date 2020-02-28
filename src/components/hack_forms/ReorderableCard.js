@@ -12,7 +12,8 @@ const useStyles = makeStyles(theme => {
     card: {
       position: "relative",
       marginTop: 20,
-      marginBottom: 20
+      marginBottom: 20,
+      minHeight: 150
     },
     content: {
       float: "left",
