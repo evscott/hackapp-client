@@ -13,6 +13,7 @@ export const theme = createMuiTheme({
     },
     secondary: {
       main: "#fcc203"
-    }
+    },
+
   }
 });
