@@ -10,6 +10,7 @@ import HackathonOverviewForm from "../hack_forms/HackathonOverviewForm";
 import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
 import { DASHBOARD_ROUTE } from "../../routes";
 import RegistrationDetailsForm from "../hack_forms/RegistrationDetailsForm";
+import { QUESTION_TYPE } from "../hack_forms/questions/QuestionType";
 
 /** The distinct pages for creating hackathons, in order. */
 const PAGES = {
@@ -17,6 +18,17 @@ const PAGES = {
   DETAILS: 2,
   REGISTRATION: 3,
   PREVIEW: 4
+};
+
+/**
+ * The titles for each page. Can be indexed using PAGE_TITLES[page],
+ * where page is an integer.
+ */
+const PAGE_TITLES = {
+  [PAGES.OVERVIEW]: "Overview",
+  [PAGES.DETAILS]: "Details",
+  [PAGES.REGISTRATION]: "Registration",
+  [PAGES.PREVIEW]: "Preview"
 };
 
 /**
@@ -28,7 +40,7 @@ const REDIRECT = {
   DASHBOARD: <Redirect to={DASHBOARD_ROUTE} />
 };
 
-/** The initial state for the hackathon overview */
+/** The initial state for the hackathon overview. */
 const overviewState = {
   name: "",
   startDate: new Date(),
@@ -38,8 +50,27 @@ const overviewState = {
   regDeadline: new Date()
 };
 
+/**
+ * The initial state for the hackathon details page.
+ * It's a list of markdown strings.
+ */
+const detailsState = ["# What the Hack?"];
+
+/** The initial set of questions for registration. */
+const questionsState = [
+  {
+    question: "",
+    desc: "",
+    options: [],
+    required: false,
+    type: QUESTION_TYPE.TXT
+  }
+];
+
 export default function CreateHackathonPage() {
   const [overview, setOverview] = useState(overviewState);
+  const [details, setDetails] = useState(detailsState);
+  const [questions, setQuestions] = useState(questionsState);
   const [page, setPage] = useState(PAGES.REGISTRATION);
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
 
@@ -129,6 +160,8 @@ export default function CreateHackathonPage() {
       case PAGES.REGISTRATION:
         return (
           <RegistrationDetailsForm
+            questions={questions}
+            setQuestions={setQuestions}
             prvPage={() => setPage(PAGES.DETAILS)}
             nextPage={() => setPage(PAGES.PREVIEW)}
           />
@@ -138,24 +171,9 @@ export default function CreateHackathonPage() {
     }
   };
 
-  const currPageTitle = () => {
-    switch(page) {
-      case PAGES.OVERVIEW:
-        return "Hackathon Overview";
-      case PAGES.DETAILS:
-        return "Hackathon Details";
-      case PAGES.REGISTRATION:
-        return "Registration Details";
-      case PAGES.PREVIEW:
-        return "Preview";
-      default:
-        return "";
-    }
-  };
-
   return (
     <Page
-      title={currPageTitle()}
+      title={PAGE_TITLES[page]}
       drawerHeader={drawerHeader}
       drawerPrimary={drawerPrimary}
       drawerSecondary={drawerSecondary}

@@ -50,8 +50,8 @@ export default function RegQuestionEditor(props) {
   const [answers, setAnswers] = React.useState([]);
 
   const updateQuestion = (property, value) => {
-    props.setRegQuestion({
-      ...props.regQuestion,
+    props.setQuestion({
+      ...props.question,
       [property]: value
     });
   };
@@ -59,7 +59,7 @@ export default function RegQuestionEditor(props) {
   if (props.viewMode) {
     return (
       <RegQuestionViewer
-        regQuestion={props.regQuestion}
+        question={props.question}
         answers={props.answers ? props.answers : answers}
         setAnswers={props.setAnswers ? props.setAnswers : setAnswers}
       />
@@ -69,11 +69,11 @@ export default function RegQuestionEditor(props) {
       <div className={classes.root}>
         <div className={classes.header}>
           <RegQuestionTypeSelector
-            questionType={props.regQuestion.type}
+            questionType={props.question.type}
             setQuestionType={type => updateQuestion("type", type)}
           />
           <RegQuestionRequiredCheckbox
-            required={props.regQuestion.required}
+            required={props.question.required}
             setRequired={required => updateQuestion("required", required)}
           />
         </div>
@@ -89,7 +89,7 @@ export default function RegQuestionEditor(props) {
             id="reg-question-title"
             label="Question"
             name="question"
-            value={props.regQuestion.question}
+            value={props.question.question}
             onChange={event => updateQuestion("question", event.target.value)}
             margin="normal"
           />
@@ -100,15 +100,15 @@ export default function RegQuestionEditor(props) {
             id="reg-question-description"
             label="Description"
             name="description"
-            value={props.regQuestion.desc}
+            value={props.question.desc}
             onChange={event => updateQuestion("desc", event.target.value)}
             margin="normal"
           />
         </div>
         <div className={classes.options}>
           <RegQuestionOptionEditor
-            type={props.regQuestion.type}
-            options={props.regQuestion.options}
+            type={props.question.type}
+            options={props.question.options}
             setRegOptions={options => updateQuestion("options", options)}
           />
         </div>
@@ -118,14 +118,14 @@ export default function RegQuestionEditor(props) {
 }
 
 RegQuestionEditor.propTypes = {
-  regQuestion: PropTypes.shape({
-    question: PropTypes.string,
-    desc: PropTypes.string,
-    options: PropTypes.arrayOf(PropTypes.string),
-    required: PropTypes.bool,
-    type: PropTypes.string
+  question: PropTypes.shape({
+    question: PropTypes.string.isRequired,
+    desc: PropTypes.string.isRequired,
+    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    required: PropTypes.bool.isRequired,
+    type: PropTypes.string.isRequired
   }).isRequired,
-  setRegQuestion: PropTypes.func.isRequired,
+  setQuestion: PropTypes.func.isRequired,
   viewMode: PropTypes.bool,
   answers: PropTypes.array,
   setAnswers: PropTypes.func

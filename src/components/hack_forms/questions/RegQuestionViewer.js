@@ -31,7 +31,7 @@ export default function RegQuestionViewer(props) {
   const createCKOptions = () => {
     return (
       <FormGroup>
-        {props.regQuestion.options.map((option, idx) => (
+        {props.question.options.map((option, idx) => (
           <FormControlLabel
             control={
               <Checkbox
@@ -59,7 +59,7 @@ export default function RegQuestionViewer(props) {
   const createRDOptions = () => {
     return (
       <RadioGroup
-        name={`Options for ${props.regQuestion.question}`}
+        name={`Options for ${props.question.question}`}
         value={props.answers[0]}
         onChange={event => props.setAnswers([event.target.value])}
       >
@@ -82,7 +82,7 @@ export default function RegQuestionViewer(props) {
         multiline
         rows="3"
         label="Answer"
-        required={props.regQuestion.required}
+        required={props.question.required}
         value={props.answers[0]}
         onChange={event => props.setAnswers([event.target.value])}
       />
@@ -90,7 +90,7 @@ export default function RegQuestionViewer(props) {
   };
 
   const getOptions = () => {
-    switch (props.regQuestion.type) {
+    switch (props.question.type) {
       case QUESTION_TYPE.CK:
         return createCKOptions();
       case QUESTION_TYPE.RD:
@@ -103,8 +103,8 @@ export default function RegQuestionViewer(props) {
   return (
     <div>
       <div className={classes.content}>
-        <Typography variant="h5">{props.regQuestion.question}</Typography>
-        <Typography class={classes.desc}>{props.regQuestion.desc}</Typography>
+        <Typography variant="h5">{props.question.question}</Typography>
+        <Typography className={classes.desc}>{props.question.desc}</Typography>
       </div>
       <div className={classes.options}>{getOptions()}</div>
     </div>
@@ -112,12 +112,12 @@ export default function RegQuestionViewer(props) {
 }
 
 RegQuestionViewer.propTypes = {
-  regQuestion: PropTypes.shape({
-    question: PropTypes.string,
-    desc: PropTypes.string,
-    options: PropTypes.arrayOf(PropTypes.string),
-    required: PropTypes.bool,
-    type: PropTypes.string
+  question: PropTypes.shape({
+    question: PropTypes.string.isRequired,
+    desc: PropTypes.string.isRequired,
+    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    required: PropTypes.bool.isRequired,
+    type: PropTypes.string.isRequired
   }).isRequired,
   answers: PropTypes.array.isRequired,
   setAnswers: PropTypes.func.isRequired

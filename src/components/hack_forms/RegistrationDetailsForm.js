@@ -8,15 +8,6 @@ import { QUESTION_TYPE } from "./questions/QuestionType";
 import ReorderableCardForm from "../reusable/ReorderableCardForm";
 
 export default function RegistrationDetailsForm(props) {
-  const [questions, setQuestions] = useState([
-    {
-      question: "",
-      desc: "",
-      options: [],
-      required: false,
-      type: QUESTION_TYPE.TXT
-    }
-  ]);
   const [viewMode, setViewMode] = useState(false);
 
   const speedDialItems = [
@@ -57,17 +48,17 @@ export default function RegistrationDetailsForm(props) {
 
   return (
     <ReorderableCardForm
-      array={questions}
-      setArray={setQuestions}
+      array={props.questions}
+      setArray={props.setQuestions}
       prvPage={props.prvPage}
       nextPage={props.nextPage}
       getCardContents={index => (
         <RegQuestionEditor
-          regQuestion={questions[index]}
-          setRegQuestion={newQuestion => {
-            const newQuestions = [...questions];
+          question={props.questions[index]}
+          setQuestion={newQuestion => {
+            const newQuestions = [...props.questions];
             newQuestions[index] = newQuestion;
-            setQuestions(newQuestions);
+            props.setQuestions(newQuestions);
           }}
           viewMode={viewMode}
         />
@@ -81,6 +72,16 @@ export default function RegistrationDetailsForm(props) {
 }
 
 RegistrationDetailsForm.propTypes = {
+  questions: PropTypes.arrayOf(
+    PropTypes.shape({
+      question: PropTypes.string.isRequired,
+      desc: PropTypes.string.isRequired,
+      options: PropTypes.arrayOf(PropTypes.string).isRequired,
+      required: PropTypes.bool.isRequired,
+      type: PropTypes.string.isRequired
+    })
+  ).isRequired,
+  setQuestions: PropTypes.func.isRequired,
   prvPage: PropTypes.func.isRequired,
   nextPage: PropTypes.func.isRequired
 };
