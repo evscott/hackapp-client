@@ -5,9 +5,10 @@ import * as Showdown from "showdown";
 import ReactMde from "react-mde";
 import { mdeCommands } from "./MdeCommands";
 import "react-mde/lib/styles/css/react-mde-all.css";
-import "./mde-override-styles.css"
+import "./mde-override-styles.css";
 import getIcon from "./MdeIcons";
 
+/** The styles for the component. */
 const useStyles = makeStyles(theme => {
   return {
     reactMde: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/** A converter for getting a component using a string of markdown. */
 const converter = new Showdown.Converter({
   tables: true,
   simplifiedAutoLink: true,
@@ -25,6 +27,9 @@ const converter = new Showdown.Converter({
   tasklists: true
 });
 
+/**
+ * A markdown editor that can also preview the result.
+ */
 export default function MdEditor(props) {
   const classes = useStyles();
 
@@ -36,18 +41,21 @@ export default function MdEditor(props) {
       value={props.text}
       onChange={props.setText}
       selectedTab={props.view ? "preview" : "write"}
-      onTabChange={() => {} /* do nothing */ }
+      onTabChange={() => {} /* do nothing, tabs are disabled */}
       generateMarkdownPreview={markdown =>
         Promise.resolve(converter.makeHtml(markdown))
       }
       getIcon={iconName => getIcon(iconName)}
       commands={props.view ? [] : mdeCommands}
     />
-  )
+  );
 }
 
 MdEditor.propTypes = {
+  // The text to edit/preview
   text: PropTypes.string.isRequired,
+  // The function for changing the text
   setText: PropTypes.func.isRequired,
+  // Whether we should be previewing the result or editing it
   view: PropTypes.bool
 };

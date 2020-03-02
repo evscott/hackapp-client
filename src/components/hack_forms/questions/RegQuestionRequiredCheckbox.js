@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Checkbox from "@material-ui/core/Checkbox";
 import InputLabel from "@material-ui/core/InputLabel";
 
+/** Creates styles for the component. */
 const useStyles = makeStyles(theme => {
   return {
     requiredCheckboxDiv: {
@@ -11,7 +12,7 @@ const useStyles = makeStyles(theme => {
       display: "flex",
       justifyContent: "flex-end",
       top: theme.spacing(2),
-      right: theme.spacing(2)
+      right: 26
     },
     requiredCheckboxLabel: {
       position: "relative",
@@ -26,6 +27,10 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * The checkbox at the top right corner of a registration question editor
+ * that allows a user to specify if a registration question is required.
+ */
 export default function RegQuestionRequiredCheckbox(props) {
   const classes = useStyles();
   return (
@@ -45,6 +50,8 @@ export default function RegQuestionRequiredCheckbox(props) {
 }
 
 RegQuestionRequiredCheckbox.propTypes = {
+  // The current setting for whether the question is required
   required: PropTypes.bool.isRequired,
+  // Setter for whether the question is required
   setRequired: PropTypes.func.isRequired
 };

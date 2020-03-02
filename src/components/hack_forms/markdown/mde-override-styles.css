@@ -1,5 +1,10 @@
+/*
+ These are override styles for the markdown editor we are using.
+ Essentially, it makes things look a tad nicer.
+ */
+
 .mde-header ul.mde-header-group li.mde-header-item button {
-    height: auto;
+  height: auto;
 }
 
 /*
@@ -7,39 +12,56 @@
  (we use custom options).
  */
 .mde-header .mde-tabs {
-    display: none;
+  display: none;
 }
 
 /*
- Make the gripper at the bottom bigger.
+ Make the gripper at the bottom of the markdown editor bigger.
  */
 .react-mde .grip {
-    height: 19px;
+  height: 19px;
 }
 
+/*
+ Makes padding look nice for the header options bar.
+ */
 .mde-header ul.mde-header-group {
-    padding-top: 8px;
-    padding-bottom: 0px;
+  padding-top: 8px;
+  padding-bottom: 0px;
 }
 
+/*
+ Add a nice transition when we hover over the formatting buttons
+ */
 .mde-header ul.mde-header-group li.mde-header-item button.mde-mui-button {
-    opacity: 1;
-    transition: all 0.2s;
+  opacity: 1;
+  transition: all 0.2s;
 }
 
 .mde-header ul.mde-header-group li.mde-header-item button.mde-mui-button:hover {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
+/*
+ Make the preview box look nice by adding a bit of padding around the
+ rendered markup.
+ */
 .mde-preview .mde-preview-content {
-    padding: 30px;
+  padding: 30px;
 }
 
+/*
+ Adds padding around the header selector items for what kind of
+ text heading is desired by the user.
+ */
 .mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown li {
-    padding: 5px;
+  padding: 5px;
 }
 
+/*
+ Boosts the size of the text in the text editor and adds padding.
+ */
 .mde-textarea-wrapper textarea.mde-text {
-    font-size: 16px;
-    padding: 25px;
+  font-size: 16px;
+  padding: 25px;
 }

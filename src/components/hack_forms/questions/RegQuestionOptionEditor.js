@@ -11,11 +11,9 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { makeStyles } from "@material-ui/core/styles";
 import { QUESTION_TYPE } from "./QuestionType";
 
+/** Creates the styles for the component. */
 const useStyles = makeStyles(theme => {
   return {
-    root: {
-      // marginTop: theme.spacing(4)
-    },
     formItem: {
       display: "flex",
       marginTop: theme.spacing(1),
@@ -29,9 +27,21 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * An editor that allows the user to create options for a question,
+ * whether it is a list of checkboxes or radio buttons. It is not
+ * visible when we are working with a question that has text input
+ * because in such a case, no options are needed.
+ */
 export default function RegQuestionOptionEditor(props) {
   const classes = useStyles();
 
+  /**
+   * Handles what happens when we edit an option. If we edited a
+   * pre-existing option, we simply replace the old value and pass
+   * it to the parent. However, if we edited a new option, we need
+   * to add the new option.
+   */
   const handleEdit = (event, index) => {
     const newOptions = [...props.options];
     if (index === props.options.length) {
@@ -42,16 +52,25 @@ export default function RegQuestionOptionEditor(props) {
     props.setRegOptions(newOptions);
   };
 
+  /**
+   * Handles when an option's icon is clicked. If it is the last
+   * option (i.e., the "add new" option), it adds a new option.
+   * Otherwise, it deletes the option (in accordance with the icon's
+   * appearance: delete vs add).
+   */
   const handleIconClicked = index => {
     const newOptions = [...props.options];
     if (index === props.options.length) {
+      // Add new option
       newOptions.push("");
     } else {
+      // Delete the option
       newOptions.splice(index, 1);
     }
     props.setRegOptions(newOptions);
   };
 
+  /** Creates a new text field for the option. */
   const createTextField = index => {
     return (
       <TextField
@@ -65,6 +84,7 @@ export default function RegQuestionOptionEditor(props) {
     );
   };
 
+  /** Gets the icon to display for the option (add or delete, depending). */
   const getIcon = index => {
     if (index === props.options.length) {
       return <AddCircleIcon fontSize="small" />;
@@ -73,9 +93,14 @@ export default function RegQuestionOptionEditor(props) {
     }
   };
 
+  /**
+   * Creates a list of checkbox options with a series of checkboxes. There
+   * is one more option visible than the actual number that exist; the last
+   * one is there for creating new ones.
+   */
   const createCKOptions = () => {
     return (
-      <FormGroup className={classes.root}>
+      <FormGroup>
         {[...props.options, ""].map((option, idx) => (
           <div className={classes.formItem} key={idx}>
             <Checkbox checked={false} />
@@ -89,6 +114,10 @@ export default function RegQuestionOptionEditor(props) {
     );
   };
 
+  /**
+   * Creates a list of radio button options with a series of radio buttons.
+   * There is one extra option visible, which is for adding more options.
+   */
   const createRDOptions = () => {
     return (
       <RadioGroup>
@@ -105,6 +134,7 @@ export default function RegQuestionOptionEditor(props) {
     );
   };
 
+  // Depending on the type of question, show different options.
   switch (props.type) {
     case QUESTION_TYPE.CK:
       return createCKOptions();
@@ -116,7 +146,10 @@ export default function RegQuestionOptionEditor(props) {
 }
 
 RegQuestionOptionEditor.propTypes = {
+  // The type of the question (radio button, checkbox, text)
   type: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
+  // The options for the question
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // A setter for the options of the question
   setRegOptions: PropTypes.func.isRequired
 };

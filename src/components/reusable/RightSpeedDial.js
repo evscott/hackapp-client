@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 
+/** Styles for the component. */
 const useStyles = makeStyles(theme => {
   return {
     speedDial: {
@@ -24,8 +25,14 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * A speed dial component with options that pop out to the left side of the
+ * dial. It positions itself on the right side of the screen using relative
+ * positioning, making it overlap with components above and below it.
+ */
 export default function RightSpeedDial(props) {
   const classes = useStyles();
+  // Sets whether or not it is showing all of its options.
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -48,5 +55,6 @@ export default function RightSpeedDial(props) {
 }
 
 RightSpeedDial.propTypes = {
-  hidden: PropTypes.bool,
+  // Whether or not to show the speed dial.
+  hidden: PropTypes.bool
 };

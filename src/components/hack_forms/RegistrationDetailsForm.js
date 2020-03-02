@@ -7,13 +7,24 @@ import RegQuestionEditor from "./questions/RegQuestionEditor";
 import { QUESTION_TYPE } from "./questions/QuestionType";
 import ReorderableCardForm from "../reusable/ReorderableCardForm";
 
+/**
+ * The form that asks the user to select the registration questions
+ * that will be given to the user.
+ */
 export default function RegistrationDetailsForm(props) {
+  // When in view mode, we'll get to preview and not edit anything
   const [viewMode, setViewMode] = useState(false);
 
+  /**
+   * All available options for creating new items on the form.
+   * These are available through a popup menu on the right called
+   * a SpeedDial.
+   */
   const speedDialItems = [
     {
       icon: <SubjectIcon />,
       title: `Add ${QUESTION_TYPE.TXT} Question`,
+      // The function for creating a new, empty question on click
       getNewItem: () => ({
         question: "",
         desc: "",
@@ -72,6 +83,8 @@ export default function RegistrationDetailsForm(props) {
 }
 
 RegistrationDetailsForm.propTypes = {
+  // The questions for the registration form, which is an array of
+  // objects
   questions: PropTypes.arrayOf(
     PropTypes.shape({
       question: PropTypes.string.isRequired,
@@ -81,7 +94,10 @@ RegistrationDetailsForm.propTypes = {
       type: PropTypes.string.isRequired
     })
   ).isRequired,
+  // The function to update the questions
   setQuestions: PropTypes.func.isRequired,
+  // The function for going to the previous page
   prvPage: PropTypes.func.isRequired,
+  // The function for going to the next page
   nextPage: PropTypes.func.isRequired
 };

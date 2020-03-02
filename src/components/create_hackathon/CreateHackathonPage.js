@@ -94,11 +94,7 @@ export default function CreateHackathonPage() {
     // Get the page from the 2-tuple output
     const pg = k[1];
     return {
-      icon: page > pg ? (
-        <CheckCircleIcon />
-      ) : (
-        <RadioButtonUncheckedIcon />
-      ),
+      icon: page > pg ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />,
       text: PAGE_TITLES[pg],
       onClick: () => setPage(pg),
       highlighted: page === pg
@@ -137,11 +133,13 @@ export default function CreateHackathonPage() {
         Create Hackathon
       </Typography>
       <Typography variant="body1" component="p">
-        You're {numStepsAway} step{numStepsAway === 1 ? '' : 's'} away from going live!
+        You're {numStepsAway} step{numStepsAway === 1 ? "" : "s"} away from
+        going live!
       </Typography>
     </div>
   );
 
+  /** The current subpage, with the corresponding form. */
   const currPage = () => {
     switch (page) {
       case PAGES.OVERVIEW:

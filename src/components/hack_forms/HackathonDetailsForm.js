@@ -7,9 +7,20 @@ import "./markdown/mde-override-styles.css";
 import MdEditor from "./markdown/MdEditor";
 import ReorderableCardForm from "../reusable/ReorderableCardForm";
 
+/**
+ * A form that asks the user to create a markdown-style collection
+ * of cards that describe the hackathon. It should be an exhaustive
+ * collection of text items that need to be shown to somebody who is going
+ * to register for the hackathon.
+ */
 export default function HackathonDetailsForm(props) {
+  // Hold whether or not we are previewing
   const [viewMode, setViewMode] = useState(false);
 
+  /**
+   * The controls available to the user when adding cards with
+   * hackathon details.
+   */
   const speedDialItems = [
     {
       icon: <SubjectIcon />,
@@ -49,10 +60,12 @@ export default function HackathonDetailsForm(props) {
 }
 
 HackathonDetailsForm.propTypes = {
-  details: PropTypes.arrayOf(
-    PropTypes.string
-  ).isRequired,
+  // The list of markdown text strings
+  details: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // A function that sets the details
   setDetails: PropTypes.func.isRequired,
+  // Function to go to the previous page
   prvPage: PropTypes.func.isRequired,
+  // Function to go to the next page
   nextPage: PropTypes.func.isRequired
 };

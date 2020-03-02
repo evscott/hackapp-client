@@ -8,6 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { QUESTION_TYPE } from "./QuestionType";
 import RegQuestionEditor from "./RegQuestionEditor";
 
+/** The styles for the component. */
 const useStyles = makeStyles(theme => {
   return {
     formControl: {
@@ -16,6 +17,10 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * A selector for what type of question a given question is.
+ * This can be a checkbox, radio button, or text input.
+ */
 export default function RegQuestionTypeSelector(props) {
   const classes = useStyles();
   return (
@@ -34,6 +39,8 @@ export default function RegQuestionTypeSelector(props) {
 }
 
 RegQuestionEditor.propTypes = {
-  questionType: PropTypes.object.isRequired,
+  // The current question type
+  questionType: PropTypes.string.isRequired,
+  // A setter for the question type
   setQuestionType: PropTypes.func.isRequired
 };

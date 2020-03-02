@@ -6,6 +6,7 @@ import { DatePicker, TimePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 import RightButtonBar from "../reusable/RightButtonBar";
 
+/** The styles pertaining to the component */
 const useStyles = makeStyles(theme => {
   return {
     row: {
@@ -34,6 +35,10 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * A form for asking the user about key information about the hackathon,
+ * such as the date, location, time, etc.
+ */
 export default function HackathonOverviewForm(props) {
   const classes = useStyles();
   return (
@@ -193,6 +198,7 @@ export default function HackathonOverviewForm(props) {
 }
 
 HackathonOverviewForm.propTypes = {
+  // The overview object, with all the data to be filled
   overview: PropTypes.shape({
     name: PropTypes.string.isRequired,
     startDate: PropTypes.instanceOf(Date).isRequired,
@@ -201,7 +207,10 @@ HackathonOverviewForm.propTypes = {
     maxRegistrants: PropTypes.number.isRequired,
     regDeadline: PropTypes.instanceOf(Date).isRequired
   }).isRequired,
+  // The function for setting changes to the overview object
   setOverview: PropTypes.func.isRequired,
+  // The function to call to go to the next page
   nextPage: PropTypes.func.isRequired,
+  // The function to call to discard the whole hackathon
   discardAndExit: PropTypes.func.isRequired
 };

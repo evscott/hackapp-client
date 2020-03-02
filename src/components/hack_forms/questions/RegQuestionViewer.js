@@ -10,6 +10,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import { QUESTION_TYPE } from "./QuestionType";
 
+/** The styles for the component. */
 const useStyles = makeStyles(theme => {
   return {
     content: {
@@ -25,9 +26,15 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * A viewer for a given registration question, showing the title,
+ * description, and options. The options are clickable and the selections
+ * are passed to the parent.
+ */
 export default function RegQuestionViewer(props) {
   const classes = useStyles();
 
+  /** Creates a group of checkmark options. */
   const createCKOptions = () => {
     return (
       <FormGroup>
@@ -56,6 +63,7 @@ export default function RegQuestionViewer(props) {
     );
   };
 
+  /** Creates a group of radio button options. */
   const createRDOptions = () => {
     return (
       <RadioGroup
@@ -75,6 +83,7 @@ export default function RegQuestionViewer(props) {
     );
   };
 
+  /** Creates a text box for text input, if that is needed. */
   const createTextBox = () => {
     return (
       <TextField
@@ -89,6 +98,7 @@ export default function RegQuestionViewer(props) {
     );
   };
 
+  /** Gets the options for the given question's type. */
   const getOptions = () => {
     switch (props.question.type) {
       case QUESTION_TYPE.CK:
@@ -112,13 +122,21 @@ export default function RegQuestionViewer(props) {
 }
 
 RegQuestionViewer.propTypes = {
+  // A registration question option
   question: PropTypes.shape({
+    // The string representation of the question
     question: PropTypes.string.isRequired,
+    // The description of the question
     desc: PropTypes.string.isRequired,
+    // The options to choose from for the question
     options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    // Whether filling out the question is required
     required: PropTypes.bool.isRequired,
+    // The type of the question (multiple choice, radio, text)
     type: PropTypes.string.isRequired
   }).isRequired,
+  // The answers the user has selected for the question
   answers: PropTypes.array.isRequired,
+  // A setter for the answers a user has selected for the question
   setAnswers: PropTypes.func.isRequired
 };

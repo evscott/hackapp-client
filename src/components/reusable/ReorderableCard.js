@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 import Card from "@material-ui/core/Card";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import DeleteIcon from '@material-ui/icons/Delete';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import DeleteIcon from "@material-ui/icons/Delete";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
+/** The styles for the component. */
 const useStyles = makeStyles(theme => {
   return {
     card: {
@@ -39,30 +40,24 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * A card with buttons for reordering it. It can be moved up and down
+ * or trashed entirely, depending on the button pressed.
+ * It should always be given children to display.
+ */
 export default function ReorderableCard(props) {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
-      <div className={classes.content}>
-        {props.children}
-      </div>
+      <div className={classes.content}>{props.children}</div>
       <div className={classes.sidebar}>
-        <IconButton
-          className={classes.icon}
-          onClick={props.onMoveUp}
-        >
+        <IconButton className={classes.icon} onClick={props.onMoveUp}>
           <KeyboardArrowUpIcon />
         </IconButton>
-        <IconButton
-          className={classes.icon}
-          onClick={props.onDelete}
-        >
+        <IconButton className={classes.icon} onClick={props.onDelete}>
           <DeleteIcon />
         </IconButton>
-        <IconButton
-          className={classes.icon}
-          onClick={props.onMoveDown}
-        >
+        <IconButton className={classes.icon} onClick={props.onMoveDown}>
           <KeyboardArrowDownIcon />
         </IconButton>
       </div>
@@ -71,7 +66,10 @@ export default function ReorderableCard(props) {
 }
 
 ReorderableCard.propTypes = {
+  // What happens when moving the card up
   onMoveUp: PropTypes.func.isRequired,
+  // What happens when we try to delete the card
   onDelete: PropTypes.func.isRequired,
+  // What happens when moving the card down
   onMoveDown: PropTypes.func.isRequired
 };
