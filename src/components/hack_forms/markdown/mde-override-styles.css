@@ -17,6 +17,11 @@
     height: 19px;
 }
 
+.mde-header ul.mde-header-group {
+    padding-top: 8px;
+    padding-bottom: 0px;
+}
+
 .mde-header ul.mde-header-group li.mde-header-item button.mde-mui-button {
     opacity: 1;
     transition: all 0.2s;
@@ -32,4 +37,9 @@
 
 .mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown li {
     padding: 5px;
+}
+
+.mde-textarea-wrapper textarea.mde-text {
+    font-size: 16px;
+    padding: 25px;
 }

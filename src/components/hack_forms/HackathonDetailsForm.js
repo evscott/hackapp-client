@@ -26,12 +26,6 @@ const useStyles = makeStyles(theme => {
     fabContents: {
       display: "flex",
       alignItems: "center"
-    },
-    button: {
-      marginRight: 10
-    },
-    spacer: {
-      marginBottom: 40
     }
   };
 });
@@ -39,7 +33,10 @@ const useStyles = makeStyles(theme => {
 export default function HackathonDetailsForm(props) {
   const classes = useStyles();
 
-  const [detailSections, setDetailSections] = useState(["# What the Hack?", "Heck"]);
+  const [detailSections, setDetailSections] = useState([
+    "# What the Hack?",
+    "Heck"
+  ]);
   const [viewMode, setViewMode] = useState(false);
 
   const getFab = () => {
@@ -88,7 +85,7 @@ export default function HackathonDetailsForm(props) {
       setArray={setDetailSections}
       prvPage={props.prvPage}
       nextPage={props.nextPage}
-      getCardContents={(index) => (
+      getCardContents={index => (
         <MdEditor
           text={detailSections[index]}
           setText={newDetailSection => {

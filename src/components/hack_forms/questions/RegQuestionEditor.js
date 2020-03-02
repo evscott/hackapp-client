@@ -80,6 +80,7 @@ export default function RegQuestionEditor(props) {
           name="question"
           value={props.regQuestion.question}
           onChange={event => updateQuestion("question", event.target.value)}
+          margin="normal"
         />
         <TextField
           fullWidth
@@ -90,6 +91,8 @@ export default function RegQuestionEditor(props) {
           name="description"
           value={props.regQuestion.desc}
           onChange={event => updateQuestion("desc", event.target.value)}
+          margin="normal"
+
         />
       </div>
       <div className={classes.options}>

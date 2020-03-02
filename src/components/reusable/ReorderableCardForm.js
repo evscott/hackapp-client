@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => {
 export default function ReorderableCardForm(props) {
   const classes = useStyles();
 
-  // Managing the IDs of each text element is required for
+  // Managing the keys of each text element is required for
   // React to get state management correct.
   const [keys, setKeys] = useState([...Array(props.array.length).keys()]);
   const [nextKey, setNextKey] = useState(props.array.length);

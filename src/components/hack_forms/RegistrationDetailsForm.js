@@ -1,72 +1,77 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import ReorderableCard from "../reusable/ReorderableCard";
-import Button from "@material-ui/core/Button";
+import SubjectIcon from "@material-ui/icons/Subject";
+import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import RegQuestionEditor from "./questions/RegQuestionEditor";
-import RightButtonBar from "../reusable/RightButtonBar";
-
-const useStyles = makeStyles(theme => {
-  return {
-    button: {
-      marginRight: 10
-    },
-    spacer: {
-      marginBottom: 40
-    },
-  };
-});
+import { QUESTION_TYPE } from "./questions/QuestionType";
+import ReorderableCardForm from "../reusable/ReorderableCardForm";
 
 export default function RegistrationDetailsForm(props) {
-  const classes = useStyles();
-
   const [questions, setQuestions] = React.useState([
     {
-      question: "Question",
-      desc: "Description",
-      options: ["Option 1", "Option TWO"],
-      required: true,
-      type: "Checkbox"
+      question: "",
+      desc: "",
+      options: [""],
+      required: false,
+      type: QUESTION_TYPE.TXT
     }
   ]);
-  const [ids, setIds] = React.useState([1]);
-  const [nextId, setNextId] = React.useState(2);
+
+  const speedDialItems = [
+    {
+      icon: <SubjectIcon />,
+      title: `Add ${QUESTION_TYPE.TXT} Question`,
+      getNewItem: () => ({
+        question: "",
+        desc: "",
+        options: [""],
+        required: false,
+        type: QUESTION_TYPE.TXT
+      })
+    },
+    {
+      icon: <RadioButtonCheckedIcon />,
+      title: `Add ${QUESTION_TYPE.RD} Question`,
+      getNewItem: () => ({
+        question: "",
+        desc: "",
+        options: [""],
+        required: false,
+        type: QUESTION_TYPE.RD
+      })
+    },
+    {
+      icon: <CheckBoxIcon />,
+      title: `Add ${QUESTION_TYPE.CK} Question`,
+      getNewItem: () => ({
+        question: "",
+        desc: "",
+        options: [""],
+        required: false,
+        type: QUESTION_TYPE.CK
+      })
+    }
+  ];
 
   return (
-    <div>
-      {questions.map((question, idx) => (
-        <React.Fragment key={ids[idx]}>
-          <ReorderableCard
-            onMoveUp={() => {}}
-            onDelete={() => {}}
-            onMoveDown={() => {}}
-          >
-            <RegQuestionEditor
-              regQuestion={question}
-              setRegQuestion={newQuestion => {
-                const newQuestions = [...questions];
-                newQuestions[idx] = newQuestion;
-                setQuestions(newQuestions);
-              }}
-            />
-          </ReorderableCard>
-        </React.Fragment>
-      ))}
-      <div className={classes.spacer} />
-      <RightButtonBar>
-        <Button className={classes.button} onClick={props.prvPage} size="large">
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={props.nextPage}
-        >
-          Next
-        </Button>
-      </RightButtonBar>
-    </div>
+    <ReorderableCardForm
+      array={questions}
+      setArray={setQuestions}
+      prvPage={props.prvPage}
+      nextPage={props.nextPage}
+      getCardContents={index => (
+        <RegQuestionEditor
+          regQuestion={questions[index]}
+          setRegQuestion={newQuestion => {
+            const newQuestions = [...questions];
+            newQuestions[index] = newQuestion;
+            setQuestions(newQuestions);
+          }}
+        />
+      )}
+      speedDialItems={speedDialItems}
+    />
   );
 }
 
