@@ -153,6 +153,8 @@ export default function CreateHackathonPage() {
       case PAGES.DETAILS:
         return (
           <HackathonDetailsForm
+            details={details}
+            setDetails={setDetails}
             prvPage={() => setPage(PAGES.OVERVIEW)}
             nextPage={() => setPage(PAGES.REGISTRATION)}
           />

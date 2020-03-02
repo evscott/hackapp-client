@@ -8,10 +8,6 @@ import MdEditor from "./markdown/MdEditor";
 import ReorderableCardForm from "../reusable/ReorderableCardForm";
 
 export default function HackathonDetailsForm(props) {
-  const [detailSections, setDetailSections] = useState([
-    "# What the Hack?",
-    "Heck"
-  ]);
   const [viewMode, setViewMode] = useState(false);
 
   const speedDialItems = [
@@ -29,17 +25,17 @@ export default function HackathonDetailsForm(props) {
 
   return (
     <ReorderableCardForm
-      array={detailSections}
-      setArray={setDetailSections}
+      array={props.details}
+      setArray={props.setDetails}
       prvPage={props.prvPage}
       nextPage={props.nextPage}
       getCardContents={index => (
         <MdEditor
-          text={detailSections[index]}
-          setText={newDetailSection => {
-            const newDetailSections = [...detailSections];
-            newDetailSections[index] = newDetailSection;
-            setDetailSections(newDetailSections);
+          text={props.details[index]}
+          setText={newDetail => {
+            const newDetails = [...props.details];
+            newDetails[index] = newDetail;
+            props.setDetails(newDetails);
           }}
           view={viewMode}
         />
@@ -53,6 +49,10 @@ export default function HackathonDetailsForm(props) {
 }
 
 HackathonDetailsForm.propTypes = {
+  details: PropTypes.arrayOf(
+    PropTypes.string
+  ).isRequired,
+  setDetails: PropTypes.func.isRequired,
   prvPage: PropTypes.func.isRequired,
   nextPage: PropTypes.func.isRequired
 };
