@@ -9,13 +9,12 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 import "./markdown/mde-override-styles.css";
 import MdEditor from "./markdown/MdEditor";
 import Button from "@material-ui/core/Button";
-import RightButtonBar from "../buttons/RightButtonBar";
-import ReorderableCard from "./ReorderableCard";
+import RightButtonBar from "../reusable/RightButtonBar";
+import ReorderableCard from "../reusable/ReorderableCard";
 import HackathonDetailsSpeedDial from "./HackathonDetailsSpeedDial";
 
 const useStyles = makeStyles(theme => {
   return {
-    root: {},
     fab: {
       position: "fixed",
       right: 20,
@@ -111,7 +110,7 @@ export default function HackathonDetailsForm(props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       {text.map((txt, idx) => (
         <React.Fragment key={ids[idx]}>
           <ReorderableCard

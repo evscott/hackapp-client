@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { DatePicker, TimePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
-import RightButtonBar from "../buttons/RightButtonBar";
+import RightButtonBar from "../reusable/RightButtonBar";
 
 const useStyles = makeStyles(theme => {
   return {

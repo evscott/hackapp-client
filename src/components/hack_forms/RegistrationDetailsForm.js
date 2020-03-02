@@ -1,14 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import ReorderableCard from "./ReorderableCard";
-import SpeedDial from "@material-ui/lab/SpeedDial";
-import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import ReorderableCard from "../reusable/ReorderableCard";
 import Button from "@material-ui/core/Button";
 import RegQuestionEditor from "./questions/RegQuestionEditor";
-import HackathonDetailsForm from "./HackathonDetailsForm";
-import RightButtonBar from "../buttons/RightButtonBar";
+import RightButtonBar from "../reusable/RightButtonBar";
 
 const useStyles = makeStyles(theme => {
   return {
