@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
 import HackathonOverviewForm from "../hack_forms/HackathonOverviewForm";
@@ -67,51 +67,48 @@ const questionsState = [
   }
 ];
 
+/**
+ * The page for creating a hackathon. It has forms for editing the
+ * hackathon overview, details, and registration questions.
+ */
 export default function CreateHackathonPage() {
+  // The overview data for the hackathon
   const [overview, setOverview] = useState(overviewState);
+  // The details data for the hackathon (array of markdown)
   const [details, setDetails] = useState(detailsState);
+  // The questions for registration
   const [questions, setQuestions] = useState(questionsState);
-  const [page, setPage] = useState(PAGES.REGISTRATION);
+  // The page we are currently looking at
+  const [page, setPage] = useState(PAGES.OVERVIEW);
+  // When we redirect, we set the state here
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
 
-  const drawerPrimary = [
-    {
-      icon:
-        page > PAGES.OVERVIEW ? (
-          <CheckCircleIcon />
-        ) : (
-          <RadioButtonUncheckedIcon />
-        ),
-      text: "Hackathon Overview",
-      onClick: () => setPage(PAGES.OVERVIEW)
-    },
-    {
-      icon:
-        page > PAGES.DETAILS ? (
-          <CheckCircleIcon />
-        ) : (
-          <RadioButtonUncheckedIcon />
-        ),
-      text: "Hackathon Details",
-      onClick: () => setPage(PAGES.DETAILS)
-    },
-    {
-      icon:
-        page > PAGES.REGISTRATION ? (
-          <CheckCircleIcon />
-        ) : (
-          <RadioButtonUncheckedIcon />
-        ),
-      text: "Registration Details",
-      onClick: () => setPage(PAGES.REGISTRATION)
-    },
-    {
-      icon: <RadioButtonUncheckedIcon />,
-      text: "Preview",
-      onClick: () => setPage(PAGES.PREVIEW)
-    }
-  ];
+  /**
+   * The primary buttons in the left drawer. These have links
+   * to all of the different subpages (overview, details,
+   * registration, preview). Each button has an icon, text,
+   * and an onClick function to call. This is passed as input
+   * to the Page, which styles it according to its template.
+   */
+  const drawerPrimary = Object.entries(PAGES).map(k => {
+    // Get the page from the 2-tuple output
+    const pg = k[1];
+    return {
+      icon: page > pg ? (
+        <CheckCircleIcon />
+      ) : (
+        <RadioButtonUncheckedIcon />
+      ),
+      text: PAGE_TITLES[pg],
+      onClick: () => setPage(pg),
+      highlighted: page === pg
+    };
+  });
 
+  /**
+   * The secondary buttons in the left drawer for saving,
+   * trashing, and exiting the Create Hackathon flow.
+   */
   const drawerSecondary = [
     {
       icon: <SaveIcon />,
@@ -128,13 +125,19 @@ export default function CreateHackathonPage() {
     }
   ];
 
+  /** The number of steps away from completing the hackathon. */
+  const numStepsAway = PAGES.PREVIEW + 1 - page;
+
+  /**
+   * The header for the drawer with some information.
+   */
   const drawerHeader = (
     <div>
       <Typography variant="h4" component="p">
         Create Hackathon
       </Typography>
       <Typography variant="body1" component="p">
-        You're 4 steps away from going live!
+        You're {numStepsAway} step{numStepsAway === 1 ? '' : 's'} away from going live!
       </Typography>
     </div>
   );

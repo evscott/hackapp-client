@@ -21,6 +21,12 @@ const useStyles = makeStyles(theme => {
       flexDirection: "column",
       justifyContent: "flex-end",
       padding: 20
+    },
+    highlighted: {
+      backgroundColor: theme.palette.grey[200]
+    },
+    highlightedText: {
+      fontWeight: 700
     }
   };
 });
@@ -38,18 +44,38 @@ export default function DrawerList(props) {
       <div className={classes.header}>{props.header}</div>
       <List>
         {props.primaryButtons.map(button => (
-          <ListItem button key={button.text} onClick={button.onClick}>
+          <ListItem
+            button
+            key={button.text}
+            onClick={button.onClick}
+            className={button.highlighted ? classes.highlighted : ""}
+          >
             <ListItemIcon>{button.icon}</ListItemIcon>
-            <ListItemText primary={button.text} />
+            <ListItemText
+              classes={
+                button.highlighted ? { primary: classes.highlightedText } : {}
+              }
+              primary={button.text}
+            />
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
         {props.secondaryButtons.map(button => (
-          <ListItem button key={button.text} onClick={button.onClick}>
+          <ListItem
+            button
+            key={button.text}
+            onClick={button.onClick}
+            className={button.highlighted ? classes.highlighted : ""}
+          >
             <ListItemIcon>{button.icon}</ListItemIcon>
-            <ListItemText primary={button.text} />
+            <ListItemText
+              classes={
+                button.highlighted ? { primary: classes.highlightedText } : {}
+              }
+              primary={button.text}
+            />
           </ListItem>
         ))}
       </List>
@@ -62,7 +88,21 @@ DrawerList.propTypes = {
   header: PropTypes.any,
   // A list of all primary (important) buttons.
   // Each button has the format {button: string, icon: component, onClick: func}
-  primaryButtons: PropTypes.array,
+  primaryButtons: PropTypes.arrayOf(
+    PropTypes.shape({
+      icon: PropTypes.object.isRequired,
+      text: PropTypes.string.isRequired,
+      onClick: PropTypes.func.isRequired,
+      highlighted: PropTypes.bool
+    })
+  ),
   // A list of all secondary (less important) buttons.
-  secondaryButtons: PropTypes.array
+  secondaryButtons: PropTypes.arrayOf(
+    PropTypes.shape({
+      icon: PropTypes.object.isRequired,
+      text: PropTypes.string.isRequired,
+      onClick: PropTypes.func.isRequired,
+      highlighted: PropTypes.bool
+    })
+  )
 };
