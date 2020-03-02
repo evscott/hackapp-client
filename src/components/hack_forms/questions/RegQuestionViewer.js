@@ -71,7 +71,7 @@ export default function RegQuestionViewer(props) {
         value={props.answers[0]}
         onChange={event => props.setAnswers([event.target.value])}
       >
-        {props.regQuestion.options.map((option, idx) => (
+        {props.question.options.map((option, idx) => (
           <FormControlLabel
             control={<Radio />}
             label={option}
