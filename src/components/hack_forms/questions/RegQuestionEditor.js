@@ -1,14 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
-import Checkbox from "@material-ui/core/Checkbox";
-import { QUESTION_TYPE } from "./QuestionType";
 import RegQuestionOptionEditor from "./RegQuestionOptionEditor";
+import RegQuestionTypeSelector from "./RegQuestionTypeSelector";
+import RegQuestionRequiredCheckbox from "./RegQuestionRequiredCheckbox";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -20,9 +16,6 @@ const useStyles = makeStyles(theme => {
     },
     content: {
       padding: theme.spacing(4)
-    },
-    formControl: {
-      minWidth: 120
     },
     requiredCheckboxDiv: {
       position: "absolute",
@@ -53,41 +46,25 @@ const useStyles = makeStyles(theme => {
 
 export default function RegQuestionEditor(props) {
   const classes = useStyles();
+
+  const updateQuestion = (property, value) => {
+    props.setRegQuestion({
+      ...props.regQuestion,
+      [property]: value
+    });
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.header}>
-        <FormControl className={classes.formControl}>
-          <InputLabel>Type</InputLabel>
-          <Select
-            value={props.regQuestion.type}
-            onChange={event => {
-              const newRegQuestion = { ...props.regQuestion };
-              newRegQuestion.type = event.target.value;
-              props.setRegQuestion(newRegQuestion);
-            }}
-          >
-            <MenuItem value={QUESTION_TYPE.CK}>{QUESTION_TYPE.CK}</MenuItem>
-            <MenuItem value={QUESTION_TYPE.RD}>{QUESTION_TYPE.RD}</MenuItem>
-            <MenuItem value={QUESTION_TYPE.TXT}>{QUESTION_TYPE.TXT}</MenuItem>
-          </Select>
-        </FormControl>
-        <div className={classes.requiredCheckboxDiv}>
-          <InputLabel shrink={true} className={classes.requiredCheckboxLabel}>
-            Required
-          </InputLabel>
-          <Checkbox
-            checked={props.regQuestion.required}
-            onChange={event => {
-              const newRegQuestion = { ...props.regQuestion };
-              newRegQuestion.required = event.target.checked;
-              props.setRegQuestion(newRegQuestion);
-            }}
-            // onChange={handleChange}
-            value="primary"
-            inputProps={{ "aria-label": "primary checkbox" }}
-            className={classes.requiredCheckbox}
-          />
-        </div>
+        <RegQuestionTypeSelector
+          questionType={props.regQuestion.type}
+          setQuestionType={type => updateQuestion("type", type)}
+        />
+        <RegQuestionRequiredCheckbox
+          required={props.regQuestion.required}
+          setRequired={required => updateQuestion("required", required)}
+        />
       </div>
       <div className={classes.content}>
         <TextField
@@ -101,6 +78,8 @@ export default function RegQuestionEditor(props) {
           id="reg-question-title"
           label="Question"
           name="question"
+          value={props.regQuestion.question}
+          onChange={event => updateQuestion("question", event.target.value)}
         />
         <TextField
           fullWidth
@@ -109,17 +88,15 @@ export default function RegQuestionEditor(props) {
           id="reg-question-description"
           label="Description"
           name="description"
+          value={props.regQuestion.desc}
+          onChange={event => updateQuestion("desc", event.target.value)}
         />
       </div>
       <div className={classes.options}>
         <RegQuestionOptionEditor
           type={props.regQuestion.type}
           options={props.regQuestion.options}
-          setRegOptions={options => {
-            const newRegQuestion = { ...props.regQuestion };
-            newRegQuestion.options = options;
-            props.setRegQuestion(newRegQuestion);
-          }}
+          setRegOptions={options => updateQuestion("options", options)}
         />
       </div>
     </div>

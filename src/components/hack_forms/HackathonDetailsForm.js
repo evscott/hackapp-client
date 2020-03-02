@@ -9,13 +9,9 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 import "./markdown/mde-override-styles.css";
 import MdEditor from "./markdown/MdEditor";
 import Button from "@material-ui/core/Button";
-import SpeedDial from "@material-ui/lab/SpeedDial";
-import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
-import SubjectIcon from "@material-ui/icons/Subject";
-import ImageIcon from "@material-ui/icons/Image";
 import RightButtonBar from "../buttons/RightButtonBar";
 import ReorderableCard from "./ReorderableCard";
+import HackathonDetailsSpeedDial from "./HackathonDetailsSpeedDial";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -38,21 +34,6 @@ const useStyles = makeStyles(theme => {
     },
     spacer: {
       marginBottom: 40
-    },
-    speedDial: {
-      position: "relative",
-      top: -30,
-      right: -25,
-      marginBottom: -60
-    },
-    speedDialHidden: {
-      position: "relative",
-      top: -40,
-      right: -25,
-      marginBottom: -80
-    },
-    speedDialFab: {
-      backgroundColor: theme.palette.secondary.main
     }
   };
 });
@@ -66,7 +47,41 @@ export default function HackathonDetailsForm(props) {
   const [ids, setIds] = useState([1, 2]);
   const [nextId, setNextId] = useState(3);
   const [viewMode, setViewMode] = useState(false);
-  const [optionsOpen, setOptionsOpen] = useState(false);
+
+  const moveCard = (fromIndex, toIndex) => {
+    if(toIndex >= 0 && toIndex < ids.length) {
+      const newText = [...text];
+      newText[fromIndex] = text[toIndex];
+      newText[toIndex] = text[fromIndex];
+      setText(newText);
+      const newIds = [...ids];
+      newIds[fromIndex] = ids[toIndex];
+      newIds[toIndex] = ids[fromIndex];
+      setIds(newIds);
+    }
+  };
+
+  const deleteCard = (index) => {
+    // Only delete if there are at least two cards
+    if (text.length > 1) {
+      const newText = [...text];
+      newText.splice(index, 1);
+      setText(newText);
+      const newIds = [...ids];
+      newIds.splice(index, 1);
+      setIds(newIds);
+    }
+  };
+
+  const addCard = (index) => {
+    const newText = [...text];
+    newText.splice(index + 1, 0, "");
+    setText(newText);
+    const newIds = [...ids];
+    newIds.splice(index + 1, 0, nextId);
+    setNextId(nextId + 1);
+    setIds(newIds);
+  };
 
   const getFab = () => {
     return (
@@ -100,43 +115,9 @@ export default function HackathonDetailsForm(props) {
       {text.map((txt, idx) => (
         <React.Fragment key={ids[idx]}>
           <ReorderableCard
-            onMoveUp={() => {
-              // Move the item one position higher
-              if (idx > 0) {
-                const newText = [...text];
-                newText[idx] = text[idx - 1];
-                newText[idx - 1] = text[idx];
-                setText(newText);
-                const newIds = [...ids];
-                newIds[idx] = ids[idx - 1];
-                newIds[idx - 1] = ids[idx];
-                setIds(newIds);
-              }
-            }}
-            onMoveDown={() => {
-              // Move the item one position lower
-              if (idx < text.length - 1) {
-                const newText = [...text];
-                newText[idx] = text[idx + 1];
-                newText[idx + 1] = text[idx];
-                setText(newText);
-                const newIds = [...ids];
-                newIds[idx] = ids[idx + 1];
-                newIds[idx + 1] = ids[idx];
-                setIds(newIds);
-              }
-            }}
-            onDelete={() => {
-              if (text.length > 1) {
-                // Delete the item from the list
-                const newText = [...text];
-                newText.splice(idx, 1);
-                setText(newText);
-                const newIds = [...ids];
-                newIds.splice(idx, 1);
-                setIds(newIds);
-              }
-            }}
+            onMoveUp={() => moveCard(idx, idx - 1)}
+            onMoveDown={() => moveCard(idx, idx + 1)}
+            onDelete={() => deleteCard(idx)}
           >
             <MdEditor
               text={txt}
@@ -148,38 +129,11 @@ export default function HackathonDetailsForm(props) {
               view={viewMode}
             />
           </ReorderableCard>
-          <SpeedDial
-            ariaLabel="Add Component"
-            className={viewMode ? classes.speedDialHidden : classes.speedDial}
-            classes={{
-              fab: classes.speedDialFab
-            }}
-            icon={<SpeedDialIcon />}
-            onClose={() => setOptionsOpen(false)}
-            onOpen={() => setOptionsOpen(true)}
-            open={optionsOpen}
+          <HackathonDetailsSpeedDial
             hidden={viewMode}
-            direction="left"
-          >
-            <SpeedDialAction
-              icon={<SubjectIcon />}
-              tooltipTitle="Add Text"
-              onClick={() => {
-                const newText = [...text];
-                newText.splice(idx + 1, 0, "");
-                setText(newText);
-                const newIds = [...ids];
-                newIds.splice(idx + 1, 0, nextId);
-                setNextId(nextId + 1);
-                setIds(newIds);
-              }}
-            />
-            <SpeedDialAction
-              icon={<ImageIcon />}
-              tooltipTitle="Add Image"
-              onClick={() => console.log("Not implemented yet.")}
-            />
-          </SpeedDial>
+            addText={() => addCard(idx)}
+            addImage={() => console.log("Not implemented yet.")}
+          />
         </React.Fragment>
       ))}
       <div className={classes.spacer} />

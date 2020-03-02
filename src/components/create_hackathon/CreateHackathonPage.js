@@ -128,7 +128,10 @@ export default function CreateHackathonPage() {
         );
       case PAGES.REGISTRATION:
         return (
-          <RegistrationDetailsForm/>
+          <RegistrationDetailsForm
+            prvPage={() => setPage(PAGES.DETAILS)}
+            nextPage={() => setPage(PAGES.PREVIEW)}
+          />
         );
       default:
         return "";

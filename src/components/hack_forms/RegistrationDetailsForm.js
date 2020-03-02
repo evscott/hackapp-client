@@ -5,10 +5,20 @@ import ReorderableCard from "./ReorderableCard";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import Button from "@material-ui/core/Button";
 import RegQuestionEditor from "./questions/RegQuestionEditor";
+import HackathonDetailsForm from "./HackathonDetailsForm";
+import RightButtonBar from "../buttons/RightButtonBar";
 
 const useStyles = makeStyles(theme => {
-  return {};
+  return {
+    button: {
+      marginRight: 10
+    },
+    spacer: {
+      marginBottom: 40
+    },
+  };
 });
 
 export default function RegistrationDetailsForm(props) {
@@ -46,6 +56,25 @@ export default function RegistrationDetailsForm(props) {
           </ReorderableCard>
         </React.Fragment>
       ))}
+      <div className={classes.spacer} />
+      <RightButtonBar>
+        <Button className={classes.button} onClick={props.prvPage} size="large">
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={props.nextPage}
+        >
+          Next
+        </Button>
+      </RightButtonBar>
     </div>
   );
 }
+
+RegistrationDetailsForm.propTypes = {
+  prvPage: PropTypes.func.isRequired,
+  nextPage: PropTypes.func.isRequired
+};
