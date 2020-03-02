@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import "react-mde/lib/styles/css/react-mde-all.css";
-import "./markdown/mde-override-styles.css";
 import Button from "@material-ui/core/Button";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import RightButtonBar from "../reusable/RightButtonBar";
@@ -65,8 +63,8 @@ export default function ReorderableCardForm(props) {
 
   return (
     <div>
-      {text.map((txt, idx) => (
-        <React.Fragment key={ids[idx]}>
+      {props.array.map((txt, idx) => (
+        <React.Fragment key={keys[idx]}>
           <ReorderableCard
             onMoveUp={() => moveCard(idx, idx - 1)}
             onMoveDown={() => moveCard(idx, idx + 1)}
