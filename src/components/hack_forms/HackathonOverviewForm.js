@@ -40,6 +40,10 @@ export default function HackathonOverviewForm(props) {
     <div>
       <TextField
         className={classes.marginedTextField}
+        value={props.overview.name}
+        onChange={event =>
+          props.setOverview({ ...props.overview, name: event.target.value })
+        }
         variant={"outlined"}
         required
         fullWidth
@@ -189,7 +193,14 @@ export default function HackathonOverviewForm(props) {
 }
 
 HackathonOverviewForm.propTypes = {
-  overview: PropTypes.any.isRequired,
+  overview: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    startDate: PropTypes.instanceOf(Date).isRequired,
+    endDate: PropTypes.instanceOf(Date).isRequired,
+    location: PropTypes.string.isRequired,
+    maxRegistrants: PropTypes.number.isRequired,
+    regDeadline: PropTypes.instanceOf(Date).isRequired
+  }).isRequired,
   setOverview: PropTypes.func.isRequired,
   nextPage: PropTypes.func.isRequired,
   discardAndExit: PropTypes.func.isRequired

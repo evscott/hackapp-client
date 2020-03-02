@@ -11,6 +11,7 @@ import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
 import { DASHBOARD_ROUTE } from "../../routes";
 import RegistrationDetailsForm from "../hack_forms/RegistrationDetailsForm";
 
+/** The distinct pages for creating hackathons, in order. */
 const PAGES = {
   OVERVIEW: 1,
   DETAILS: 2,
@@ -18,11 +19,16 @@ const PAGES = {
   PREVIEW: 4
 };
 
+/**
+ * The possible redirects from this page for React Router.
+ * If redirected, we go to a new page route without rendering this page.
+ */
 const REDIRECT = {
   NONE: "",
   DASHBOARD: <Redirect to={DASHBOARD_ROUTE} />
 };
 
+/** The initial state for the hackathon overview */
 const overviewState = {
   name: "",
   startDate: new Date(),
