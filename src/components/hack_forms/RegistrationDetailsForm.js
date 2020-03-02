@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import SubjectIcon from "@material-ui/icons/Subject";
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
@@ -8,15 +8,16 @@ import { QUESTION_TYPE } from "./questions/QuestionType";
 import ReorderableCardForm from "../reusable/ReorderableCardForm";
 
 export default function RegistrationDetailsForm(props) {
-  const [questions, setQuestions] = React.useState([
+  const [questions, setQuestions] = useState([
     {
       question: "",
       desc: "",
-      options: [""],
+      options: [],
       required: false,
       type: QUESTION_TYPE.TXT
     }
   ]);
+  const [viewMode, setViewMode] = useState(false);
 
   const speedDialItems = [
     {
@@ -25,7 +26,7 @@ export default function RegistrationDetailsForm(props) {
       getNewItem: () => ({
         question: "",
         desc: "",
-        options: [""],
+        options: [],
         required: false,
         type: QUESTION_TYPE.TXT
       })
@@ -36,7 +37,7 @@ export default function RegistrationDetailsForm(props) {
       getNewItem: () => ({
         question: "",
         desc: "",
-        options: [""],
+        options: [],
         required: false,
         type: QUESTION_TYPE.RD
       })
@@ -47,7 +48,7 @@ export default function RegistrationDetailsForm(props) {
       getNewItem: () => ({
         question: "",
         desc: "",
-        options: [""],
+        options: [],
         required: false,
         type: QUESTION_TYPE.CK
       })
@@ -68,9 +69,13 @@ export default function RegistrationDetailsForm(props) {
             newQuestions[index] = newQuestion;
             setQuestions(newQuestions);
           }}
+          viewMode={viewMode}
         />
       )}
       speedDialItems={speedDialItems}
+      speedDialHidden={viewMode}
+      viewMode={viewMode}
+      setViewMode={setViewMode}
     />
   );
 }

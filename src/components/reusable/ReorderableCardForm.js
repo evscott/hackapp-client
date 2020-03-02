@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
+import Fab from "@material-ui/core/Fab";
+import Typography from "@material-ui/core/Typography";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import EditIcon from "@material-ui/icons/Edit";
 import RightButtonBar from "../reusable/RightButtonBar";
 import ReorderableCard from "../reusable/ReorderableCard";
 import RightSpeedDial from "./RightSpeedDial";
@@ -14,12 +18,56 @@ const useStyles = makeStyles(theme => {
     },
     spacer: {
       marginBottom: 40
+    },
+    fab: {
+      position: "fixed",
+      right: 20,
+      bottom: 20,
+      zIndex: 1051
+    },
+    icon: {
+      marginRight: 10
+    },
+    fabContents: {
+      display: "flex",
+      alignItems: "center"
     }
   };
 });
 
 export default function ReorderableCardForm(props) {
   const classes = useStyles();
+
+  const getFab = () => {
+    return (
+      <Fab
+        className={classes.fab}
+        color="primary"
+        onClick={() => {
+          if(props.setViewMode) {
+            props.setViewMode(!props.viewMode)
+          }
+        }}
+        variant="extended"
+      >
+        {props.viewMode ? (
+          <div className={classes.fabContents}>
+            <EditIcon className={classes.icon} />
+            <Typography variant="button" display="inline">
+              Edit
+            </Typography>
+          </div>
+        ) : (
+          <div className={classes.fabContents}>
+            <VisibilityIcon className={classes.icon} />
+            <Typography variant="button" display="inline">
+              Preview
+            </Typography>
+          </div>
+        )}
+      </Fab>
+    );
+  };
 
   // Managing the keys of each text element is required for
   // React to get state management correct.
@@ -98,7 +146,7 @@ export default function ReorderableCardForm(props) {
           Next
         </Button>
       </RightButtonBar>
-      {props.fab ? props.fab : ""}
+      {props.setViewMode ? getFab() : ""}
     </div>
   );
 }
@@ -117,5 +165,6 @@ ReorderableCardForm.propTypes = {
     })
   ).isRequired,
   speedDialHidden: PropTypes.bool,
-  fab: PropTypes.object
+  viewMode: PropTypes.bool,
+  setViewMode: PropTypes.func
 };

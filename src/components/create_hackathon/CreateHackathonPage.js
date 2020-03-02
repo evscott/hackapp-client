@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
@@ -11,11 +10,6 @@ import HackathonOverviewForm from "../hack_forms/HackathonOverviewForm";
 import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
 import { DASHBOARD_ROUTE } from "../../routes";
 import RegistrationDetailsForm from "../hack_forms/RegistrationDetailsForm";
-
-/**
- * The styles for the React component.
- */
-const useStyles = makeStyles(theme => {});
 
 const PAGES = {
   OVERVIEW: 1,
