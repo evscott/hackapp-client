@@ -138,6 +138,28 @@ export default function ReorderableCardForm(props) {
     setKeys(newKeys);
   };
 
+  /** The navigation component at the bottom. */
+  const navigation = () => {
+    if(props.prvPage && props.nextPage) {
+      return (
+        <RightButtonBar>
+          <Button className={classes.button} onClick={props.prvPage} size="large">
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={props.nextPage}
+          >
+            Next
+          </Button>
+        </RightButtonBar>
+      )
+    }
+    return "";
+  };
+
   return (
     <div>
       {props.array.map((txt, idx) => (
@@ -146,35 +168,26 @@ export default function ReorderableCardForm(props) {
             onMoveUp={() => moveCard(idx, idx - 1)}
             onMoveDown={() => moveCard(idx, idx + 1)}
             onDelete={() => deleteCard(idx)}
+            reorderingDisabled={props.reorderingDisabled}
           >
             {props.getCardContents(idx)}
           </ReorderableCard>
           <RightSpeedDial hidden={props.speedDialHidden}>
-            {props.speedDialItems.map((item, actionNumber) => (
-              <SpeedDialAction
-                key={actionNumber}
-                icon={item.icon}
-                tooltipTitle={item.title}
-                onClick={() => addCard(idx, item.getNewItem)}
-              />
-            ))}
+            {props.speedDialItems
+              ? props.speedDialItems.map((item, actionNumber) => (
+                  <SpeedDialAction
+                    key={actionNumber}
+                    icon={item.icon}
+                    tooltipTitle={item.title}
+                    onClick={() => addCard(idx, item.getNewItem)}
+                  />
+                ))
+              : ""}
           </RightSpeedDial>
         </React.Fragment>
       ))}
       <div className={classes.spacer} />
-      <RightButtonBar>
-        <Button className={classes.button} onClick={props.prvPage} size="large">
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={props.nextPage}
-        >
-          Next
-        </Button>
-      </RightButtonBar>
+      {navigation()}
       {props.setViewMode ? getFab() : ""}
     </div>
   );
@@ -187,9 +200,9 @@ ReorderableCardForm.propTypes = {
   // Sets the array
   setArray: PropTypes.func.isRequired,
   // Goes to the previous page
-  prvPage: PropTypes.func.isRequired,
+  prvPage: PropTypes.func,
   // Goes to the next page
-  nextPage: PropTypes.func.isRequired,
+  nextPage: PropTypes.func,
   // Gets the contents that go into a card, given the current index
   getCardContents: PropTypes.func.isRequired,
   // A list of options for creating new cards. Each option should have
@@ -201,12 +214,14 @@ ReorderableCardForm.propTypes = {
       title: PropTypes.string,
       getNewItem: PropTypes.func
     })
-  ).isRequired,
+  ),
   // Whether to hide the speed dial options for creating cards
   speedDialHidden: PropTypes.bool,
   // Whether we are in view mode or not
   viewMode: PropTypes.bool,
   // A setter for going into view mode. If not set, we do not have a view mode
   // and the floating action button for setting it does not exist.
-  setViewMode: PropTypes.func
+  setViewMode: PropTypes.func,
+  // Whether reordering has been completely disabled or not
+  reorderingDisabled: PropTypes.bool
 };

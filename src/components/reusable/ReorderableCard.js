@@ -21,6 +21,11 @@ const useStyles = makeStyles(theme => {
       position: "relative",
       width: "calc(100% - 40px)"
     },
+    contentBig: {
+      float: "left",
+      position: "relative",
+      width: "100%"
+    },
     sidebar: {
       float: "left",
       clear: "none",
@@ -33,6 +38,9 @@ const useStyles = makeStyles(theme => {
       justifyContent: "center",
       height: "100%",
       backgroundColor: theme.palette.primary.main
+    },
+    sidebarHidden: {
+      display: "none"
     },
     icon: {
       color: theme.palette.primary.contrastText
@@ -49,8 +57,18 @@ export default function ReorderableCard(props) {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
-      <div className={classes.content}>{props.children}</div>
-      <div className={classes.sidebar}>
+      <div
+        className={
+          props.reorderingDisabled ? classes.contentBig : classes.content
+        }
+      >
+        {props.children}
+      </div>
+      <div
+        className={
+          props.reorderingDisabled ? classes.sidebarHidden : classes.sidebar
+        }
+      >
         <IconButton className={classes.icon} onClick={props.onMoveUp}>
           <KeyboardArrowUpIcon />
         </IconButton>
@@ -71,5 +89,7 @@ ReorderableCard.propTypes = {
   // What happens when we try to delete the card
   onDelete: PropTypes.func.isRequired,
   // What happens when moving the card down
-  onMoveDown: PropTypes.func.isRequired
+  onMoveDown: PropTypes.func.isRequired,
+  // Disables the reordering and hides those functions
+  reorderingDisabled: PropTypes.bool
 };

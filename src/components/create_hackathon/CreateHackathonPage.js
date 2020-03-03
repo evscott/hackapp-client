@@ -11,25 +11,8 @@ import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
 import { DASHBOARD_ROUTE } from "../../routes";
 import RegistrationDetailsForm from "../hack_forms/RegistrationDetailsForm";
 import { QUESTION_TYPE } from "../hack_forms/questions/QuestionType";
-
-/** The distinct pages for creating hackathons, in order. */
-const PAGES = {
-  OVERVIEW: 1,
-  DETAILS: 2,
-  REGISTRATION: 3,
-  PREVIEW: 4
-};
-
-/**
- * The titles for each page. Can be indexed using PAGE_TITLES[page],
- * where page is an integer.
- */
-const PAGE_TITLES = {
-  [PAGES.OVERVIEW]: "Overview",
-  [PAGES.DETAILS]: "Details",
-  [PAGES.REGISTRATION]: "Registration",
-  [PAGES.PREVIEW]: "Preview"
-};
+import { PAGES, PAGE_TITLES, PAGES_LIST } from "./CreateHackathonSubpages";
+import HackathonPreviewForm from "../hack_forms/HackathonPreviewForm";
 
 /**
  * The possible redirects from this page for React Router.
@@ -90,9 +73,7 @@ export default function CreateHackathonPage() {
    * and an onClick function to call. This is passed as input
    * to the Page, which styles it according to its template.
    */
-  const drawerPrimary = Object.entries(PAGES).map(k => {
-    // Get the page from the 2-tuple output
-    const pg = k[1];
+  const drawerPrimary = PAGES_LIST.map(pg => {
     return {
       icon: page > pg ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />,
       text: PAGE_TITLES[pg],
@@ -167,6 +148,13 @@ export default function CreateHackathonPage() {
             setQuestions={setQuestions}
             prvPage={() => setPage(PAGES.DETAILS)}
             nextPage={() => setPage(PAGES.PREVIEW)}
+          />
+        );
+      case PAGES.PREVIEW:
+        return (
+          <HackathonPreviewForm
+            questions={questions}
+            details={details}
           />
         );
       default:
