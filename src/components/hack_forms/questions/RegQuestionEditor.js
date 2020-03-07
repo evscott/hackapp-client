@@ -146,7 +146,17 @@ RegQuestionEditor.propTypes = {
     type: PropTypes.string.isRequired
   }).isRequired,
   // Function for setting the data for a question
-  setQuestion: PropTypes.func.isRequired,
+  setQuestion: (props, propName) => {
+    // Type check to ensure we have a function defined when viewMode is true
+    if (
+      props["viewMode"] === false &&
+      (props[propName] === undefined || typeof props[propName] !== "function")
+    ) {
+      return new Error(
+        "RegQuestionEditor must have a setter for the question when viewMode is false"
+      );
+    }
+  },
   // If we should just view rather than edit the question
   viewMode: PropTypes.bool,
   // The answers (options) chosen when viewing the question. Not required

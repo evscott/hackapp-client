@@ -75,7 +75,6 @@ export default function RegistrationDetailsForm(props) {
         />
       )}
       speedDialItems={speedDialItems}
-      speedDialHidden={viewMode}
       viewMode={viewMode}
       setViewMode={setViewMode}
     />

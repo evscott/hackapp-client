@@ -59,14 +59,14 @@ export default function ReorderableCard(props) {
     <Card className={classes.card}>
       <div
         className={
-          props.reorderingDisabled ? classes.contentBig : classes.content
+          props.viewMode ? classes.contentBig : classes.content
         }
       >
         {props.children}
       </div>
       <div
         className={
-          props.reorderingDisabled ? classes.sidebarHidden : classes.sidebar
+          props.viewMode ? classes.sidebarHidden : classes.sidebar
         }
       >
         <IconButton className={classes.icon} onClick={props.onMoveUp}>
@@ -91,5 +91,5 @@ ReorderableCard.propTypes = {
   // What happens when moving the card down
   onMoveDown: PropTypes.func.isRequired,
   // Disables the reordering and hides those functions
-  reorderingDisabled: PropTypes.bool
+  viewMode: PropTypes.bool
 };

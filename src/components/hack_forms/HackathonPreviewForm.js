@@ -45,17 +45,13 @@ export default function HackathonPreviewForm(props) {
     return (
       <ReorderableCardForm
         array={props.details}
-        setArray={() => {} /* disabled */}
         getCardContents={index => (
           <MdEditor
             text={props.details[index]}
-            setText={() => {} /* disabled */}
-            view={true}
+            viewMode
           />
         )}
-        viewMode={true}
-        speedDialHidden={true}
-        reorderingDisabled
+        viewMode
       />
     );
   };
@@ -65,19 +61,13 @@ export default function HackathonPreviewForm(props) {
     return (
       <ReorderableCardForm
         array={props.questions}
-        setArray={() => {} /* disabled */}
         getCardContents={index => (
           <RegQuestionEditor
             question={props.questions[index]}
-            setQuestion={() => {
-              /* disabled */
-            }}
-            viewMode={true}
+            viewMode
           />
         )}
-        viewMode={true}
-        speedDialHidden={true}
-        reorderingDisabled
+        viewMode
       />
     );
   };

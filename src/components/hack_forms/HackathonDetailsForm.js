@@ -48,11 +48,10 @@ export default function HackathonDetailsForm(props) {
             newDetails[index] = newDetail;
             props.setDetails(newDetails);
           }}
-          view={viewMode}
+          viewMode={viewMode}
         />
       )}
       speedDialItems={speedDialItems}
-      speedDialHidden={viewMode}
       viewMode={viewMode}
       setViewMode={setViewMode}
     />
