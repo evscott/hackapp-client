@@ -40,6 +40,11 @@ export default function HackathonPreviewForm(props) {
   // preview page, since that would be a recursive mess!)
   const pagesWithoutPreview = PAGES_LIST.filter(pg => pg !== PAGES.PREVIEW);
 
+  /** Gets a read-only preview of the hackathon overview. */
+  const previewOverview = () => {
+
+  };
+
   /** Gets a read-only preview of the hackathon details. */
   const previewDetails = () => {
     return (
