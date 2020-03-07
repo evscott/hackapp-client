@@ -45,6 +45,7 @@ export default function HackathonPreviewForm(props) {
     return (
       <ReorderableCardForm
         array={props.details}
+        key="preview-details" // Key required to avoid React errors reusing components
         getCardContents={index => (
           <MdEditor
             text={props.details[index]}
@@ -61,6 +62,7 @@ export default function HackathonPreviewForm(props) {
     return (
       <ReorderableCardForm
         array={props.questions}
+        key="preview-questions"
         getCardContents={index => (
           <RegQuestionEditor
             question={props.questions[index]}
