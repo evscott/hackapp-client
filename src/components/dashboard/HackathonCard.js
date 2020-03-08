@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
+import dayjs from "dayjs";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import { makeStyles } from "@material-ui/core/styles";
-
 import hackathonImg from "../../img/hackathon-default.jpg";
 
 /**
@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => {
         overflow: "hidden"
       }
     },
-    title: {
+    nowrap: {
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis"
@@ -47,7 +47,8 @@ const useStyles = makeStyles(theme => {
         position: "relative",
         display: "inline-block",
         width: 180,
-        borderRight: "1px #CCCCCC solid"
+        borderRight: "1px #CCCCCC solid",
+        top: -7
       }
     },
     date1: {
@@ -67,6 +68,13 @@ const useStyles = makeStyles(theme => {
     date3: {
       display: "inline-block",
       clear: "none"
+    },
+    primaryDetails: {
+      paddingBottom: 8
+    },
+    secondaryDetails: {
+      textAlign: "center",
+      backgroundColor: theme.palette.grey[100]
     }
   };
 });
@@ -86,28 +94,32 @@ export default function HackathonCard(props) {
           image={hackathonImg}
           title="Hackathon"
         />
-        <CardContent>
+        <CardContent className={classes.primaryDetails}>
           <div className={classes.date}>
             <Typography className={classes.date1} variant="h6" component="p">
-              {props.startDate}
+              {dayjs(props.overview.startDate).format("h:mma MMM D")}
             </Typography>
             <Typography className={classes.date2} variant="body2" component="p">
               TO
             </Typography>
             <Typography className={classes.date3} variant="h6" component="p">
-              {props.endDate}
+              {dayjs(props.overview.endDate).format("h:mma MMM D")}
             </Typography>
           </div>
           <div className={classes.info}>
-            <Typography
-              className={classes.title}
-              variant="h4"
-              component="h2"
-              gutterBottom
-            >
-              {props.title}
+            <Typography className={classes.nowrap} variant="h4" component="h2">
+              {props.overview.name}
+            </Typography>
+            <Typography className={classes.nowrap}>
+              {props.overview.location}
             </Typography>
           </div>
+        </CardContent>
+        <CardContent className={classes.secondaryDetails}>
+          <Typography>
+            Up to <b>{props.overview.maxRegistrants}</b> attendees can register
+            by <b>{dayjs(props.overview.regDeadline).format("h:mma MMMM D, YYYY")}</b>
+          </Typography>
         </CardContent>
       </CardActionArea>
     </Card>
@@ -115,11 +127,13 @@ export default function HackathonCard(props) {
 }
 
 HackathonCard.propTypes = {
-  // A string representing when the hackathon starts.
-  // Format: "6:00PM Feb 8"
-  startDate: PropTypes.string.isRequired,
-  // String representing when the hackathon ends.
-  endDate: PropTypes.string.isRequired,
-  // The title for the hackathon
-  title: PropTypes.string.isRequired
+  // The overview object, with all the data to be show about the hackathon
+  overview: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    startDate: PropTypes.instanceOf(Date).isRequired,
+    endDate: PropTypes.instanceOf(Date).isRequired,
+    location: PropTypes.string.isRequired,
+    maxRegistrants: PropTypes.number.isRequired,
+    regDeadline: PropTypes.instanceOf(Date).isRequired
+  }).isRequired
 };

@@ -155,6 +155,7 @@ export default function CreateHackathonPage() {
           <HackathonPreviewForm
             questions={questions}
             details={details}
+            overview={overview}
           />
         );
       default:

@@ -23,14 +23,20 @@ const REDIRECT = {
  */
 const pastHackathons = [
   {
-    title: "MtA Hacks 2018",
-    startDate: "6:00PM Feb 8",
-    endDate: "1:30PM Feb 9"
+    name: "MtA Hacks 2018",
+    startDate: new Date('February 6, 1995 06:30:00'),
+    endDate: new Date('February 6, 1995 16:30:00'),
+    location: "Mount Allison University",
+    maxRegistrants: 59,
+    regDeadline: new Date('February 6, 1995 06:30:00')
   },
   {
-    title: "MtA Hacks 2019",
-    startDate: "6:00PM Feb 8",
-    endDate: "1:30PM Feb 9"
+    name: "MtA Hacks 2019",
+    startDate: new Date('February 7, 1995 10:30:00'),
+    endDate: new Date('February 8, 1995 20:35:00'),
+    location: "Mount Allison University",
+    maxRegistrants: 65,
+    regDeadline: new Date('February 7, 1995 10:30:00')
   }
 ];
 
@@ -41,19 +47,28 @@ const pastHackathons = [
  */
 const upcomingHackathons = [
   {
-    title: "MtA Hacks 2020",
-    startDate: "6:00PM Feb 8",
-    endDate: "1:30PM Feb 9"
+    name: "MtA Hacks 2020",
+    startDate: new Date('February 7, 2021 18:00:00'),
+    endDate: new Date('February 8, 2021 13:30:00'),
+    location: "Mount Allison University",
+    maxRegistrants: 79,
+    regDeadline: new Date('February 7, 2021 18:00:00'),
   },
   {
-    title: "MtA Hacks 2021",
-    startDate: "6:00PM Feb 8",
-    endDate: "1:30PM Feb 9"
+    name: "MtA Hacks 2021",
+    startDate: new Date('February 7, 2021 18:00:00'),
+    endDate: new Date('February 8, 2021 13:30:00'),
+    location: "Mount Allison University",
+    maxRegistrants: 854,
+    regDeadline: new Date('February 7, 2021 18:00:00'),
   },
   {
-    title: "MtA Hacks 2022",
-    startDate: "6:00PM Feb 8",
-    endDate: "1:30PM Feb 9"
+    name: "MtA Hacks 2022",
+    startDate: new Date('February 7, 2021 18:00:00'),
+    endDate: new Date('February 8, 2021 13:30:00'),
+    location: "Mount Allison University",
+    maxRegistrants: 79438,
+    regDeadline: new Date('February 7, 2021 18:00:00'),
   }
 ];
 
@@ -156,13 +171,13 @@ export default function DashboardPage() {
         Upcoming Hackathons
       </Typography>
       {upcomingHackathons.map(hackathon => (
-        <HackathonCard {...hackathon} key={hackathon.title + hackathon.startDate + hackathon.endDate} />
+        <HackathonCard overview={hackathon} key={hackathon.name + hackathon.startDate + hackathon.endDate} />
       ))}
       <Typography className={classes.subheader} variant="h4" component="h2">
         Past Hackathons
       </Typography>
       {pastHackathons.map(hackathon => (
-        <HackathonCard {...hackathon} key={hackathon.title + hackathon.startDate + hackathon.endDate} />
+        <HackathonCard overview={hackathon} key={hackathon.name + hackathon.startDate + hackathon.endDate} />
       ))}
       <Tooltip title="Create New Hackathon" arrow placement="top">
         <Fab className={classes.fab} color="primary" onClick={() => setRedirect(REDIRECT.CREATE)} >

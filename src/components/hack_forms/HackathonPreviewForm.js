@@ -13,6 +13,7 @@ import { largeDrawerWidth } from "../page/Drawer";
 import ReorderableCardForm from "../reusable/ReorderableCardForm";
 import RegQuestionEditor from "./questions/RegQuestionEditor";
 import MdEditor from "./markdown/MdEditor";
+import HackathonCard from "../dashboard/HackathonCard";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -42,7 +43,9 @@ export default function HackathonPreviewForm(props) {
 
   /** Gets a read-only preview of the hackathon overview. */
   const previewOverview = () => {
-
+    return (
+      <HackathonCard overview={props.overview}/>
+    )
   };
 
   /** Gets a read-only preview of the hackathon details. */
@@ -82,6 +85,8 @@ export default function HackathonPreviewForm(props) {
   /** Gets the current page to preview. */
   const getPage = () => {
     switch (page) {
+      case PAGES.OVERVIEW:
+        return previewOverview();
       case PAGES.DETAILS:
         return previewDetails();
       case PAGES.REGISTRATION:
@@ -114,6 +119,15 @@ export default function HackathonPreviewForm(props) {
 }
 
 HackathonPreviewForm.propTypes = {
+  // The overview object, with all the general data to be show
+  overview: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    startDate: PropTypes.instanceOf(Date).isRequired,
+    endDate: PropTypes.instanceOf(Date).isRequired,
+    location: PropTypes.string.isRequired,
+    maxRegistrants: PropTypes.number.isRequired,
+    regDeadline: PropTypes.instanceOf(Date).isRequired
+  }).isRequired,
   // The questions for the registration form, which is an array of
   // objects
   questions: PropTypes.arrayOf(

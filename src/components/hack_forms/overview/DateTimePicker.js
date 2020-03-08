@@ -21,7 +21,10 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-
+/**
+ * A nice date-and-time picker that fills an entire row with the options.
+ * It's a lightly styled wrapper for the Material-UI pickers.
+ */
 export default function DateTimePicker(props) {
   const classes = useStyles();
   return (

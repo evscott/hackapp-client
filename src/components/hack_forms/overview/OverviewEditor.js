@@ -34,8 +34,8 @@ const useStyles = makeStyles(theme => {
 });
 
 /**
- * A form for asking the user about key information about the hackathon,
- * such as the date, location, time, etc.
+ * A set of fields for editing the overview of a hackathon. This is a reusable
+ * component.
  */
 export default function OverviewEditor(props) {
   const classes = useStyles();
