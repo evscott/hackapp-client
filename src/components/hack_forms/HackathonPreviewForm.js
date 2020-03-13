@@ -18,10 +18,9 @@ import HackathonCard from "../dashboard/HackathonCard";
 const useStyles = makeStyles(theme => {
   return {
     bottomNav: {
-      position: "fixed",
-      bottom: theme.spacing(3),
-      left: theme.spacing(3),
-      right: theme.spacing(3),
+      position: "static",
+      marginTop: 20,
+      borderRadius: 4,
       backgroundColor: theme.palette.grey[100],
       [theme.breakpoints.up("md")]: {
         left: largeDrawerWidth + theme.spacing(3)
@@ -98,7 +97,6 @@ export default function HackathonPreviewForm(props) {
 
   return (
     <div>
-      {getPage()}
       <BottomNavigation
         className={classes.bottomNav}
         value={page}
@@ -114,6 +112,7 @@ export default function HackathonPreviewForm(props) {
           />
         ))}
       </BottomNavigation>
+      {getPage()}
     </div>
   );
 }
