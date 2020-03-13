@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => {
     content: {
       marginTop: 75,
       maxWidth: 650,
+      marginBottom: 100,
       [theme.breakpoints.up("md")]: {
         width: `calc(100% - ${largeDrawerWidth}px)`,
         marginLeft: `calc(${largeDrawerWidth}px + ((50% - ${0.5 *
@@ -84,7 +85,7 @@ Drawer.propTypes = {
   // The header components in the drawer
   drawerHeader: PropTypes.any,
   // A list of all primary (important) buttons.
-  // Each button has the format {button: string,icon: component}
+  // Each button has the format {button: string, icon: component, onClick: func}
   drawerPrimary: PropTypes.array,
   // A list of all the secondary (less important) buttons.
   drawerSecondary: PropTypes.array,
