@@ -99,6 +99,8 @@ export default function RegQuestionOptionEditor(props) {
    * one is there for creating new ones.
    */
   const createCKOptions = () => {
+    // Displays all options, plus one extra (the empty string) which is for
+    // adding additional options in the editor
     return (
       <FormGroup>
         {[...props.options, ""].map((option, idx) => (
@@ -119,6 +121,8 @@ export default function RegQuestionOptionEditor(props) {
    * There is one extra option visible, which is for adding more options.
    */
   const createRDOptions = () => {
+    // Displays all options, plus one extra (the empty string) which is for
+    // adding additional options in the editor
     return (
       <RadioGroup>
         {[...props.options, ""].map((option, idx) => (
