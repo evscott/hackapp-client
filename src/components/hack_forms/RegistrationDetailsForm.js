@@ -12,9 +12,6 @@ import ReorderableCardForm from "../reusable/ReorderableCardForm";
  * that will be given to the user.
  */
 export default function RegistrationDetailsForm(props) {
-  // When in view mode, we'll get to preview and not edit anything
-  const [viewMode, setViewMode] = useState(false);
-
   /**
    * All available options for creating new items on the form.
    * These are available through a popup menu on the right called
@@ -61,8 +58,6 @@ export default function RegistrationDetailsForm(props) {
     <ReorderableCardForm
       array={props.questions}
       setArray={props.setQuestions}
-      prvPage={props.prvPage}
-      nextPage={props.nextPage}
       getCardContents={index => (
         <RegQuestionEditor
           question={props.questions[index]}
@@ -71,12 +66,11 @@ export default function RegistrationDetailsForm(props) {
             newQuestions[index] = newQuestion;
             props.setQuestions(newQuestions);
           }}
-          viewMode={viewMode}
+          viewMode={props.viewMode}
         />
       )}
       speedDialItems={speedDialItems}
-      viewMode={viewMode}
-      setViewMode={setViewMode}
+      viewMode={props.viewMode}
     />
   );
 }
@@ -95,8 +89,6 @@ RegistrationDetailsForm.propTypes = {
   ).isRequired,
   // The function to update the questions
   setQuestions: PropTypes.func.isRequired,
-  // The function for going to the previous page
-  prvPage: PropTypes.func.isRequired,
-  // The function for going to the next page
-  nextPage: PropTypes.func.isRequired
+  // Whether the form is in view-only mode or not
+  viewMode: PropTypes.bool
 };

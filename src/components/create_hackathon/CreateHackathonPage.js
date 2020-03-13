@@ -6,13 +6,17 @@ import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
-import HackathonOverviewForm from "../hack_forms/HackathonOverviewForm";
+import OverviewEditor from "../hack_forms/overview/OverviewEditor";
 import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
 import { DASHBOARD_ROUTE } from "../../routes";
 import RegistrationDetailsForm from "../hack_forms/RegistrationDetailsForm";
 import { QUESTION_TYPE } from "../hack_forms/questions/QuestionType";
 import { PAGES, PAGE_TITLES, PAGES_LIST } from "./CreateHackathonSubpages";
 import HackathonPreviewForm from "../hack_forms/HackathonPreviewForm";
+import FabNav from "../reusable/FabNav";
+
+/** The pages which have preview functionality **/
+const PREVIEW_PAGES = [PAGES.DETAILS, PAGES.REGISTRATION];
 
 /**
  * The possible redirects from this page for React Router.
@@ -61,6 +65,8 @@ export default function CreateHackathonPage() {
   const [details, setDetails] = useState(detailsState);
   // The questions for registration
   const [questions, setQuestions] = useState(questionsState);
+  // Whether we are in preview mode or not
+  const [viewMode, setViewMode] = useState(false);
   // The page we are currently looking at
   const [page, setPage] = useState(PAGES.OVERVIEW);
   // When we redirect, we set the state here
@@ -125,11 +131,9 @@ export default function CreateHackathonPage() {
     switch (page) {
       case PAGES.OVERVIEW:
         return (
-          <HackathonOverviewForm
+          <OverviewEditor
             overview={overview}
             setOverview={setOverview}
-            nextPage={() => setPage(PAGES.DETAILS)}
-            discardAndExit={() => setRedirect(REDIRECT.DASHBOARD)}
           />
         );
       case PAGES.DETAILS:
@@ -137,8 +141,7 @@ export default function CreateHackathonPage() {
           <HackathonDetailsForm
             details={details}
             setDetails={setDetails}
-            prvPage={() => setPage(PAGES.OVERVIEW)}
-            nextPage={() => setPage(PAGES.REGISTRATION)}
+            viewMode={viewMode}
           />
         );
       case PAGES.REGISTRATION:
@@ -146,8 +149,7 @@ export default function CreateHackathonPage() {
           <RegistrationDetailsForm
             questions={questions}
             setQuestions={setQuestions}
-            prvPage={() => setPage(PAGES.DETAILS)}
-            nextPage={() => setPage(PAGES.PREVIEW)}
+            viewMode={viewMode}
           />
         );
       case PAGES.PREVIEW:
@@ -163,6 +165,33 @@ export default function CreateHackathonPage() {
     }
   };
 
+  /** Gets the navigation component for moving between pages */
+  const getNav = () => {
+    return (
+      <FabNav
+        // Go back a page and reset view mode (or redirect to dashboard)
+        onClickPrev={() => {
+          if (page === PAGES.OVERVIEW) setRedirect(REDIRECT.DASHBOARD);
+          else setPage(page - 1);
+          setViewMode(false);
+        }}
+        // Go forward a page and reset view mode (or redirect to dashboard)
+        onClickNext={() => {
+          if (page === PAGES.PREVIEW) setRedirect(REDIRECT.DASHBOARD);
+          else setPage(page + 1);
+          setViewMode(false);
+        }}
+        prevText={page === PAGES.OVERVIEW ? "Discard and Exit" : "Back"}
+        nextText={page === PAGES.PREVIEW ? "Save and Publish" : "Next"}
+        // If the page has preview functionality, show it! Otherwise, don't
+        onClickPreview={
+          PREVIEW_PAGES.includes(page) ? () => setViewMode(!viewMode) : null
+        }
+        viewMode={viewMode}
+      />
+    );
+  };
+
   return (
     <Page
       title={PAGE_TITLES[page]}
@@ -172,6 +201,7 @@ export default function CreateHackathonPage() {
     >
       {redirect}
       {currPage()}
+      {getNav()}
     </Page>
   );
 }

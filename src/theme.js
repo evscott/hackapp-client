@@ -12,7 +12,8 @@ export const theme = createMuiTheme({
       main: "#cc2200"
     },
     secondary: {
-      main: "#fcc203"
+      main: "#fcc203",
+      contrastText: "#FFF"
     }
   }
 });

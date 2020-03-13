@@ -1,40 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import EditIcon from "@material-ui/icons/Edit";
-import RightButtonBar from "../reusable/RightButtonBar";
 import ReorderableCard from "../reusable/ReorderableCard";
 import RightSpeedDial from "./RightSpeedDial";
-
-/** The styles for the component. */
-const useStyles = makeStyles(theme => {
-  return {
-    button: {
-      marginRight: 10
-    },
-    spacer: {
-      marginBottom: 40
-    },
-    fab: {
-      position: "fixed",
-      right: 20,
-      bottom: 20,
-      zIndex: 1051
-    },
-    icon: {
-      marginRight: 10
-    },
-    fabContents: {
-      display: "flex",
-      alignItems: "center"
-    }
-  };
-});
 
 /**
  * A form that has many cards that can be reordered and deleted as desired.
@@ -44,43 +13,6 @@ const useStyles = makeStyles(theme => {
  * of the children passed as a property.
  */
 export default function ReorderableCardForm(props) {
-  const classes = useStyles();
-
-  /**
-   * Gets the floating action button for switching between
-   * viewMode and editMode.
-   */
-  const getFab = () => {
-    return (
-      <Fab
-        className={classes.fab}
-        color="primary"
-        onClick={() => {
-          if (props.setViewMode) {
-            props.setViewMode(!props.viewMode);
-          }
-        }}
-        variant="extended"
-      >
-        {props.viewMode ? (
-          <div className={classes.fabContents}>
-            <EditIcon className={classes.icon} />
-            <Typography variant="button" display="inline">
-              Edit
-            </Typography>
-          </div>
-        ) : (
-          <div className={classes.fabContents}>
-            <VisibilityIcon className={classes.icon} />
-            <Typography variant="button" display="inline">
-              Preview
-            </Typography>
-          </div>
-        )}
-      </Fab>
-    );
-  };
-
   // Managing the keys of each text element is required for
   // React to get state management correct. So, keys are used here.
   const [keys, setKeys] = useState([...Array(props.array.length).keys()]);
@@ -138,32 +70,6 @@ export default function ReorderableCardForm(props) {
     setKeys(newKeys);
   };
 
-  /** The navigation component at the bottom. */
-  const navigation = () => {
-    if (props.prvPage && props.nextPage) {
-      return (
-        <RightButtonBar>
-          <Button
-            className={classes.button}
-            onClick={props.prvPage}
-            size="large"
-          >
-            Back
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={props.nextPage}
-          >
-            Next
-          </Button>
-        </RightButtonBar>
-      );
-    }
-    return "";
-  };
-
   return (
     <div>
       {props.array.map((txt, idx) => (
@@ -192,9 +98,6 @@ export default function ReorderableCardForm(props) {
           )}
         </React.Fragment>
       ))}
-      <div className={classes.spacer} />
-      {navigation()}
-      {props.setViewMode ? getFab() : ""}
     </div>
   );
 }
@@ -215,10 +118,6 @@ ReorderableCardForm.propTypes = {
       );
     }
   },
-  // Goes to the previous page
-  prvPage: PropTypes.func,
-  // Goes to the next page
-  nextPage: PropTypes.func,
   // Gets the contents that go into a card, given the current index
   getCardContents: PropTypes.func.isRequired,
   // A list of options for creating new cards. Each option should have
@@ -233,7 +132,4 @@ ReorderableCardForm.propTypes = {
   ),
   // Whether we are in view mode or not
   viewMode: PropTypes.bool,
-  // A setter for going into view mode. If not set, we do not have a view mode
-  // and the floating action button for setting it does not exist.
-  setViewMode: PropTypes.func
 };

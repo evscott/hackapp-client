@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import SubjectIcon from "@material-ui/icons/Subject";
 import ImageIcon from "@material-ui/icons/Image";
@@ -14,9 +14,6 @@ import ReorderableCardForm from "../reusable/ReorderableCardForm";
  * to register for the hackathon.
  */
 export default function HackathonDetailsForm(props) {
-  // Hold whether or not we are previewing
-  const [viewMode, setViewMode] = useState(false);
-
   /**
    * The controls available to the user when adding cards with
    * hackathon details.
@@ -38,8 +35,6 @@ export default function HackathonDetailsForm(props) {
     <ReorderableCardForm
       array={props.details}
       setArray={props.setDetails}
-      prvPage={props.prvPage}
-      nextPage={props.nextPage}
       getCardContents={index => (
         <MdEditor
           text={props.details[index]}
@@ -48,12 +43,11 @@ export default function HackathonDetailsForm(props) {
             newDetails[index] = newDetail;
             props.setDetails(newDetails);
           }}
-          viewMode={viewMode}
+          viewMode={props.viewMode}
         />
       )}
       speedDialItems={speedDialItems}
-      viewMode={viewMode}
-      setViewMode={setViewMode}
+      viewMode={props.viewMode}
     />
   );
 }
@@ -63,8 +57,6 @@ HackathonDetailsForm.propTypes = {
   details: PropTypes.arrayOf(PropTypes.string).isRequired,
   // A function that sets the details
   setDetails: PropTypes.func.isRequired,
-  // Function to go to the previous page
-  prvPage: PropTypes.func.isRequired,
-  // Function to go to the next page
-  nextPage: PropTypes.func.isRequired
+  // Whether the form is in view-only mode or not
+  viewMode: PropTypes.bool
 };
