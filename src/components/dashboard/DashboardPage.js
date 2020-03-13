@@ -80,7 +80,7 @@ const useStyles = makeStyles(theme => {
     fab: {
       position: "fixed",
       right: 20,
-      bottom: 30
+      bottom: 20
     },
     drawerHeaderText: {
       textAlign: "left",

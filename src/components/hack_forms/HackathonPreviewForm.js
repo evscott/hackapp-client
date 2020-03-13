@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => {
       [theme.breakpoints.up("md")]: {
         left: largeDrawerWidth + theme.spacing(3)
       }
+    },
+    navigationAction: {
+      maxWidth: 200
     }
   };
 });
@@ -105,6 +108,7 @@ export default function HackathonPreviewForm(props) {
       >
         {pagesWithoutPreview.map(pg => (
           <BottomNavigationAction
+            className={classes.navigationAction}
             label={PAGE_TITLES[pg]}
             value={pg}
             key={pg}

@@ -36,7 +36,7 @@ export default function FabNav(props) {
   const getBackButton = () => {
     if (props.onClickPrev) {
       return (
-        <Tooltip title={props.prevText}>
+        <Tooltip title={props.prevText} arrow>
           <Fab
             className={classes.fab}
             color="primary"
@@ -52,7 +52,7 @@ export default function FabNav(props) {
 
   const getNextButton = () => {
     return (
-      <Tooltip title={props.nextText}>
+      <Tooltip title={props.nextText} arrow>
         <Fab
           className={classes.fab}
           color="primary"
@@ -67,7 +67,7 @@ export default function FabNav(props) {
   const getPreviewButton = () => {
     if (props.onClickPreview) {
       return (
-        <Tooltip title={props.viewMode ? "Edit" : "Preview"}>
+        <Tooltip title={props.viewMode ? "Edit" : "Preview"} arrow>
           <Fab onClick={props.onClickPreview} color="secondary" size="medium">
             {props.viewMode ? <EditIcon /> : <VisibilityIcon />}
           </Fab>
