@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import SubjectIcon from "@material-ui/icons/Subject";
 import ImageIcon from "@material-ui/icons/Image";
 import "react-mde/lib/styles/css/react-mde-all.css";
-import "./markdown/mde-override-styles.css";
-import MdEditor from "./markdown/MdEditor";
-import ReorderableCardForm from "../reusable/ReorderableCardForm";
+import "./mde-override-styles.css";
+import MdEditor from "./MdEditor";
+import ReorderableCardForm from "../../reusable/ReorderableCardForm";
 
 /**
  * A form that asks the user to create a markdown-style collection

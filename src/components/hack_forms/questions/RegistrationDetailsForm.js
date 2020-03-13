@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import SubjectIcon from "@material-ui/icons/Subject";
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import RegQuestionEditor from "./questions/RegQuestionEditor";
-import { QUESTION_TYPE } from "./questions/QuestionType";
-import ReorderableCardForm from "../reusable/ReorderableCardForm";
+import RegQuestionEditor from "./RegQuestionEditor";
+import { QUESTION_TYPE } from "./QuestionType";
+import ReorderableCardForm from "../../reusable/ReorderableCardForm";
 
 /**
  * The form that asks the user to select the registration questions

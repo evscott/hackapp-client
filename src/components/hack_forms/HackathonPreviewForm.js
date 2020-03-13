@@ -12,7 +12,7 @@ import {
 import { largeDrawerWidth } from "../page/Drawer";
 import ReorderableCardForm from "../reusable/ReorderableCardForm";
 import RegQuestionEditor from "./questions/RegQuestionEditor";
-import MdEditor from "./markdown/MdEditor";
+import MdEditor from "./details/MdEditor";
 import HackathonCard from "../dashboard/HackathonCard";
 
 const useStyles = makeStyles(theme => {
