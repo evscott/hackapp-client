@@ -9,7 +9,14 @@ import { theme } from "./theme";
 import SetupPage from "./components/setup/SetupPage";
 import DashboardPage from "./components/dashboard/DashboardPage";
 import CreateHackathonPage from "./components/create_hackathon/CreateHackathonPage";
-import { CREATE_HACKATHON_PREXISTING_ROUTE, CREATE_HACKATHON_ROUTE, DASHBOARD_ROUTE, SETUP_ROUTE } from "./routes";
+import {
+  CREATE_HACKATHON_PREXISTING_ROUTE,
+  CREATE_HACKATHON_ROUTE,
+  DASHBOARD_ROUTE,
+  SETUP_ROUTE,
+  VIEW_HACKATHON_ROUTE
+} from "./routes";
+import ViewHackathonPage from "./components/view_hackathon/ViewHackathonPage";
 
 /**
  * The application. Has a theme and routes.
@@ -34,6 +41,7 @@ function App() {
             <Route path={CREATE_HACKATHON_ROUTE}>
               <CreateHackathonPage />
             </Route>
+            <Route path={VIEW_HACKATHON_ROUTE} component={ViewHackathonPage}/>
           </Switch>
         </MuiPickersUtilsProvider>
       </MuiThemeProvider>

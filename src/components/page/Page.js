@@ -79,16 +79,16 @@ export default function Page(props) {
   );
 }
 
-Drawer.propTypes = {
+Page.propTypes = {
   // A page must have some content
   children: PropTypes.any.isRequired,
   // The header components in the drawer
   drawerHeader: PropTypes.any,
   // A list of all primary (important) buttons.
   // Each button has the format {button: string, icon: component, onClick: func}
-  drawerPrimary: PropTypes.array,
+  drawerPrimary: PropTypes.array.isRequired,
   // A list of all the secondary (less important) buttons.
-  drawerSecondary: PropTypes.array,
+  drawerSecondary: PropTypes.array.isRequired,
   // The title of the page.
-  title: PropTypes.string
+  title: PropTypes.string.isRequired
 };

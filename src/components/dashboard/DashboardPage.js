@@ -8,7 +8,11 @@ import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
-import { CREATE_HACKATHON_ROUTE, createHackathonRouteFor } from "../../routes";
+import {
+  CREATE_HACKATHON_ROUTE,
+  createHackathonRouteFor,
+  viewHackathonRouteFor
+} from "../../routes";
 import { connect } from "react-redux";
 import {
   sortDraftHackathons,
@@ -20,9 +24,8 @@ import {
 const REDIRECT = {
   NONE: "",
   CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />,
-  UPDATE: hackathon => (
-    <Redirect to={createHackathonRouteFor(hackathon.hid)} />
-  )
+  UPDATE: hackathon => <Redirect to={createHackathonRouteFor(hackathon.hid)} />,
+  VIEW: hackathon => <Redirect to={{pathname: viewHackathonRouteFor(hackathon.hid), state: {hid: hackathon.hid}}} />
 };
 
 /**
@@ -112,48 +115,25 @@ function DashboardPage(props) {
     </div>
   );
 
-  const upcomingHacks = () => {
-    if (props.upcomingHackathons.length > 0) {
+  /**
+   * Shows a list of hackathons.
+   *
+   * @param hackathonList A list of hackathons
+   * @param listType The type of hackathons in the list (draft, upcoming, past)
+   * @returns {*} List of hackathon cards
+   */
+  const showHackathons = (hackathonList, listType) => {
+    if (hackathonList.length > 0) {
       return (
         <React.Fragment>
           <Typography className={classes.subheader} variant="h4" component="h2">
-            Upcoming Hackathons
+            {listType} Hackathons
           </Typography>
           {props.upcomingHackathons.map(hackathon => (
-            <HackathonCard overview={hackathon.overview} key={hackathon.hid} />
-          ))}
-        </React.Fragment>
-      );
-    }
-  };
-
-  const pastHacks = () => {
-    if (props.pastHackathons.length > 0) {
-      return (
-        <React.Fragment>
-          <Typography className={classes.subheader} variant="h4" component="h2">
-            Past Hackathons
-          </Typography>
-          {props.pastHackathons.map(hackathon => (
-            <HackathonCard overview={hackathon.overview} key={hackathon.hid} />
-          ))}
-        </React.Fragment>
-      );
-    }
-  };
-
-  const draftHacks = () => {
-    if (props.draftHackathons.length > 0) {
-      return (
-        <React.Fragment>
-          <Typography className={classes.subheader} variant="h4" component="h2">
-            Draft Hackathons
-          </Typography>
-          {props.draftHackathons.map(hackathon => (
             <HackathonCard
               overview={hackathon.overview}
               key={hackathon.hid}
-              onClick={() => setRedirect(REDIRECT.UPDATE(hackathon))}
+              onClick={() => setRedirect(REDIRECT.VIEW(hackathon))}
             />
           ))}
         </React.Fragment>
@@ -169,9 +149,9 @@ function DashboardPage(props) {
       drawerSecondary={drawerSecondary}
     >
       {redirect}
-      {upcomingHacks()}
-      {draftHacks()}
-      {pastHacks()}
+      {showHackathons(props.upcomingHackathons, "Upcoming")}
+      {showHackathons(props.draftHackathons, "Draft")}
+      {showHackathons(props.pastHackathons, "Past")}
       <Tooltip title="Create New Hackathon" arrow placement="top">
         <Fab
           className={classes.fab}
@@ -185,6 +165,7 @@ function DashboardPage(props) {
   );
 }
 
+// Gets the hackathons from the redux store and sorts them
 const mapStateToProps = state => {
   const hackArr = Object.values(state.hackathons.byHID);
   const pastHackathons = sortPrevHackathons(hackArr);

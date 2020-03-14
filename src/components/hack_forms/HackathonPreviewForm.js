@@ -38,7 +38,11 @@ const useStyles = makeStyles(theme => {
 export default function HackathonPreviewForm(props) {
   const classes = useStyles();
   // Which preview page to show
-  const [page, setPage] = React.useState(PAGES.OVERVIEW);
+  let [page, setPage] = React.useState(PAGES.OVERVIEW);
+  if (props.page && props.setPage) {
+    page = props.page;
+    setPage = props.setPage
+  }
   // A list of pages to preview (excluding the preview—you can't preview the
   // preview page, since that would be a recursive mess!)
   const pagesWithoutPreview = PAGES_LIST.filter(pg => pg !== PAGES.PREVIEW);
@@ -143,5 +147,11 @@ HackathonPreviewForm.propTypes = {
     })
   ).isRequired,
   // The list of markdown text strings
-  details: PropTypes.arrayOf(PropTypes.string).isRequired
+  details: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // The page to preview
+  // (if supplied, this becomes a controlled component)
+  page: PropTypes.number,
+  // The function to move between pages
+  // (if supplied, this becomes a controlled component)
+  setPage: PropTypes.func
 };

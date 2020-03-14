@@ -10,7 +10,7 @@ import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import SaveIcon from "@material-ui/icons/Save";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import DeleteIcon from "@material-ui/icons/Delete";
 import OverviewEditor from "../hack_forms/overview/OverviewEditor";
 import HackathonDetailsForm from "../hack_forms/details/HackathonDetailsForm";
@@ -134,8 +134,8 @@ function CreateHackathonPage(props) {
    */
   const drawerSecondary = [
     {
-      icon: <SaveIcon />,
-      text: "Save and Exit",
+      icon: <ArrowBackIcon />,
+      text: "Return to Dashboard",
       onClick: () => {
         saveHackathon(true);
         setRedirect(REDIRECT.DASHBOARD);
@@ -143,7 +143,7 @@ function CreateHackathonPage(props) {
     },
     {
       icon: <DeleteIcon />,
-      text: "Discard and Exit",
+      text: "Discard Hackathon",
       onClick: () => setRedirect(REDIRECT.DASHBOARD)
     }
   ];
@@ -206,7 +206,10 @@ function CreateHackathonPage(props) {
       <FabNav
         // Go back a page and reset view mode (or redirect to dashboard)
         onClickBack={() => {
-          if (page === PAGES.OVERVIEW) setRedirect(REDIRECT.DASHBOARD);
+          if (page === PAGES.OVERVIEW) {
+            saveHackathon(true);
+            setRedirect(REDIRECT.DASHBOARD);
+          }
           else setPage(page - 1);
           setViewMode(false);
         }}
@@ -218,7 +221,7 @@ function CreateHackathonPage(props) {
           } else setPage(page + 1);
           setViewMode(false);
         }}
-        backText={page === PAGES.OVERVIEW ? "Discard and Exit" : "Back"}
+        backText={page === PAGES.OVERVIEW ? "Return to Dashboard" : "Back"}
         nextText={page === PAGES.PREVIEW ? "Save and Publish" : "Next"}
         // If the page has preview functionality, show it! Otherwise, don't
         onClickPreview={
