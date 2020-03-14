@@ -100,7 +100,6 @@ export default function RegQuestionEditor(props) {
             }}
             required
             fullWidth
-            id="reg-question-title"
             label="Question"
             name="question"
             value={props.question.question}
@@ -111,7 +110,6 @@ export default function RegQuestionEditor(props) {
             fullWidth
             multiline
             rows="2"
-            id="reg-question-description"
             label="Description"
             name="description"
             value={props.question.desc}

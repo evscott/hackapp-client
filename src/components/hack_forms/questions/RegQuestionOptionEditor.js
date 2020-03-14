@@ -75,7 +75,6 @@ export default function RegQuestionOptionEditor(props) {
     return (
       <TextField
         className={classes.textField}
-        id={`option-${index + 1}`}
         name={`option-${index + 1}`}
         label={`Option ${index + 1}`}
         value={index < props.options.length ? props.options[index] : ""}

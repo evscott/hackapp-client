@@ -65,9 +65,10 @@ const questionsState = [
  * hackathon overview, details, and registration questions.
  */
 function CreateHackathonPage(props) {
+  // First, if we're editing a draft hackathon, load that up
   const { hid } = useParams();
   const oldHackathon = hid ? props.getHackathon(hid) : null;
-  console.log(oldHackathon);
+
   // The overview data for the hackathon
   const [overview, setOverview] = useState(
     oldHackathon ? oldHackathon.overview : overviewState

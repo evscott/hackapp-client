@@ -49,6 +49,7 @@ const initialState = {
         {
           question: "Additional information",
           desc: "We don't want to hear it in person, so complain here.",
+          options: [],
           required: false,
           type: QUESTION_TYPE.TXT
         }
@@ -87,6 +88,7 @@ const initialState = {
         {
           question: "Additional information",
           desc: "",
+          options: [],
           required: false,
           type: QUESTION_TYPE.TXT
         }
@@ -125,6 +127,7 @@ const initialState = {
         {
           question: "Additional information",
           desc: "",
+          options: [],
           required: false,
           type: QUESTION_TYPE.TXT
         }
