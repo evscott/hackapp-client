@@ -117,7 +117,7 @@ export default function HackathonCard(props) {
         </CardContent>
         <CardContent className={classes.secondaryDetails}>
           <Typography>
-            Up to <b>{props.overview.maxRegistrants}</b> attendees can register
+            Up to <b>{props.overview.maxReg}</b> attendees can register
             by <b>{dayjs(props.overview.regDeadline).format("h:mma MMMM D, YYYY")}</b>
           </Typography>
         </CardContent>
@@ -133,7 +133,7 @@ HackathonCard.propTypes = {
     startDate: PropTypes.instanceOf(Date).isRequired,
     endDate: PropTypes.instanceOf(Date).isRequired,
     location: PropTypes.string.isRequired,
-    maxRegistrants: PropTypes.number.isRequired,
+    maxReg: PropTypes.number.isRequired,
     regDeadline: PropTypes.instanceOf(Date).isRequired
   }).isRequired
 };

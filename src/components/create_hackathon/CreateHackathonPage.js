@@ -33,7 +33,7 @@ const overviewState = {
   startDate: new Date(),
   endDate: new Date(),
   location: "",
-  maxRegistrants: 100,
+  maxReg: 100,
   regDeadline: new Date()
 };
 

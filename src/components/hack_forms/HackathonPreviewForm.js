@@ -128,7 +128,7 @@ HackathonPreviewForm.propTypes = {
     startDate: PropTypes.instanceOf(Date).isRequired,
     endDate: PropTypes.instanceOf(Date).isRequired,
     location: PropTypes.string.isRequired,
-    maxRegistrants: PropTypes.number.isRequired,
+    maxReg: PropTypes.number.isRequired,
     regDeadline: PropTypes.instanceOf(Date).isRequired
   }).isRequired,
   // The questions for the registration form, which is an array of

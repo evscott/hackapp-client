@@ -94,7 +94,7 @@ export default function OverviewEditor(props) {
           if (!isNaN(value) && value >= 0) {
             props.setOverview({
               ...props.overview,
-              maxRegistrants: value
+              maxReg: value
             });
           }
         }}
@@ -124,7 +124,7 @@ OverviewEditor.propTypes = {
     startDate: PropTypes.instanceOf(Date).isRequired,
     endDate: PropTypes.instanceOf(Date).isRequired,
     location: PropTypes.string.isRequired,
-    maxRegistrants: PropTypes.number.isRequired,
+    maxReg: PropTypes.number.isRequired,
     regDeadline: PropTypes.instanceOf(Date).isRequired
   }).isRequired,
   // The function for setting changes to the overview object

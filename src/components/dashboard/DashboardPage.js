@@ -9,73 +9,19 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
 import { CREATE_HACKATHON_ROUTE } from "../../routes";
+import hackathons from "../../redux/reducers/hackathons";
+import { connect } from "react-redux";
+import {
+  sortDraftHackathons,
+  sortNextHackathons,
+  sortPrevHackathons
+} from "../../redux/util/sortHackathons";
 
 /** The routes that we might redirect to by clicking a button. */
 const REDIRECT = {
   NONE: "",
   CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />
 };
-
-/**
- * Temporary list of past hackathons.
- * @TODO: Connect this to the information store
- * @type {*[]}
- */
-const pastHackathons = [
-  {
-    name: "MtA Hacks 2018",
-    startDate: new Date('February 6, 1995 06:30:00'),
-    endDate: new Date('February 6, 1995 16:30:00'),
-    location: "Mount Allison University",
-    maxRegistrants: 59,
-    regDeadline: new Date('February 6, 1995 06:30:00'),
-    draft: false
-  },
-  {
-    name: "MtA Hacks 2019",
-    startDate: new Date('February 7, 1995 10:30:00'),
-    endDate: new Date('February 8, 1995 20:35:00'),
-    location: "Mount Allison University",
-    maxRegistrants: 65,
-    regDeadline: new Date('February 7, 1995 10:30:00'),
-    draft: false
-  }
-];
-
-/**
- * Temporary list of upcoming hackathons.
- * @TODO: Connect this to the information store
- * @type {*[]}
- */
-const upcomingHackathons = [
-  {
-    name: "MtA Hacks 2020",
-    startDate: new Date('February 7, 2021 18:00:00'),
-    endDate: new Date('February 8, 2021 13:30:00'),
-    location: "Mount Allison University",
-    maxRegistrants: 79,
-    regDeadline: new Date('February 7, 2021 18:00:00'),
-    draft: false
-  },
-  {
-    name: "MtA Hacks 2021",
-    startDate: new Date('February 7, 2021 18:00:00'),
-    endDate: new Date('February 8, 2021 13:30:00'),
-    location: "Mount Allison University",
-    maxRegistrants: 854,
-    regDeadline: new Date('February 7, 2021 18:00:00'),
-    draft: false
-  },
-  {
-    name: "MtA Hacks 2022",
-    startDate: new Date('February 7, 2021 18:00:00'),
-    endDate: new Date('February 8, 2021 13:30:00'),
-    location: "Mount Allison University",
-    maxRegistrants: 79438,
-    regDeadline: new Date('February 7, 2021 18:00:00'),
-    draft: false
-  }
-];
 
 /**
  * The styles for the React component.
@@ -125,7 +71,8 @@ const drawerSecondary = [];
  * a list of all hackathons being managed and standard navigation items.
  * @returns {*} The page for the dashboard.
  */
-export default function DashboardPage() {
+function DashboardPage(props) {
+  console.log(props);
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(REDIRECT.NONE);
 
@@ -145,14 +92,14 @@ export default function DashboardPage() {
         variant="body1"
         component="p"
       >
-        <b>{upcomingHackathons.length}</b> upcoming
+        <b>{props.upcomingHackathons.length}</b> upcoming
       </Typography>
       <Typography
         className={classes.drawerSmallTest}
         variant="body1"
         component="p"
       >
-        <b>{pastHackathons.length}</b> done
+        <b>{props.pastHackathons.length}</b> done
       </Typography>
       <Typography
         className={classes.drawerSmallTest}
@@ -164,6 +111,51 @@ export default function DashboardPage() {
     </div>
   );
 
+  const upcomingHacks = () => {
+    if (props.upcomingHackathons.length > 0) {
+      return (
+        <React.Fragment>
+          <Typography className={classes.subheader} variant="h4" component="h2">
+            Upcoming Hackathons
+          </Typography>
+          {props.upcomingHackathons.map(hackathon => (
+            <HackathonCard overview={hackathon.overview} key={hackathon.hid} />
+          ))}
+        </React.Fragment>
+      );
+    }
+  };
+
+  const pastHacks = () => {
+    if(props.pastHackathons.length > 0) {
+      return (
+        <React.Fragment>
+          <Typography className={classes.subheader} variant="h4" component="h2">
+            Past Hackathons
+          </Typography>
+          {props.pastHackathons.map(hackathon => (
+            <HackathonCard overview={hackathon.overview} key={hackathon.hid} />
+          ))}
+        </React.Fragment>
+      );
+    }
+  };
+
+  const draftHacks = () => {
+    if(props.draftHackathons.length > 0) {
+      return (
+        <React.Fragment>
+          <Typography className={classes.subheader} variant="h4" component="h2">
+            Draft Hackathons
+          </Typography>
+          {props.draftHackathons.map(hackathon => (
+            <HackathonCard overview={hackathon.overview} key={hackathon.hid} />
+          ))}
+        </React.Fragment>
+      );
+    }
+  };
+
   return (
     <Page
       title="Dashboard"
@@ -172,23 +164,28 @@ export default function DashboardPage() {
       drawerSecondary={drawerSecondary}
     >
       {redirect}
-      <Typography className={classes.subheader} variant="h4" component="h2">
-        Upcoming Hackathons
-      </Typography>
-      {upcomingHackathons.map(hackathon => (
-        <HackathonCard overview={hackathon} key={hackathon.name + hackathon.startDate + hackathon.endDate} />
-      ))}
-      <Typography className={classes.subheader} variant="h4" component="h2">
-        Past Hackathons
-      </Typography>
-      {pastHackathons.map(hackathon => (
-        <HackathonCard overview={hackathon} key={hackathon.name + hackathon.startDate + hackathon.endDate} />
-      ))}
+      {upcomingHacks()}
+      {draftHacks()}
+      {pastHacks()}
       <Tooltip title="Create New Hackathon" arrow placement="top">
-        <Fab className={classes.fab} color="primary" onClick={() => setRedirect(REDIRECT.CREATE)} >
+        <Fab
+          className={classes.fab}
+          color="primary"
+          onClick={() => setRedirect(REDIRECT.CREATE)}
+        >
           <AddIcon />
         </Fab>
       </Tooltip>
     </Page>
   );
 }
+
+const mapStateToProps = state => {
+  const hackArr = Object.values(state.hackathons.byHID);
+  const pastHackathons = sortPrevHackathons(hackArr);
+  const upcomingHackathons = sortNextHackathons(hackArr);
+  const draftHackathons = sortDraftHackathons(hackArr);
+  return { pastHackathons, upcomingHackathons, draftHackathons };
+};
+
+export default connect(mapStateToProps)(DashboardPage);
