@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => {
     },
     info: {
       [theme.breakpoints.up("sm")]: {
-        width: "calc(100% - 180px)",
+        width: "calc(100% - 190px)",
         display: "inline-block",
         margin: 0,
         clear: "none",
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => {
       [theme.breakpoints.up("sm")]: {
         position: "relative",
         display: "inline-block",
-        width: 180,
+        width: 190,
         borderRight: "1px #CCCCCC solid",
         top: -7
       }

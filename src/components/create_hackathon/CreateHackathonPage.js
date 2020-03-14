@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  addHackathon,
+  updateHackathon
+} from "../../redux/actions/hackathonActions";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
@@ -58,19 +63,50 @@ const questionsState = [
  * The page for creating a hackathon. It has forms for editing the
  * hackathon overview, details, and registration questions.
  */
-export default function CreateHackathonPage() {
+function CreateHackathonPage(props) {
   // The overview data for the hackathon
-  const [overview, setOverview] = useState(overviewState);
+  const [overview, setOverview] = useState(
+    props.hackathon ? props.hackathon.overview : overviewState
+  );
   // The details data for the hackathon (array of markdown)
-  const [details, setDetails] = useState(detailsState);
+  const [details, setDetails] = useState(
+    props.hackathon ? props.hackathon.details : detailsState
+  );
   // The questions for registration
-  const [questions, setQuestions] = useState(questionsState);
+  const [questions, setQuestions] = useState(
+    props.hackathon ? props.hackathon.questions : questionsState
+  );
   // Whether we are in preview mode or not
   const [viewMode, setViewMode] = useState(false);
   // The page we are currently looking at
   const [page, setPage] = useState(PAGES.OVERVIEW);
   // When we redirect, we set the state here
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
+
+  /**
+   * Save the hackathon (update it if we were passed a
+   * hackathon as a parameter, or add it otherwise)
+   *
+   * @param draft Whether to mark the hackathon as a draft.
+   */
+  const saveHackathon = (draft) => {
+    setOverview({ ...overview, draft });
+    if (props.hackathon) {
+      // Just update and publish
+      props.updateHackathon({
+        ...props.hackathon,
+        overview,
+        details,
+        questions
+      });
+    } else {
+      props.addHackathon({
+        overview,
+        details,
+        questions
+      });
+    }
+  };
 
   /**
    * The primary buttons in the left drawer. These have links
@@ -97,7 +133,7 @@ export default function CreateHackathonPage() {
       icon: <SaveIcon />,
       text: "Save and Exit",
       onClick: () => {
-        // @TODO: Actually save
+        saveHackathon(true);
         setRedirect(REDIRECT.DASHBOARD);
       }
     },
@@ -172,8 +208,10 @@ export default function CreateHackathonPage() {
         }}
         // Go forward a page and reset view mode (or redirect to dashboard)
         onClickNext={() => {
-          if (page === PAGES.PREVIEW) setRedirect(REDIRECT.DASHBOARD);
-          else setPage(page + 1);
+          if (page === PAGES.PREVIEW) {
+            saveHackathon(false)
+            setRedirect(REDIRECT.DASHBOARD);
+          } else setPage(page + 1);
           setViewMode(false);
         }}
         backText={page === PAGES.OVERVIEW ? "Discard and Exit" : "Back"}
@@ -200,3 +238,7 @@ export default function CreateHackathonPage() {
     </Page>
   );
 }
+
+export default connect(null, { addHackathon, updateHackathon })(
+  CreateHackathonPage
+);

@@ -9,7 +9,6 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
 import { CREATE_HACKATHON_ROUTE } from "../../routes";
-import hackathons from "../../redux/reducers/hackathons";
 import { connect } from "react-redux";
 import {
   sortDraftHackathons,
@@ -72,7 +71,6 @@ const drawerSecondary = [];
  * @returns {*} The page for the dashboard.
  */
 function DashboardPage(props) {
-  console.log(props);
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(REDIRECT.NONE);
 

@@ -1,4 +1,12 @@
 import { QUESTION_TYPE } from "../../components/hack_forms/questions/QuestionType";
+import { ADD_HACKATHON, DELETE_HACKATHON, UPDATE_HACKATHON } from "../actions/actionTypes";
+
+/**
+ * The hackathon ID for the next hackathon that gets created.
+ *
+ * @TODO: replace this with an actual database call.
+ */
+let nextHID = 2;
 
 /**
  * The initial state for this branch of the Redux store tree.
@@ -94,8 +102,36 @@ const initialState = {
  * @param action The action to perform on the state tree
  */
 export default function hackathons(state = initialState, action) {
-  // TODO: actually implement what actions will do.
-  switch (action) {
+  switch (action.type) {
+    case ADD_HACKATHON:
+      let hid = nextHID++;
+      return {
+        ...state,
+        byHID: {
+          ...state.byHID,
+          [hid]: {
+            ...action.hackathon,
+            hid
+          }
+        }
+      };
+    case UPDATE_HACKATHON:
+      hid = action.hackathon.hid;
+      return {
+        ...state,
+        byHID: {
+          ...state.byHID,
+          [hid]: action.hackathon
+        }
+      };
+    case DELETE_HACKATHON:
+      hid = action.hid;
+      let byHID = {...state.byHID};
+      delete byHID[hid];
+      return {
+        ...state,
+        byHID: byHID
+      };
     default:
       return state;
   }
