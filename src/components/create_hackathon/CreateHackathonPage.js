@@ -89,19 +89,18 @@ function CreateHackathonPage(props) {
    *
    * @param draft Whether to mark the hackathon as a draft.
    */
-  const saveHackathon = (draft) => {
-    setOverview({ ...overview, draft });
+  const saveHackathon = draft => {
     if (props.hackathon) {
       // Just update and publish
       props.updateHackathon({
         ...props.hackathon,
-        overview,
+        overview: { ...overview, draft },
         details,
         questions
       });
     } else {
       props.addHackathon({
-        overview,
+        overview: { ...overview, draft },
         details,
         questions
       });
@@ -209,7 +208,7 @@ function CreateHackathonPage(props) {
         // Go forward a page and reset view mode (or redirect to dashboard)
         onClickNext={() => {
           if (page === PAGES.PREVIEW) {
-            saveHackathon(false)
+            saveHackathon(false);
             setRedirect(REDIRECT.DASHBOARD);
           } else setPage(page + 1);
           setViewMode(false);
