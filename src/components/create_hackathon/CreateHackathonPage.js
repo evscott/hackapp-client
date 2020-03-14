@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  addHackathon,
-  updateHackathon
-} from "../../redux/actions/hackathonActions";
-import { useParams } from "react-router-dom";
+import { addHackathon } from "../../redux/actions/hackathonActions";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
@@ -65,22 +61,12 @@ const questionsState = [
  * hackathon overview, details, and registration questions.
  */
 function CreateHackathonPage(props) {
-  // First, if we're editing a draft hackathon, load that up
-  const { hid } = useParams();
-  const oldHackathon = hid ? props.getHackathon(hid) : null;
-
   // The overview data for the hackathon
-  const [overview, setOverview] = useState(
-    oldHackathon ? oldHackathon.overview : overviewState
-  );
+  const [overview, setOverview] = useState(overviewState);
   // The details data for the hackathon (array of markdown)
-  const [details, setDetails] = useState(
-    oldHackathon ? oldHackathon.details : detailsState
-  );
+  const [details, setDetails] = useState(detailsState);
   // The questions for registration
-  const [questions, setQuestions] = useState(
-    oldHackathon ? oldHackathon.questions : questionsState
-  );
+  const [questions, setQuestions] = useState(questionsState);
   // Whether we are in preview mode or not
   const [viewMode, setViewMode] = useState(false);
   // The page we are currently looking at
@@ -95,21 +81,11 @@ function CreateHackathonPage(props) {
    * @param draft Whether to mark the hackathon as a draft.
    */
   const saveHackathon = draft => {
-    if (oldHackathon) {
-      // Just update and publish
-      props.updateHackathon({
-        ...oldHackathon,
-        overview: { ...overview, draft },
-        details,
-        questions
-      });
-    } else {
-      props.addHackathon({
-        overview: { ...overview, draft },
-        details,
-        questions
-      });
-    }
+    props.addHackathon({
+      overview: { ...overview, draft },
+      details,
+      questions
+    });
   };
 
   /**
@@ -209,8 +185,7 @@ function CreateHackathonPage(props) {
           if (page === PAGES.OVERVIEW) {
             saveHackathon(true);
             setRedirect(REDIRECT.DASHBOARD);
-          }
-          else setPage(page - 1);
+          } else setPage(page - 1);
           setViewMode(false);
         }}
         // Go forward a page and reset view mode (or redirect to dashboard)
@@ -246,10 +221,5 @@ function CreateHackathonPage(props) {
   );
 }
 
-const mapStateToProps = state => ({
-  getHackathon: hid => state.hackathons.byHID[hid]
-});
-
-export default connect(mapStateToProps, { addHackathon, updateHackathon })(
-  CreateHackathonPage
-);
+// Connects redux store to add hackathons
+export default connect(null, { addHackathon })(CreateHackathonPage);
