@@ -4,7 +4,10 @@ import {
   deleteHackathon,
   updateHackathon
 } from "../../redux/actions/hackathonActions";
-import { PAGE_TITLES, PAGES } from "../create_hackathon/CreateHackathonSubpages";
+import {
+  PAGE_TITLES,
+  PAGES
+} from "../create_hackathon/CreateHackathonSubpages";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -46,6 +49,7 @@ const useStyles = makeStyles(theme => {
 function ViewHackathonPage(props) {
   const classes = useStyles();
   const { hackathon } = props;
+  const { draft } = hackathon.overview;
 
   // Hold onto temporary versions of the overview/details/questions
   // for edits: we only want to save and send to the redux store if
@@ -87,10 +91,14 @@ function ViewHackathonPage(props) {
       }
     },
     {
-      icon: hackathon.draft ? <VisibilityIcon /> : <VisibilityOffIcon />,
-      text: hackathon.draft ? "Publish Hackathon" : "Unpublish Hackathon",
+      icon: draft ? <VisibilityIcon /> : <VisibilityOffIcon />,
+      text: draft ? "Publish Hackathon" : "Unpublish Hackathon",
+      // On clicking unpublish, we should change the draft flag
       onClick: () => {
-        props.updateHackathon({ ...hackathon, draft: !hackathon.draft });
+        props.updateHackathon({
+          ...hackathon,
+          overview: { ...hackathon.overview, draft: !draft }
+        });
       }
     }
   ];
@@ -131,18 +139,10 @@ function ViewHackathonPage(props) {
   const currModal = () => {
     switch (page) {
       case PAGES.OVERVIEW:
-        return (
-          <OverviewEditor
-            overview={overview}
-            setOverview={setOverview}
-          />
-        );
+        return <OverviewEditor overview={overview} setOverview={setOverview} />;
       case PAGES.DETAILS:
         return (
-          <HackathonDetailsForm
-            details={details}
-            setDetails={setDetails}
-          />
+          <HackathonDetailsForm details={details} setDetails={setDetails} />
         );
       case PAGES.REGISTRATION:
         return (
@@ -177,9 +177,9 @@ function ViewHackathonPage(props) {
           {PAGE_TITLES[page]}
         </Typography>
         {currModal()}
-        <div className={classes.spacer}/>
-        <SaveButtonBar onCancel={discard} onSave={save}/>
-        <div className={classes.spacer}/>
+        <div className={classes.spacer} />
+        <SaveButtonBar onCancel={discard} onSave={save} />
+        <div className={classes.spacer} />
       </MegaModal>
     </Page>
   );

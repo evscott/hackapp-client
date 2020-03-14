@@ -129,7 +129,7 @@ function DashboardPage(props) {
           <Typography className={classes.subheader} variant="h4" component="h2">
             {listType} Hackathons
           </Typography>
-          {props.upcomingHackathons.map(hackathon => (
+          {hackathonList.map(hackathon => (
             <HackathonCard
               overview={hackathon.overview}
               key={hackathon.hid}
