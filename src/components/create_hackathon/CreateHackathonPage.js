@@ -130,12 +130,7 @@ export default function CreateHackathonPage() {
   const currPage = () => {
     switch (page) {
       case PAGES.OVERVIEW:
-        return (
-          <OverviewEditor
-            overview={overview}
-            setOverview={setOverview}
-          />
-        );
+        return <OverviewEditor overview={overview} setOverview={setOverview} />;
       case PAGES.DETAILS:
         return (
           <HackathonDetailsForm
@@ -170,7 +165,7 @@ export default function CreateHackathonPage() {
     return (
       <FabNav
         // Go back a page and reset view mode (or redirect to dashboard)
-        onClickPrev={() => {
+        onClickBack={() => {
           if (page === PAGES.OVERVIEW) setRedirect(REDIRECT.DASHBOARD);
           else setPage(page - 1);
           setViewMode(false);
@@ -181,7 +176,7 @@ export default function CreateHackathonPage() {
           else setPage(page + 1);
           setViewMode(false);
         }}
-        prevText={page === PAGES.OVERVIEW ? "Discard and Exit" : "Back"}
+        backText={page === PAGES.OVERVIEW ? "Discard and Exit" : "Back"}
         nextText={page === PAGES.PREVIEW ? "Save and Publish" : "Next"}
         // If the page has preview functionality, show it! Otherwise, don't
         onClickPreview={

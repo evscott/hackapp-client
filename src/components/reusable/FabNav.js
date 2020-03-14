@@ -30,17 +30,24 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * A navigation floating action button that appears at the bottom
+ * right of every page in major flows of the application. It has a
+ * right/left button as well as a preview/edit button for pages that
+ * require the feature.
+ */
 export default function FabNav(props) {
   const classes = useStyles();
 
+  /** Gets the back button, if the back button function defined */
   const getBackButton = () => {
-    if (props.onClickPrev) {
+    if (props.onClickBack) {
       return (
-        <Tooltip title={props.prevText} arrow>
+        <Tooltip title={props.backText} arrow>
           <Fab
             className={classes.fab}
             color="primary"
-            onClick={props.onClickPrev}
+            onClick={props.onClickBack}
             size="medium"
           >
             <ArrowBackIcon />
@@ -50,6 +57,7 @@ export default function FabNav(props) {
     }
   };
 
+  /** Gets the next button, if the next button function defined */
   const getNextButton = () => {
     if (props.onClickNext) {
       return (
@@ -93,9 +101,17 @@ FabNav.propTypes = {
   // Function for what happens when click preview
   // (if undefined, preview button is hidden)
   onClickPreview: PropTypes.func,
+  // Whether we're in view mode (only needed if the preview
+  // button is used for the page).
   viewMode: PropTypes.bool,
+  // Function for what happens when click the next button
+  // (if undefined, next button is hidden)
   onClickNext: PropTypes.func,
-  onClickPrev: PropTypes.func,
+  // Function for what happens when click the back button
+  // (if undefined, back button is hidden)
+  onClickBack: PropTypes.func,
+  // The text for the tooltip for the next button
   nextText: PropTypes.string,
-  prevText: PropTypes.string
+  // The text for the tooltip for the back button
+  backText: PropTypes.string
 };
