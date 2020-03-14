@@ -28,7 +28,8 @@ const pastHackathons = [
     endDate: new Date('February 6, 1995 16:30:00'),
     location: "Mount Allison University",
     maxRegistrants: 59,
-    regDeadline: new Date('February 6, 1995 06:30:00')
+    regDeadline: new Date('February 6, 1995 06:30:00'),
+    draft: false
   },
   {
     name: "MtA Hacks 2019",
@@ -36,7 +37,8 @@ const pastHackathons = [
     endDate: new Date('February 8, 1995 20:35:00'),
     location: "Mount Allison University",
     maxRegistrants: 65,
-    regDeadline: new Date('February 7, 1995 10:30:00')
+    regDeadline: new Date('February 7, 1995 10:30:00'),
+    draft: false
   }
 ];
 
@@ -53,6 +55,7 @@ const upcomingHackathons = [
     location: "Mount Allison University",
     maxRegistrants: 79,
     regDeadline: new Date('February 7, 2021 18:00:00'),
+    draft: false
   },
   {
     name: "MtA Hacks 2021",
@@ -61,6 +64,7 @@ const upcomingHackathons = [
     location: "Mount Allison University",
     maxRegistrants: 854,
     regDeadline: new Date('February 7, 2021 18:00:00'),
+    draft: false
   },
   {
     name: "MtA Hacks 2022",
@@ -69,6 +73,7 @@ const upcomingHackathons = [
     location: "Mount Allison University",
     maxRegistrants: 79438,
     regDeadline: new Date('February 7, 2021 18:00:00'),
+    draft: false
   }
 ];
 

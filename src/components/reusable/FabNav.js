@@ -51,17 +51,19 @@ export default function FabNav(props) {
   };
 
   const getNextButton = () => {
-    return (
-      <Tooltip title={props.nextText} arrow>
-        <Fab
-          className={classes.fab}
-          color="primary"
-          onClick={props.onClickNext}
-        >
-          <ArrowForwardIcon />
-        </Fab>
-      </Tooltip>
-    );
+    if (props.onClickNext) {
+      return (
+        <Tooltip title={props.nextText} arrow>
+          <Fab
+            className={classes.fab}
+            color="primary"
+            onClick={props.onClickNext}
+          >
+            <ArrowForwardIcon />
+          </Fab>
+        </Tooltip>
+      );
+    }
   };
 
   const getPreviewButton = () => {
@@ -92,7 +94,7 @@ FabNav.propTypes = {
   // (if undefined, preview button is hidden)
   onClickPreview: PropTypes.func,
   viewMode: PropTypes.bool,
-  onClickNext: PropTypes.func.isRequired,
+  onClickNext: PropTypes.func,
   onClickPrev: PropTypes.func,
   nextText: PropTypes.string,
   prevText: PropTypes.string
