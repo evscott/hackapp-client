@@ -137,7 +137,7 @@ HackathonPreviewForm.propTypes = {
     PropTypes.shape({
       question: PropTypes.string.isRequired,
       desc: PropTypes.string.isRequired,
-      options: PropTypes.arrayOf(PropTypes.string).isRequired,
+      options: PropTypes.arrayOf(PropTypes.string),
       required: PropTypes.bool.isRequired,
       type: PropTypes.string.isRequired
     })

@@ -6,7 +6,7 @@ import { ADD_HACKATHON, DELETE_HACKATHON, UPDATE_HACKATHON } from "../actions/ac
  *
  * @TODO: replace this with an actual database call.
  */
-let nextHID = 2;
+let nextHID = 3;
 
 /**
  * The initial state for this branch of the Redux store tree.
@@ -91,6 +91,44 @@ const initialState = {
           type: QUESTION_TYPE.TXT
         }
       ]
+    },
+    2: {
+      hid: 2,
+      // Primary information is in the overview
+      overview: {
+        name: "Draft Hacks 3",
+        startDate: new Date("February 6, 2022 07:30:00"),
+        endDate: new Date("February 6, 2022 16:30:00"),
+        location: "Meal Hall",
+        maxReg: 150,
+        regDeadline: new Date("February 6, 2022 06:30:00"),
+        draft: true
+      },
+      // Text information is in the details section
+      details: ["# This is a hackathon", "With even more cool stuff"],
+      // Registration questions for the hackathon
+      questions: [
+        {
+          question: "Most important question",
+          desc: "This is fun!",
+          options: ["Option 1", "Option 2", "Option 3"],
+          required: true,
+          type: QUESTION_TYPE.CK
+        },
+        {
+          question: "Answer me!",
+          desc: "Please.",
+          options: ["Option 1!", "Option 2!", "Option 3!"],
+          required: false,
+          type: QUESTION_TYPE.RD
+        },
+        {
+          question: "Additional information",
+          desc: "",
+          required: false,
+          type: QUESTION_TYPE.TXT
+        }
+      ]
     }
   }
 };
@@ -102,9 +140,10 @@ const initialState = {
  * @param action The action to perform on the state tree
  */
 export default function hackathons(state = initialState, action) {
+  let hid = 0;
   switch (action.type) {
     case ADD_HACKATHON:
-      let hid = nextHID++;
+      hid = nextHID++;
       return {
         ...state,
         byHID: {

@@ -88,11 +88,11 @@ export default function HackathonCard(props) {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea onClick={props.onClick}>
         <CardMedia
           className={classes.media}
           image={hackathonImg}
-          title="Hackathon"
+          title={props.overview.name}
         />
         <CardContent className={classes.primaryDetails}>
           <div className={classes.date}>
@@ -135,5 +135,7 @@ HackathonCard.propTypes = {
     location: PropTypes.string.isRequired,
     maxReg: PropTypes.number.isRequired,
     regDeadline: PropTypes.instanceOf(Date).isRequired
-  }).isRequired
+  }).isRequired,
+  // What happens when click the hackathon card
+  onClick: PropTypes.func
 };

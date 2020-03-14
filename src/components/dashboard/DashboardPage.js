@@ -8,7 +8,7 @@ import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
-import { CREATE_HACKATHON_ROUTE } from "../../routes";
+import { CREATE_HACKATHON_ROUTE, createHackathonRouteFor } from "../../routes";
 import { connect } from "react-redux";
 import {
   sortDraftHackathons,
@@ -19,7 +19,10 @@ import {
 /** The routes that we might redirect to by clicking a button. */
 const REDIRECT = {
   NONE: "",
-  CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />
+  CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />,
+  UPDATE: hackathon => (
+    <Redirect to={createHackathonRouteFor(hackathon.hid)} />
+  )
 };
 
 /**
@@ -125,7 +128,7 @@ function DashboardPage(props) {
   };
 
   const pastHacks = () => {
-    if(props.pastHackathons.length > 0) {
+    if (props.pastHackathons.length > 0) {
       return (
         <React.Fragment>
           <Typography className={classes.subheader} variant="h4" component="h2">
@@ -140,14 +143,18 @@ function DashboardPage(props) {
   };
 
   const draftHacks = () => {
-    if(props.draftHackathons.length > 0) {
+    if (props.draftHackathons.length > 0) {
       return (
         <React.Fragment>
           <Typography className={classes.subheader} variant="h4" component="h2">
             Draft Hackathons
           </Typography>
           {props.draftHackathons.map(hackathon => (
-            <HackathonCard overview={hackathon.overview} key={hackathon.hid} />
+            <HackathonCard
+              overview={hackathon.overview}
+              key={hackathon.hid}
+              onClick={() => setRedirect(REDIRECT.UPDATE(hackathon))}
+            />
           ))}
         </React.Fragment>
       );

@@ -5,6 +5,7 @@ import {
   addHackathon,
   updateHackathon
 } from "../../redux/actions/hackathonActions";
+import { useParams } from "react-router-dom";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
@@ -64,17 +65,20 @@ const questionsState = [
  * hackathon overview, details, and registration questions.
  */
 function CreateHackathonPage(props) {
+  const { hid } = useParams();
+  const oldHackathon = hid ? props.getHackathon(hid) : null;
+  console.log(oldHackathon);
   // The overview data for the hackathon
   const [overview, setOverview] = useState(
-    props.hackathon ? props.hackathon.overview : overviewState
+    oldHackathon ? oldHackathon.overview : overviewState
   );
   // The details data for the hackathon (array of markdown)
   const [details, setDetails] = useState(
-    props.hackathon ? props.hackathon.details : detailsState
+    oldHackathon ? oldHackathon.details : detailsState
   );
   // The questions for registration
   const [questions, setQuestions] = useState(
-    props.hackathon ? props.hackathon.questions : questionsState
+    oldHackathon ? oldHackathon.questions : questionsState
   );
   // Whether we are in preview mode or not
   const [viewMode, setViewMode] = useState(false);
@@ -90,10 +94,10 @@ function CreateHackathonPage(props) {
    * @param draft Whether to mark the hackathon as a draft.
    */
   const saveHackathon = draft => {
-    if (props.hackathon) {
+    if (oldHackathon) {
       // Just update and publish
       props.updateHackathon({
-        ...props.hackathon,
+        ...oldHackathon,
         overview: { ...overview, draft },
         details,
         questions
@@ -238,6 +242,10 @@ function CreateHackathonPage(props) {
   );
 }
 
-export default connect(null, { addHackathon, updateHackathon })(
+const mapStateToProps = state => ({
+  getHackathon: hid => state.hackathons.byHID[hid]
+});
+
+export default connect(mapStateToProps, { addHackathon, updateHackathon })(
   CreateHackathonPage
 );
