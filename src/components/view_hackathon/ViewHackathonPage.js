@@ -48,8 +48,9 @@ const useStyles = makeStyles(theme => {
  */
 function ViewHackathonPage(props) {
   const classes = useStyles();
-  const { hackathon } = props;
-  const { draft } = hackathon.overview;
+  const hackathon = props.hackathon || {};
+  // Get the draft property without crashing when things are null
+  const draft = (hackathon.overview || {}).draft;
 
   // Hold onto temporary versions of the overview/details/questions
   // for edits: we only want to save and send to the redux store if
@@ -64,6 +65,11 @@ function ViewHackathonPage(props) {
   const [modalOpen, setModalOpen] = useState(false);
   // Handle which page is being viewed
   const [page, setPage] = useState(PAGES.OVERVIEW);
+
+  // Redirect immediately so we don't throw errors about nulls
+  if(redirect !== REDIRECT.NONE) {
+    return redirect
+  }
 
   /**
    * The header for the drawer on the left hand side. It just has
@@ -163,7 +169,6 @@ function ViewHackathonPage(props) {
       drawerPrimary={drawerPrimary}
       drawerSecondary={drawerSecondary}
     >
-      {redirect}
       <HackathonPreviewForm
         overview={hackathon.overview}
         questions={hackathon.questions}
