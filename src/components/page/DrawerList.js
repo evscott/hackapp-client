@@ -38,6 +38,33 @@ const useStyles = makeStyles(theme => {
  */
 export default function DrawerList(props) {
   const classes = useStyles();
+
+  /** Gets the list of secondary buttons, if needed. */
+  const getSecondaryList = () => {
+    if (props.secondaryButtons) {
+      return (
+        <List>
+          {props.secondaryButtons.map(button => (
+            <ListItem
+              button
+              key={button.text}
+              onClick={button.onClick}
+              className={button.highlighted ? classes.highlighted : ""}
+            >
+              <ListItemIcon>{button.icon}</ListItemIcon>
+              <ListItemText
+                classes={
+                  button.highlighted ? { primary: classes.highlightedText } : {}
+                }
+                primary={button.text}
+              />
+            </ListItem>
+          ))}
+        </List>
+      );
+    }
+  };
+
   return (
     <div>
       <div className={classes.spacer} />
@@ -61,24 +88,7 @@ export default function DrawerList(props) {
         ))}
       </List>
       <Divider />
-      <List>
-        {props.secondaryButtons.map(button => (
-          <ListItem
-            button
-            key={button.text}
-            onClick={button.onClick}
-            className={button.highlighted ? classes.highlighted : ""}
-          >
-            <ListItemIcon>{button.icon}</ListItemIcon>
-            <ListItemText
-              classes={
-                button.highlighted ? { primary: classes.highlightedText } : {}
-              }
-              primary={button.text}
-            />
-          </ListItem>
-        ))}
-      </List>
+      {getSecondaryList()}
     </div>
   );
 }
@@ -95,7 +105,7 @@ DrawerList.propTypes = {
       onClick: PropTypes.func.isRequired,
       highlighted: PropTypes.bool
     })
-  ),
+  ).isRequired,
   // A list of all secondary (less important) buttons.
   secondaryButtons: PropTypes.arrayOf(
     PropTypes.shape({

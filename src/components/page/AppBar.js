@@ -102,19 +102,29 @@ export default function AppBarComponent(props) {
   };
 
   const classes = useStyles();
+
+  /** Gets the menu button icon, if it should be displayed */
+  const getMenuIcon = () => {
+    if (!props.noMenu) {
+      return (
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          className={classes.menu}
+          onClick={props.onClickMenu}
+        >
+          <MenuIcon />
+        </IconButton>
+      );
+    }
+  };
+
   return (
     <AppBar className={classes.appBar} position="static">
       <div className={classes.container}>
         <Toolbar className={classes.toolbar}>
           <div className={classes.appBarLeft}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              className={classes.menu}
-              onClick={props.onClickMenu}
-            >
-              <MenuIcon />
-            </IconButton>
+            {getMenuIcon()}
             <Fade in={scrolled}>
               <Typography
                 component="h6"
@@ -153,5 +163,7 @@ AppBarComponent.propTypes = {
   // The page's title (only visible after scrolling)
   title: PropTypes.string,
   // A function with what clicking the menu button does (i.e., open a drawer).
-  onClickMenu: PropTypes.func.isRequired
+  onClickMenu: PropTypes.func.isRequired,
+  // If true, it does not show the menu icon
+  noMenu: PropTypes.bool
 };

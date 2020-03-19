@@ -2,7 +2,6 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import Page from "../page/Page";
 import { makeStyles } from "@material-ui/core/styles";
-import SettingsIcon from "@material-ui/icons/Settings";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
@@ -10,7 +9,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
 import {
   CREATE_HACKATHON_ROUTE,
-  createHackathonRouteFor,
   viewHackathonRouteFor
 } from "../../routes";
 import { connect } from "react-redux";
@@ -24,7 +22,6 @@ import {
 const REDIRECT = {
   NONE: "",
   CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />,
-  UPDATE: hackathon => <Redirect to={createHackathonRouteFor(hackathon.hid)} />,
   VIEW: hackathon => <Redirect to={{pathname: viewHackathonRouteFor(hackathon.hid), state: {hid: hackathon.hid}}} />
 };
 
@@ -54,24 +51,6 @@ const useStyles = makeStyles(theme => {
 });
 
 /**
- * The primary settings for the page drawer.
- * @type {{icon: *, text: string}[]}
- */
-const drawerPrimary = [
-  {
-    icon: <SettingsIcon />,
-    text: "Settings",
-    onClick: () => console.log("Settings go here")
-  }
-];
-
-/**
- * The secondary settings for the page drawer.
- * @type {Array}
- */
-const drawerSecondary = [];
-
-/**
  * The first page a hackathon manager sees upon logging in. It features
  * a list of all hackathons being managed and standard navigation items.
  * @returns {*} The page for the dashboard.
@@ -79,41 +58,6 @@ const drawerSecondary = [];
 function DashboardPage(props) {
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(REDIRECT.NONE);
-
-  // Creates the drawer header content which is injected into the page
-  // based on the hackathon statistics.
-  const drawerHeader = (
-    <div>
-      <Typography
-        className={classes.drawerHeaderText}
-        variant="h4"
-        component="p"
-      >
-        Hacker Stats
-      </Typography>
-      <Typography
-        className={classes.drawerSmallTest}
-        variant="body1"
-        component="p"
-      >
-        <b>{props.upcomingHackathons.length}</b> upcoming
-      </Typography>
-      <Typography
-        className={classes.drawerSmallTest}
-        variant="body1"
-        component="p"
-      >
-        <b>{props.pastHackathons.length}</b> done
-      </Typography>
-      <Typography
-        className={classes.drawerSmallTest}
-        variant="body1"
-        component="p"
-      >
-        <b>Infinite</b> potential
-      </Typography>
-    </div>
-  );
 
   /**
    * Shows a list of hackathons.
@@ -144,9 +88,6 @@ function DashboardPage(props) {
   return (
     <Page
       title="Dashboard"
-      drawerHeader={drawerHeader}
-      drawerPrimary={drawerPrimary}
-      drawerSecondary={drawerSecondary}
     >
       {redirect}
       {showHackathons(props.upcomingHackathons, "Upcoming")}

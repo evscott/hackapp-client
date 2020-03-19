@@ -28,6 +28,11 @@ const useStyles = makeStyles(theme => {
           largeDrawerWidth}px) - 325px))`
       }
     },
+    contentNoDrawer: {
+      marginTop: 75,
+      maxWidth: 650,
+      marginBottom: 100
+    },
     title: {
       paddingTop: 50
     }
@@ -53,23 +58,32 @@ export default function Page(props) {
     setDrawerOpen(!drawerOpen);
   };
 
+  /** Gets the drawer, if we need one for the page (based on props). */
+  const getDrawer = () => {
+    if (props.drawerPrimary) {
+      return (
+        <Drawer isOpen={drawerOpen} setIsOpen={toggleDrawer}>
+          <DrawerList
+            header={props.drawerHeader}
+            primaryButtons={props.drawerPrimary}
+            secondaryButtons={props.drawerSecondary}
+          />
+        </Drawer>
+      );
+    }
+  };
+
   return (
     <div>
       <Container className={classes.appBarContainer}>
-        <AppBar title={props.title} onClickMenu={toggleDrawer} />
+        <AppBar title={props.title} onClickMenu={toggleDrawer} noMenu />
       </Container>
-      <Drawer
-        className={classes.drawer}
-        isOpen={drawerOpen}
-        setIsOpen={toggleDrawer}
+      {getDrawer()}
+      <Container
+        className={
+          props.drawerPrimary ? classes.content : classes.contentNoDrawer
+        }
       >
-        <DrawerList
-          header={props.drawerHeader}
-          primaryButtons={props.drawerPrimary}
-          secondaryButtons={props.drawerSecondary}
-        />
-      </Drawer>
-      <Container className={classes.content}>
         <Typography variant="h2" component="h1" className={classes.title}>
           {props.title}
         </Typography>
@@ -86,9 +100,9 @@ Page.propTypes = {
   drawerHeader: PropTypes.any,
   // A list of all primary (important) buttons.
   // Each button has the format {button: string, icon: component, onClick: func}
-  drawerPrimary: PropTypes.array.isRequired,
+  drawerPrimary: PropTypes.array,
   // A list of all the secondary (less important) buttons.
-  drawerSecondary: PropTypes.array.isRequired,
+  drawerSecondary: PropTypes.array,
   // The title of the page.
   title: PropTypes.string.isRequired
 };
