@@ -3,10 +3,10 @@ import Slide from "@material-ui/core/Slide";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { Redirect } from "react-router-dom";
-import SetupAdminForm from "./SetupAdminForm";
 import SetupOrgForm from "./SetupOrgForm";
 import { makeStyles } from "@material-ui/core/styles";
 import { DASHBOARD_ROUTE } from "../../routes";
+import UserForm from "../signin_forms/UserForm";
 
 /** The index for the register a new admin page. */
 const REGISTER_ADMIN_PAGE = 0;
@@ -111,7 +111,11 @@ export default function SetupPage() {
           className={classes.slide}
         >
           <Container maxWidth={"xs"}>
-            <SetupAdminForm handleCreateAdmin={handleCreateAdmin} />
+            <UserForm
+              onCompleteText="Create Admin"
+              onComplete={handleCreateAdmin}
+              getUsername
+            />
           </Container>
         </Slide>
 
