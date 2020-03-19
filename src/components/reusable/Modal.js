@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import Modal from "@material-ui/core/Modal";
 import Card from "@material-ui/core/Card";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
 
 /** Styles for the react component */
@@ -24,10 +26,15 @@ const useStyles = makeStyles(theme => {
     },
     cardContent: {
       margin: "auto",
-      paddingTop: 40,
+      paddingTop: 70,
       width: "90%",
       maxWidth: 650,
       maxHeight: "50%"
+    },
+    closeIcon: {
+      position: "absolute",
+      top: 10,
+      left: 10
     }
   };
 });
@@ -44,6 +51,12 @@ export default function MegaModal(props) {
       onClose={() => props.setOpen(false)}
     >
       <Card className={classes.card}>
+        <IconButton className={classes.closeIcon}>
+          <CloseIcon
+            fontSize="large"
+            onClick={() => props.setOpen(false)}
+          />
+        </IconButton>
         <div className={classes.cardContent}>{props.children}</div>
       </Card>
     </Modal>
