@@ -17,16 +17,17 @@ const useStyles = makeStyles(theme => {
     },
     card: {
       width: "calc(100% - 32px)",
-      maxWidth: 800,
       position: "absolute",
       top: 90,
-      bottom: -5,
+      maxWidth: 900,
+      maxHeight: "calc(100vh - 110px)",
       outline: 0,
       overflowY: "auto"
     },
     cardContent: {
       margin: "auto",
       paddingTop: 70,
+      paddingBottom: 20,
       width: "90%",
       maxWidth: 650,
       maxHeight: "50%"

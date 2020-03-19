@@ -9,3 +9,5 @@ export const DELETE_HACKATHON = "DELETE_HACKATHON";
 export const SIGNIN_USER = "SIGNIN_USER";
 /** Action type for logging a user out of the app */
 export const SIGNOUT_USER = "SIGNOUT_USER";
+/** Action type for signing up a user for the app */
+export const SIGNUP_USER = "SIGNUP_USER";

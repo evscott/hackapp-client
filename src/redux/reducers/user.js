@@ -1,4 +1,4 @@
-import { SIGNIN_USER, SIGNOUT_USER } from "../actions/actionTypes";
+import { SIGNIN_USER, SIGNOUT_USER, SIGNUP_USER } from "../actions/actionTypes";
 
 /**
  * The initial state for this branch of the redux store containing
@@ -27,7 +27,9 @@ const initialState = {
 export default function user(state = initialState, action) {
   switch (action.type) {
     case SIGNIN_USER:
-      return { ...state, user: action.user };
+      return { loggedIn: true, user: action.user };
+    case SIGNUP_USER:
+      return { loggedIn: true, user: action.user };
     case SIGNOUT_USER:
       return { loggedIn: false };
     default:

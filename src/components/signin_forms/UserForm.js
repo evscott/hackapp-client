@@ -23,6 +23,9 @@ const useStyles = makeStyles(theme => {
     },
     leftMargin: {
       marginLeft: 10
+    },
+    cancelButton: {
+      marginRight: 10
     }
   };
 });
@@ -80,7 +83,7 @@ export default function UserForm(props) {
   const getCancelButton = () => {
     if (props.onCancel) {
       return (
-        <Button variant="contained" color="primary" onClick={props.onCancel}>
+        <Button className={classes.cancelButton} onClick={props.onCancel}>
           Cancel
         </Button>
       );
