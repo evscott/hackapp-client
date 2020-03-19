@@ -149,8 +149,6 @@ export default function AppBarComponent(props) {
             <UserPopover
               anchor={popoverAnchor}
               closePopover={closePopover}
-              name="Graeme Zinck"
-              userType="Admin"
             />
           </div>
         </Toolbar>
