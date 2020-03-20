@@ -18,3 +18,10 @@ export const ADD_REGISTRATION = "ADD_REGISTRATION";
 export const UPDATE_REGISTRATION = "UPDATE_REGISTRATION";
 /** Action type for removing a user's registration for a hackthon */
 export const DELETE_REGISTRATION = "DELETE_REGISTRATION";
+
+/** Action type for an error */
+export const ERROR = "ERROR";
+/** Action type for a notification */
+export const NOTIFICATION = "NOTIFICATION";
+/** Action type for dismissing notification */
+export const DISMISS_NOTIFICATION = "DISMISS_NOTIFICATION";

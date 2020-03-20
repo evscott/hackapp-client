@@ -7,6 +7,7 @@ import Drawer from "./Drawer";
 import { largeDrawerWidth } from "./Drawer";
 import PropTypes from "prop-types";
 import DrawerList from "./DrawerList";
+import AlertSnackbar from "../reusable/Snackbar";
 
 /**
  * The styles for a page in the UI.
@@ -89,6 +90,7 @@ export default function Page(props) {
         </Typography>
         {props.children}
       </Container>
+      <AlertSnackbar/>
     </div>
   );
 }
