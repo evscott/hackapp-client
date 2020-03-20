@@ -52,11 +52,11 @@ export default function MegaModal(props) {
       onClose={() => props.setOpen(false)}
     >
       <Card className={classes.card}>
-        <IconButton className={classes.closeIcon}>
-          <CloseIcon
-            fontSize="large"
-            onClick={() => props.setOpen(false)}
-          />
+        <IconButton
+          className={classes.closeIcon}
+          onClick={() => props.setOpen(false)}
+        >
+          <CloseIcon fontSize="large" />
         </IconButton>
         <div className={classes.cardContent}>{props.children}</div>
       </Card>

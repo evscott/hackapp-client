@@ -8,6 +8,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import { makeStyles } from "@material-ui/core/styles";
 import hackathonImg from "../../img/hackathon-default.jpg";
+import { connect } from "react-redux";
 
 /**
  * The styles for the hackathon information card.
@@ -84,8 +85,32 @@ const useStyles = makeStyles(theme => {
  * a hackathon.
  * @param props Has a startDate, endDate, and title for the hackathon.
  */
-export default function HackathonCard(props) {
+function HackathonCard(props) {
   const classes = useStyles();
+
+  /**
+   * Gets text saying whether the user has already registered for the
+   * hackathon.
+   */
+  const getRegistrationInfo = () => {
+    if (props.registered) {
+      return (
+        <Typography>
+          <i>You have already registered for {props.overview.name}</i>
+        </Typography>
+      );
+    } else {
+      return (
+        <Typography>
+          Up to <b>{props.overview.maxReg}</b> attendees can register by{" "}
+          <b>
+            {dayjs(props.overview.regDeadline).format("h:mma MMMM D, YYYY")}
+          </b>
+        </Typography>
+      );
+    }
+  };
+
   return (
     <Card className={classes.root}>
       <CardActionArea onClick={props.onClick}>
@@ -116,10 +141,7 @@ export default function HackathonCard(props) {
           </div>
         </CardContent>
         <CardContent className={classes.secondaryDetails}>
-          <Typography>
-            Up to <b>{props.overview.maxReg}</b> attendees can register
-            by <b>{dayjs(props.overview.regDeadline).format("h:mma MMMM D, YYYY")}</b>
-          </Typography>
+          {getRegistrationInfo()}
         </CardContent>
       </CardActionArea>
     </Card>
@@ -139,3 +161,11 @@ HackathonCard.propTypes = {
   // What happens when click the hackathon card
   onClick: PropTypes.func
 };
+
+const mapStateToProps = (state, ownProps) => {
+  // Get whether or not the user has registered in the hackathon
+  const registered = state.registrations.byHID[ownProps.hid];
+  return { registered };
+};
+
+export default connect(mapStateToProps)(HackathonCard);

@@ -82,6 +82,7 @@ function DashboardPage(props) {
               overview={hackathon.overview}
               key={hackathon.hid}
               onClick={() => setRedirect(REDIRECT.VIEW(hackathon))}
+              hid={hackathon.hid}
             />
           ))}
         </React.Fragment>
