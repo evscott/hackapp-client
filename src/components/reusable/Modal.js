@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => {
     cardContent: {
       margin: "auto",
       paddingTop: 70,
-      paddingBottom: 20,
+      paddingBottom: 60,
       width: "90%",
       maxWidth: 650,
       maxHeight: "50%"

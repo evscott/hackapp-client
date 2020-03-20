@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import {
+  addRegistration,
+  updateRegistration,
+  deleteRegistration
+} from "../../redux/actions/registrationActions";
 import Typography from "@material-ui/core/Typography";
 import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
 import EditIcon from "@material-ui/icons/Edit";
@@ -98,7 +103,10 @@ function UserViewHackathonPage(props) {
             variant="extended"
             color="primary"
             className={classes.fab}
-            onClick={() => setModalOpen(true)}
+            onClick={() => {
+              setAnswers(props.oldRegistration);
+              setModalOpen(true);
+            }}
           >
             <EditIcon className={classes.icon} />
             Edit Registration
@@ -143,9 +151,12 @@ function UserViewHackathonPage(props) {
         />
         <SaveButtonBar
           onCancel={() => {
+            if (props.registered) props.deleteRegistration(props.hid);
             setModalOpen(false);
           }}
           onSave={() => {
+            if (props.registered) props.updateRegistration(props.hid, answers);
+            else props.addRegistration(props.hid, answers);
             setModalOpen(false);
           }}
           saveText={props.registered ? "Update" : "Register"}
@@ -180,8 +191,13 @@ UserViewHackathonPage.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  hackathon: state.hackathons.byHID[ownProps.hid]
-  // registered: whether the user has registered
+  hackathon: state.hackathons.byHID[ownProps.hid],
+  registered: state.registrations.byHID[ownProps.hid] !== undefined,
+  oldRegistration: state.registrations.byHID[ownProps.hid]
 });
 
-export default connect(mapStateToProps)(UserViewHackathonPage);
+export default connect(mapStateToProps, {
+  addRegistration,
+  updateRegistration,
+  deleteRegistration
+})(UserViewHackathonPage);

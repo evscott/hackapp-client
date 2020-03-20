@@ -11,3 +11,10 @@ export const SIGNIN_USER = "SIGNIN_USER";
 export const SIGNOUT_USER = "SIGNOUT_USER";
 /** Action type for signing up a user for the app */
 export const SIGNUP_USER = "SIGNUP_USER";
+
+/** Action type for registering a user for a hackthon */
+export const ADD_REGISTRATION = "ADD_REGISTRATION";
+/** Action type for updating a user's registration for a hackthon */
+export const UPDATE_REGISTRATION = "UPDATE_REGISTRATION";
+/** Action type for removing a user's registration for a hackthon */
+export const DELETE_REGISTRATION = "DELETE_REGISTRATION";
