@@ -19,12 +19,8 @@ export default function SaveButtonBar(props) {
 
   return (
     <RightButtonBar>
-      <Button
-        className={classes.button}
-        // variant="contained"
-        onClick={props.onCancel}
-      >
-        Cancel
+      <Button className={classes.button} onClick={props.onCancel}>
+        {props.cancelText || "Cancel"}
       </Button>
       <Button
         className={classes.button}
@@ -32,15 +28,19 @@ export default function SaveButtonBar(props) {
         color="primary"
         onClick={props.onSave}
       >
-        Save
+        {props.saveText || "Save"}
       </Button>
     </RightButtonBar>
-  )
+  );
 }
 
 SaveButtonBar.propTypes = {
   // Function called when clicking the Cancel button
   onCancel: PropTypes.func.isRequired,
+  // The text for cancelling
+  cancelText: PropTypes.string,
   // Function called when clicking the Save button
-  onSave: PropTypes.func.isRequired
+  onSave: PropTypes.func.isRequired,
+  // The text for saving
+  saveText: PropTypes.string
 };

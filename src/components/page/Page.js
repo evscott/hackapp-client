@@ -76,7 +76,7 @@ export default function Page(props) {
   return (
     <div>
       <Container className={classes.appBarContainer}>
-        <AppBar title={props.title} onClickMenu={toggleDrawer} noMenu />
+        <AppBar title={props.title} onClickMenu={toggleDrawer} noMenu={props.drawerPrimary === undefined} />
       </Container>
       {getDrawer()}
       <Container
