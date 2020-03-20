@@ -1,9 +1,9 @@
 const SETUP_ROUTE = "/setup";
-const DASHBOARD_ROUTE = "/dashboard";
+const DASHBOARD_ROUTE = "/";
 const CREATE_HACKATHON_ROUTE = "/create";
 const CREATE_HACKATHON_PREXISTING_ROUTE = "/create/:hid";
-const VIEW_HACKATHON_ROUTE = "/hack/:hid";
-const viewHackathonRouteFor = hid => `/hack/${hid}`;
+const VIEW_HACKATHON_ROUTE = "/admin/:hid";
+const viewHackathonRouteFor = hid => `/admin/${hid}`;
 
 export {
   SETUP_ROUTE,

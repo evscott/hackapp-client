@@ -12,6 +12,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import Typography from "@material-ui/core/Typography";
 import Page from "../page/Page";
 import { DASHBOARD_ROUTE } from "../../routes";
@@ -67,8 +68,8 @@ function ViewHackathonPage(props) {
   const [page, setPage] = useState(PAGES.OVERVIEW);
 
   // Redirect immediately so we don't throw errors about nulls
-  if(redirect !== REDIRECT.NONE) {
-    return redirect
+  if (redirect !== REDIRECT.NONE) {
+    return redirect;
   }
 
   /**
@@ -89,11 +90,10 @@ function ViewHackathonPage(props) {
   /** The primary buttons in the drawer for changing the hackathon */
   const drawerPrimary = [
     {
-      icon: <DeleteIcon />,
-      text: "Delete Hackathon",
+      icon: <CloudDownloadIcon />,
+      text: "Download Registration CSV",
       onClick: () => {
-        props.deleteHackathon(hackathon.hid);
-        setRedirect(REDIRECT.DASHBOARD);
+        console.log("Not implemented");
       }
     },
     {
@@ -105,6 +105,14 @@ function ViewHackathonPage(props) {
           ...hackathon,
           overview: { ...hackathon.overview, draft: !draft }
         });
+      }
+    },
+    {
+      icon: <DeleteIcon />,
+      text: "Delete Hackathon",
+      onClick: () => {
+        props.deleteHackathon(hackathon.hid);
+        setRedirect(REDIRECT.DASHBOARD);
       }
     }
   ];

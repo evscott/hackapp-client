@@ -87,7 +87,7 @@ function DashboardPage(props) {
 
   return (
     <Page
-      title="Dashboard"
+      title="HackApp"
     >
       {redirect}
       {showHackathons(props.upcomingHackathons, "Upcoming")}

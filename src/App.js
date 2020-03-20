@@ -29,19 +29,17 @@ function App() {
         <MuiPickersUtilsProvider utils={DayJsUtils}>
           <CssBaseline />
           <Switch>
-            <Route path={SETUP_ROUTE}>
-              <SetupPage />
-            </Route>
-            <Route path={DASHBOARD_ROUTE}>
-              <DashboardPage />
-            </Route>
-            <Route path={CREATE_HACKATHON_PREXISTING_ROUTE}>
-              <CreateHackathonPage />
-            </Route>
-            <Route path={CREATE_HACKATHON_ROUTE}>
-              <CreateHackathonPage />
-            </Route>
-            <Route path={VIEW_HACKATHON_ROUTE} component={ViewHackathonPage}/>
+            <Route path={SETUP_ROUTE} component={SetupPage} />
+            <Route
+              path={CREATE_HACKATHON_PREXISTING_ROUTE}
+              component={CreateHackathonPage}
+            />
+            <Route
+              path={CREATE_HACKATHON_ROUTE}
+              component={CreateHackathonPage}
+            />
+            <Route path={VIEW_HACKATHON_ROUTE} component={ViewHackathonPage} />
+            <Route path={DASHBOARD_ROUTE} component={DashboardPage} />
           </Switch>
         </MuiPickersUtilsProvider>
       </MuiThemeProvider>
