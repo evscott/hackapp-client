@@ -41,7 +41,7 @@ export default function HackathonPreviewForm(props) {
   let [page, setPage] = React.useState(PAGES.OVERVIEW);
   if (props.page && props.setPage) {
     page = props.page;
-    setPage = props.setPage
+    setPage = props.setPage;
   }
   // A list of pages to preview (excluding the preview—you can't preview the
   // preview page, since that would be a recursive mess!)
@@ -49,9 +49,7 @@ export default function HackathonPreviewForm(props) {
 
   /** Gets a read-only preview of the hackathon overview. */
   const previewOverview = () => {
-    return (
-      <HackathonCard overview={props.overview}/>
-    )
+    return <HackathonCard overview={props.overview} />;
   };
 
   /** Gets a read-only preview of the hackathon details. */
@@ -61,10 +59,7 @@ export default function HackathonPreviewForm(props) {
         array={props.details}
         key="preview-details" // Key required to avoid React errors reusing components
         getCardContents={index => (
-          <MdEditor
-            text={props.details[index]}
-            viewMode
-          />
+          <MdEditor text={props.details[index]} viewMode />
         )}
         viewMode
       />
@@ -78,10 +73,7 @@ export default function HackathonPreviewForm(props) {
         array={props.questions}
         key="preview-questions"
         getCardContents={index => (
-          <RegQuestionEditor
-            question={props.questions[index]}
-            viewMode
-          />
+          <RegQuestionEditor question={props.questions[index]} viewMode />
         )}
         viewMode
       />

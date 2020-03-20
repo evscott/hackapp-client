@@ -7,10 +7,7 @@ import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
-import {
-  CREATE_HACKATHON_ROUTE,
-  viewHackathonRouteFor
-} from "../../routes";
+import { CREATE_HACKATHON_ROUTE, viewHackathonRouteFor } from "../../routes";
 import { connect } from "react-redux";
 import {
   sortDraftHackathons,
@@ -22,7 +19,14 @@ import {
 const REDIRECT = {
   NONE: "",
   CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />,
-  VIEW: hackathon => <Redirect to={{pathname: viewHackathonRouteFor(hackathon.hid), state: {hid: hackathon.hid}}} />
+  VIEW: hackathon => (
+    <Redirect
+      to={{
+        pathname: viewHackathonRouteFor(hackathon.hid),
+        state: { hid: hackathon.hid }
+      }}
+    />
+  )
 };
 
 /**
@@ -51,9 +55,9 @@ const useStyles = makeStyles(theme => {
 });
 
 /**
- * The first page a hackathon manager sees upon logging in. It features
- * a list of all hackathons being managed and standard navigation items.
- * @returns {*} The page for the dashboard.
+ * This is the homepage for the application. A regular user sees all upcoming
+ * and past hackathons. An admin (must be logged in) sees all upcoming, past,
+ * and draft hackathons.
  */
 function DashboardPage(props) {
   const classes = useStyles();
@@ -85,23 +89,30 @@ function DashboardPage(props) {
     }
   };
 
+  /** Gets the floating action button for adding hackathon if admin */
+  const getFab = () => {
+    if (props.admin) {
+      return (
+        <Tooltip title="Create New Hackathon" arrow placement="top">
+          <Fab
+            className={classes.fab}
+            color="primary"
+            onClick={() => setRedirect(REDIRECT.CREATE)}
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+      );
+    }
+  };
+
   return (
-    <Page
-      title="HackApp"
-    >
+    <Page title="HackApp">
       {redirect}
       {showHackathons(props.upcomingHackathons, "Upcoming")}
-      {showHackathons(props.draftHackathons, "Draft")}
+      {props.admin ? showHackathons(props.draftHackathons, "Draft") : ""}
       {showHackathons(props.pastHackathons, "Past")}
-      <Tooltip title="Create New Hackathon" arrow placement="top">
-        <Fab
-          className={classes.fab}
-          color="primary"
-          onClick={() => setRedirect(REDIRECT.CREATE)}
-        >
-          <AddIcon />
-        </Fab>
-      </Tooltip>
+      {getFab()}
     </Page>
   );
 }
@@ -112,7 +123,8 @@ const mapStateToProps = state => {
   const pastHackathons = sortPrevHackathons(hackArr);
   const upcomingHackathons = sortNextHackathons(hackArr);
   const draftHackathons = sortDraftHackathons(hackArr);
-  return { pastHackathons, upcomingHackathons, draftHackathons };
+  const admin = state.user.loggedIn && state.user.user.admin;
+  return { pastHackathons, upcomingHackathons, draftHackathons, admin };
 };
 
 export default connect(mapStateToProps)(DashboardPage);
