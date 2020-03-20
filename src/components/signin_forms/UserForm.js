@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => {
     leftMargin: {
       marginLeft: 10
     },
-    cancelButton: {
+    marginedButton: {
       marginRight: 10
     }
   };
@@ -83,10 +83,21 @@ export default function UserForm(props) {
   const getCancelButton = () => {
     if (props.onCancel) {
       return (
-        <Button className={classes.cancelButton} onClick={props.onCancel}>
+        <Button className={classes.marginedButton} onClick={props.onCancel}>
           Cancel
         </Button>
       );
+    }
+  };
+
+  /** Gets the accessory button, if functionality is enabled */
+  const getAccessoryButton = () => {
+    if(props.onAccessory) {
+      return (
+        <Button className={classes.marginedButton} onClick={props.onAccessory}>
+          {props.accessoryText || "Change Mode"}
+        </Button>
+      )
     }
   };
 
@@ -119,6 +130,7 @@ export default function UserForm(props) {
       />
       <RightButtonBar>
         {getCancelButton()}
+        {getAccessoryButton()}
         <Button variant="contained" color="primary" onClick={onComplete}>
           {props.onCompleteText}
         </Button>
@@ -130,10 +142,14 @@ export default function UserForm(props) {
 UserForm.propTypes = {
   // Whether or not it should accept the user's name
   getUsername: PropTypes.bool,
-  // The text on the button for completing the input
-  onCompleteText: PropTypes.string.isRequired,
   // The function called on cancelling the input
   onCancel: PropTypes.func,
   // The function called on completing the input
-  onComplete: PropTypes.func.isRequired
+  onComplete: PropTypes.func.isRequired,
+  // The text on the button for completing the input
+  onCompleteText: PropTypes.string.isRequired,
+  // The function called on clicking an (optional) accessory button
+  onAccessory: PropTypes.func,
+  // The text on the accessory button
+  accessoryText: PropTypes.string
 };

@@ -2,20 +2,11 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
-import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
-import { signIn, signUp, signOut } from "../../redux/actions/userActions";
-import MegaModal from "../reusable/Modal";
-import UserForm from "../signin_forms/UserForm";
+import { signOut } from "../../redux/actions/userActions";
 import UserInfoCard from "./UserInfoCard";
 import UserLoginCard from "./UserLoginCard";
-
-/** The modal displayed when signing in */
-const SIGNIN_MODAL = "SIGNIN MODAL";
-/** The modal displayed when signing up */
-const SIGNUP_MODAL = "SIGNUP MODAL";
-/** State when there is no modal */
-const NO_MODAL = "NO MODAL";
+import SignInModal from "../signin_forms/SignInModal";
 
 /**
  * Styles for the user popover.
@@ -34,62 +25,27 @@ const useStyles = makeStyles(theme => {
  * is visible, and the user name and userType.
  */
 function UserPopover(props) {
-  // The modal that is currently open
-  const [modalOpen, setModalOpen] = useState(NO_MODAL);
+  // Whether the modal is open
+  const [modalOpen, setModalOpen] = useState(false);
+  // Whether the modal form is a signup form or not
+  const [signUpForm, setSignUpForm] = useState(false);
   const classes = useStyles();
   const open = Boolean(props.anchor);
 
-  const getModal = () => {
-    if (modalOpen === SIGNIN_MODAL) {
-      return (
-        <MegaModal
-          open={modalOpen === SIGNIN_MODAL}
-          setOpen={() => setModalOpen(NO_MODAL)}
-        >
-          <Typography variant="h2">Sign In</Typography>
-          <Typography>Sign in and get hacking.</Typography>
-          <UserForm
-            onCompleteText="Sign In"
-            onComplete={user => {
-              props.signIn(user);
-              setModalOpen(NO_MODAL);
-              props.closePopover();
-            }}
-            onCancel={() => setModalOpen(NO_MODAL)}
-          />
-        </MegaModal>
-      );
-    } else if (modalOpen === SIGNUP_MODAL) {
-      return (
-        <MegaModal
-          open={modalOpen === SIGNUP_MODAL}
-          setOpen={() => setModalOpen(NO_MODAL)}
-        >
-          <Typography variant="h2">Sign Up</Typography>
-          <Typography>Sign up and join the hacker community.</Typography>
-          <UserForm
-            onCompleteText="Sign Up"
-            onComplete={user => {
-              props.signUp(user);
-              setModalOpen(NO_MODAL);
-              props.closePopover();
-            }}
-            getUsername
-          />
-        </MegaModal>
-      );
-    }
+  const openSignUp = () => {
+    setModalOpen(true);
+    setSignUpForm(true);
+  };
+
+  const openSignIn = () => {
+    setModalOpen(true);
+    setSignUpForm(false);
   };
 
   /** Gets the content of the popover based on if the user is logged in. */
   const getCard = () => {
     if (!props.loggedIn) {
-      return (
-        <UserLoginCard
-          onSignUp={() => setModalOpen(SIGNUP_MODAL)}
-          onSignIn={() => setModalOpen(SIGNIN_MODAL)}
-        />
-      );
+      return <UserLoginCard onSignUp={openSignUp} onSignIn={openSignIn} />;
     } else {
       return (
         <UserInfoCard
@@ -118,7 +74,12 @@ function UserPopover(props) {
         horizontal: "right"
       }}
     >
-      {getModal()}
+      <SignInModal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        signUpForm={signUpForm}
+        setSignUpForm={setSignUpForm}
+      />
       {getCard()}
     </Popover>
   );
@@ -146,6 +107,6 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps, { signIn, signUp, signOut })(
+export default connect(mapStateToProps, { signOut })(
   UserPopover
 );

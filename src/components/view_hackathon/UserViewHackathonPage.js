@@ -12,6 +12,7 @@ import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
 import EditIcon from "@material-ui/icons/Edit";
 import Fab from "@material-ui/core/Fab";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { DASHBOARD_ROUTE } from "../../routes";
 import Page from "../page/Page";
 import HackathonCard from "../dashboard/HackathonCard";
@@ -21,6 +22,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MegaModal from "../reusable/Modal";
 import RegQuestionViewer from "../hack_forms/questions/RegQuestionViewer";
 import SaveButtonBar from "./SaveButtonBar";
+import SignInModal from "../signin_forms/SignInModal";
 
 /** This defines the styles for the React component */
 const useStyles = makeStyles(theme => {
@@ -60,6 +62,8 @@ function UserViewHackathonPage(props) {
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
   // Hold whether the modal is open
   const [modalOpen, setModalOpen] = useState(false);
+  // When must login (before registering), holds whether we're signing in or up
+  const [signUp, setSignUp] = useState(false);
   // Hold answers to the registration questions
   // Initializes to an array of empty arrays
   const [answers, setAnswers] = useState(
@@ -97,7 +101,19 @@ function UserViewHackathonPage(props) {
    */
   const getFab = () => {
     if (hackathon.overview.regDeadline > new Date()) {
-      if (props.registered) {
+      if (!props.loggedIn) {
+        return (
+          <Fab
+            variant="extended"
+            color="primary"
+            className={classes.fab}
+            onClick={() => setModalOpen(true)}
+          >
+            <ArrowForwardIcon className={classes.icon} />
+            Sign In to Register
+          </Fab>
+        );
+      } else if (props.registered) {
         return (
           <Fab
             variant="extended"
@@ -130,40 +146,52 @@ function UserViewHackathonPage(props) {
 
   /** Gets the modal for registering for the hackathon */
   const getRegistrationModal = () => {
-    return (
-      <MegaModal open={modalOpen} setOpen={setModalOpen}>
-        <Typography variant="h2">Register</Typography>
-        <ReorderableCardForm
-          array={hackathon.questions}
-          getCardContents={index => (
-            <RegQuestionViewer
-              question={hackathon.questions[index]}
-              answers={answers[index]}
-              setAnswers={ans => {
-                // Replace the answer in the array
-                const newAnswers = [...answers];
-                newAnswers[index] = ans;
-                setAnswers(newAnswers);
-              }}
-            />
-          )}
-          viewMode
+    if (props.loggedIn) {
+      return (
+        <MegaModal open={modalOpen} setOpen={setModalOpen}>
+          <Typography variant="h2">Register</Typography>
+          <ReorderableCardForm
+            array={hackathon.questions}
+            getCardContents={index => (
+              <RegQuestionViewer
+                question={hackathon.questions[index]}
+                answers={answers[index]}
+                setAnswers={ans => {
+                  // Replace the answer in the array
+                  const newAnswers = [...answers];
+                  newAnswers[index] = ans;
+                  setAnswers(newAnswers);
+                }}
+              />
+            )}
+            viewMode
+          />
+          <SaveButtonBar
+            onCancel={() => {
+              if (props.registered) props.deleteRegistration(props.hid);
+              setModalOpen(false);
+            }}
+            onSave={() => {
+              if (props.registered)
+                props.updateRegistration(props.hid, answers);
+              else props.addRegistration(props.hid, answers);
+              setModalOpen(false);
+            }}
+            saveText={props.registered ? "Update" : "Register"}
+            cancelText={props.registered ? "Cancel Registration" : "Cancel"}
+          />
+        </MegaModal>
+      );
+    } else {
+      return (
+        <SignInModal
+          open={modalOpen}
+          setOpen={setModalOpen}
+          signUpForm={signUp}
+          setSignUpForm={setSignUp}
         />
-        <SaveButtonBar
-          onCancel={() => {
-            if (props.registered) props.deleteRegistration(props.hid);
-            setModalOpen(false);
-          }}
-          onSave={() => {
-            if (props.registered) props.updateRegistration(props.hid, answers);
-            else props.addRegistration(props.hid, answers);
-            setModalOpen(false);
-          }}
-          saveText={props.registered ? "Update" : "Register"}
-          cancelText={props.registered ? "Cancel Registration" : "Cancel"}
-        />
-      </MegaModal>
-    );
+      );
+    }
   };
 
   return (
@@ -193,7 +221,8 @@ UserViewHackathonPage.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
   hackathon: state.hackathons.byHID[ownProps.hid],
   registered: state.registrations.byHID[ownProps.hid] !== undefined,
-  oldRegistration: state.registrations.byHID[ownProps.hid]
+  oldRegistration: state.registrations.byHID[ownProps.hid],
+  loggedIn: state.user.loggedIn
 });
 
 export default connect(mapStateToProps, {
