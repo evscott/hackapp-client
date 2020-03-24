@@ -18,7 +18,7 @@ const initialState = {
 export default function user(state = initialState, action) {
   switch (action.type) {
     case ADD_USER_TO_STATE:
-      return { loggedIn: true, user: action.user };
+      return { loggedIn: true, user: action.user, token: action.token};
     case REMOVE_USER_FROM_STATE:
       return { loggedIn: false };
     default:

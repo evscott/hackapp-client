@@ -1,14 +1,15 @@
 import { ADD_USER_TO_STATE, REMOVE_USER_FROM_STATE } from "./actionTypes";
 import { showError, showNotification } from "./notificationActions";
-import fetch from "cross-fetch";
+import fetch from "../fetchWithTimeout";
 
 /** The path for authenticating a user */
 const AUTH_PATH = `${process.env.REACT_APP_API_ADDRESS}/auth/`;
 
 /** Action for adding user data to the state */
-const addUserToState = user => ({
+const addUserToState = (user, token) => ({
   type: ADD_USER_TO_STATE,
-  user
+  user,
+  token
 });
 
 /** Action for removing user data from the state */
@@ -28,15 +29,8 @@ export const signIn = user => dispatch => {
     .then(res => res.json())
     .then(res => {
       if (res.token && res.user) {
-        // Add the token to the state
-        res.user.token = res.token;
-
-        // @TODO: Fix this when fixed on server side
-        res.user.firstName = res.user.first_name;
-        res.user.lastName = res.user.last_name;
-
         dispatch(showNotification(`Welcome back, ${res.user.firstName}!`));
-        dispatch(addUserToState(res.user));
+        dispatch(addUserToState(res.user, res.token));
       } else {
         dispatch(showError("Sign in failed. Shucks."));
       }
@@ -58,14 +52,8 @@ export const signUp = user => dispatch => {
     .then(res => res.json())
     .then(res => {
       if (res.token && res.user) {
-        res.user.token = res.token;
-
-        // @TODO: Fix this when fixed on server side
-        res.user.firstName = res.user.first_name;
-        res.user.lastName = res.user.last_name;
-
         dispatch(showNotification(`Let's get hacking, ${res.user.firstName}!`));
-        dispatch(addUserToState(res.user));
+        dispatch(addUserToState(res.user, res.token));
       } else {
         dispatch(showError("Sign up failed. Somebody messed up big time."));
       }

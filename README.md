@@ -1,16 +1,33 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# HackApp Client
 
-## Available Scripts
+This is a React frontend application for managing hackathons.
+It allows a hackathon manager to create a webpage with details about the hackathon,
+which is listed on the app's dashboard. It also allows the manager to set up registration
+questions. Regular users can log in to the website and sign up for hackathons by filling
+out the registration forms.
 
-In the project directory, you can run:
+## Running the Application
 
-### `npm start`
+### Quick Start
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+If all you want to do is start running the application, go to [Hackapp](https://github.com/evscott/hackapp).
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### For Frontend Development
+
+If you want to be able to work on the frontend and iteratively test (i.e., you do not want to
+restart a docker container for every commit), perform the following:
+
+1. Pull down the backend using `git clone https://github.com/evscott/hackapp-api.git`.
+2. `cd` into the backend directory and run `docker-compose up --build` to run the server on
+`http://localhost:8080`. You should be able to go to `http://localhost:8080/api` in your
+browser and see the API calls used by the application.
+3. Pull down this frontend repository using `git clone https://github.com/evscott/hackapp-client.git`.
+4. `cd` into the frontend directory and run `npm start`, which starts the app in development
+mode.
+5. Go to `http://localhost:9090` to use the app! The page will reload if you make edits. SInce
+it will run in development mode, the console has all the Redux state changes.
+
+## Documentation from `create-react-app`
 
 ### `npm test`
 
@@ -26,16 +43,6 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 ## Learn More
 

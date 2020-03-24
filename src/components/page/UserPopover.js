@@ -32,6 +32,9 @@ function UserPopover(props) {
   const classes = useStyles();
   const open = Boolean(props.anchor);
 
+  // If logged in, set modal to be closed
+  if(props.loggedIn && modalOpen) setModalOpen(false);
+
   const openSignUp = () => {
     setModalOpen(true);
     setSignUpForm(true);

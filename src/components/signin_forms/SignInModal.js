@@ -25,7 +25,6 @@ function SignInModal(props) {
         onComplete={user => {
           if (signUp) props.signUp(user);
           else props.signIn(user);
-          props.setOpen(false);
         }}
         onCancel={() => props.setOpen(false)}
         onAccessory={() => props.setSignUpForm(!props.signUpForm)}
