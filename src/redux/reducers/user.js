@@ -1,20 +1,11 @@
-import { SIGNIN_USER, SIGNOUT_USER, SIGNUP_USER } from "../actions/actionTypes";
+import { ADD_USER_TO_STATE, REMOVE_USER_FROM_STATE } from "../actions/actionTypes";
 
 /**
  * The initial state for this branch of the redux store containing
  * the user information (for the logged in user).
- *
- * @TODO: remove the temporary example user
  */
 const initialState = {
-  loggedIn: true,
-  user: {
-    uid: 0,
-    firstName: "Graeme",
-    lastName: "Zinck",
-    email: "graeme@zinck.com",
-    admin: true
-  }
+  loggedIn: false
 };
 
 /**
@@ -26,11 +17,9 @@ const initialState = {
  */
 export default function user(state = initialState, action) {
   switch (action.type) {
-    case SIGNIN_USER:
+    case ADD_USER_TO_STATE:
       return { loggedIn: true, user: action.user };
-    case SIGNUP_USER:
-      return { loggedIn: true, user: action.user };
-    case SIGNOUT_USER:
+    case REMOVE_USER_FROM_STATE:
       return { loggedIn: false };
     default:
       return state;
