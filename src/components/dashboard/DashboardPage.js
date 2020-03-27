@@ -14,6 +14,7 @@ import {
   sortNextHackathons,
   sortPrevHackathons
 } from "../../redux/util/sortHackathons";
+import LoadingCard from "../reusable/LoadingCard";
 
 /** The routes that we might redirect to by clicking a button. */
 const REDIRECT = {
@@ -100,13 +101,27 @@ function DashboardPage(props) {
     }
   };
 
+  /**
+   * Assembles everything on the page into one React fragment.
+   * This is necessary since if we're loading data, we have to return
+   * a LoadingCard.
+   */
+  const getPageContents = () => {
+    if(redirect) return redirect;
+    if(props.loading) return <LoadingCard />;
+    return (
+      <React.Fragment>
+        {showHackathons(props.upcomingHackathons, "Upcoming")}
+        {props.admin ? showHackathons(props.draftHackathons, "Draft") : ""}
+        {showHackathons(props.pastHackathons, "Past")}
+        {getFab()}
+      </React.Fragment>
+    );
+  };
+
   return (
     <Page title="HackApp">
-      {redirect}
-      {showHackathons(props.upcomingHackathons, "Upcoming")}
-      {props.admin ? showHackathons(props.draftHackathons, "Draft") : ""}
-      {showHackathons(props.pastHackathons, "Past")}
-      {getFab()}
+      {getPageContents()}
     </Page>
   );
 }
@@ -114,11 +129,18 @@ function DashboardPage(props) {
 // Gets the hackathons from the redux store and sorts them
 const mapStateToProps = state => {
   const hackArr = Object.values(state.hackathons.byHID);
+  const loading = state.hackathons.loading;
   const pastHackathons = sortPrevHackathons(hackArr);
   const upcomingHackathons = sortNextHackathons(hackArr);
   const draftHackathons = sortDraftHackathons(hackArr);
   const admin = state.user.loggedIn && state.user.user.admin;
-  return { pastHackathons, upcomingHackathons, draftHackathons, admin };
+  return {
+    loading,
+    pastHackathons,
+    upcomingHackathons,
+    draftHackathons,
+    admin
+  };
 };
 
 export default connect(mapStateToProps)(DashboardPage);

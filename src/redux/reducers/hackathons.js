@@ -7,6 +7,7 @@ import { ADD_HACKATHONS_TO_STATE, UPDATE_HACKATHON_OVERVIEW_IN_STATE, DELETE_HAC
  * @TODO: remove the temporary example hackathons
  */
 const initialState = {
+  loading: true,
   // Dictionary to find hackathon by hackathon ID
   byHID: {
     0: {
@@ -142,6 +143,7 @@ export default function hackathons(state = initialState, action) {
     case ADD_HACKATHONS_TO_STATE:
       return {
         ...state,
+        loading: false,
         byHID: action.hackathons.reduce((map, hack) => {
           map[hack.hid] = hack;
           return map;
