@@ -17,6 +17,7 @@ import {
   VIEW_HACKATHON_ROUTE
 } from "./routes";
 import ViewHackathonPage from "./components/view_hackathon/ViewHackathonPage";
+import Startup from "./components/Startup";
 
 /**
  * The application. Has a theme and routes.
@@ -24,26 +25,31 @@ import ViewHackathonPage from "./components/view_hackathon/ViewHackathonPage";
  */
 function App() {
   return (
-    <Router>
-      <MuiThemeProvider theme={theme}>
-        <MuiPickersUtilsProvider utils={DayJsUtils}>
-          <CssBaseline />
-          <Switch>
-            <Route path={SETUP_ROUTE} component={SetupPage} />
-            <Route
-              path={CREATE_HACKATHON_PREXISTING_ROUTE}
-              component={CreateHackathonPage}
-            />
-            <Route
-              path={CREATE_HACKATHON_ROUTE}
-              component={CreateHackathonPage}
-            />
-            <Route path={VIEW_HACKATHON_ROUTE} component={ViewHackathonPage} />
-            <Route path={DASHBOARD_ROUTE} component={DashboardPage} />
-          </Switch>
-        </MuiPickersUtilsProvider>
-      </MuiThemeProvider>
-    </Router>
+    <Startup>
+      <Router>
+        <MuiThemeProvider theme={theme}>
+          <MuiPickersUtilsProvider utils={DayJsUtils}>
+            <CssBaseline />
+            <Switch>
+              <Route path={SETUP_ROUTE} component={SetupPage} />
+              <Route
+                path={CREATE_HACKATHON_PREXISTING_ROUTE}
+                component={CreateHackathonPage}
+              />
+              <Route
+                path={CREATE_HACKATHON_ROUTE}
+                component={CreateHackathonPage}
+              />
+              <Route
+                path={VIEW_HACKATHON_ROUTE}
+                component={ViewHackathonPage}
+              />
+              <Route path={DASHBOARD_ROUTE} component={DashboardPage} />
+            </Switch>
+          </MuiPickersUtilsProvider>
+        </MuiThemeProvider>
+      </Router>
+    </Startup>
   );
 }
 

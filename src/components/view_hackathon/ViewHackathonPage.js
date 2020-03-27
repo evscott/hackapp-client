@@ -8,7 +8,7 @@ import UserViewHackathonPage from "./UserViewHackathonPage";
  * editing the hackathon as well by clicking on the edit button.
  */
 function ViewHackathonPage(props) {
-  const hid = parseInt(props.match.params.hid)
+  const hid = props.match.params.hid;
   if (props.admin) {
     return <AdminViewHackathonPage hid={hid} />;
   } else {

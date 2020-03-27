@@ -1,7 +1,7 @@
-/** Action type for adding a new hackathon */
-export const ADD_HACKATHON = "ADD_HACKATHON";
-/** Action type for updating a hackathon */
-export const UPDATE_HACKATHON = "UPDATE_HACKATHON";
+/** Action type for loading an array of hackathons to the app */
+export const ADD_HACKATHONS_TO_STATE = "ADD_HACKATHONS_TO_STATE";
+/** Action type for updating a hackathon's overview in the state */
+export const UPDATE_HACKATHON_OVERVIEW_IN_STATE = "UPDATE_HACKATHON_OVERVIEW_IN_STATE";
 /** Action type for deleting a hackathon */
 export const DELETE_HACKATHON = "DELETE_HACKATHON";
 

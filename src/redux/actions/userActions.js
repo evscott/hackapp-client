@@ -1,9 +1,7 @@
 import { ADD_USER_TO_STATE, REMOVE_USER_FROM_STATE } from "./actionTypes";
+import { AUTH_PATH } from "../apiPaths";
 import { showError, showNotification } from "./notificationActions";
 import fetch from "../fetchWithTimeout";
-
-/** The path for authenticating a user */
-const AUTH_PATH = `${process.env.REACT_APP_API_ADDRESS}/auth/`;
 
 /** Action for adding user data to the state */
 const addUserToState = (user, token) => ({
@@ -49,17 +47,22 @@ export const signUp = user => dispatch => {
       "Content-Type": "application/json"
     }
   })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`Sign up failed: ${res.statusText}`);
+      return res.json();
+    })
     .then(res => {
       if (res.token && res.user) {
         dispatch(showNotification(`Let's get hacking, ${res.user.firstName}!`));
         dispatch(addUserToState(res.user, res.token));
       } else {
-        dispatch(showError("Sign up failed. Somebody messed up big time."));
+        throw new Error(
+          "Sign up failed: The server's response got scrambled like my eggs."
+        );
       }
     })
-    .catch(() => {
-      dispatch(showError("Sign up failed. That sucks."));
+    .catch(err => {
+      dispatch(showError(err.message));
     });
 };
 

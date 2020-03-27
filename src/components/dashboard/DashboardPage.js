@@ -19,14 +19,7 @@ import {
 const REDIRECT = {
   NONE: "",
   CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />,
-  VIEW: hackathon => (
-    <Redirect
-      to={{
-        pathname: viewHackathonRouteFor(hackathon.hid),
-        state: { hid: hackathon.hid }
-      }}
-    />
-  )
+  VIEW: hackathon => <Redirect to={viewHackathonRouteFor(hackathon.hid)} />
 };
 
 /**

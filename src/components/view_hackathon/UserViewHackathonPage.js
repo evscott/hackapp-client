@@ -215,7 +215,7 @@ function UserViewHackathonPage(props) {
 }
 
 UserViewHackathonPage.propTypes = {
-  hid: PropTypes.number.isRequired
+  hid: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
