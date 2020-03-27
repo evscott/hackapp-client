@@ -82,7 +82,7 @@ function AdminViewHackathonPage(props) {
         View Hackathon
       </Typography>
       <Typography variant="body1" component="p">
-        {hackathon.overview.name}
+        {(hackathon.overview || {}).name || "Loading..."}
       </Typography>
     </div>
   );
@@ -149,6 +149,17 @@ function AdminViewHackathonPage(props) {
     setModalOpen(false);
   };
 
+  /**
+   * Opens the modal and resets the data for the hackathon back
+   * to the original state.
+   */
+  const openModal = () => {
+    setOverview(hackathon.overview);
+    setDetails(hackathon.details);
+    setQuestions(hackathon.questions);
+    setModalOpen(true);
+  };
+
   /** Gets the modal for editing, based on the page being viewed. */
   const currModal = () => {
     switch (page) {
@@ -177,23 +188,25 @@ function AdminViewHackathonPage(props) {
       drawerPrimary={drawerPrimary}
       drawerSecondary={drawerSecondary}
     >
-      <HackathonPreviewForm
-        overview={hackathon.overview}
-        questions={hackathon.questions}
-        details={hackathon.details}
-        page={page}
-        setPage={setPage}
-      />
-      <FabNav onClickPreview={() => setModalOpen(true)} viewMode={true} />
-      <MegaModal open={modalOpen} setOpen={setModalOpen}>
-        <Typography variant="h2" component="h2">
-          {PAGE_TITLES[page]}
-        </Typography>
-        {currModal()}
-        <div className={classes.spacer} />
-        <SaveButtonBar onCancel={discard} onSave={save} />
-        <div className={classes.spacer} />
-      </MegaModal>
+      <React.Fragment>
+        <HackathonPreviewForm
+          overview={hackathon.overview}
+          questions={hackathon.questions}
+          details={hackathon.details}
+          page={page}
+          setPage={setPage}
+        />
+        <FabNav onClickPreview={() => openModal()} viewMode={true} />
+        <MegaModal open={modalOpen} setOpen={setModalOpen}>
+          <Typography variant="h2" component="h2">
+            {PAGE_TITLES[page]}
+          </Typography>
+          {currModal()}
+          <div className={classes.spacer} />
+          <SaveButtonBar onCancel={discard} onSave={save} />
+          <div className={classes.spacer} />
+        </MegaModal>
+      </React.Fragment>
     </Page>
   );
 }

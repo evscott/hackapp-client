@@ -8,38 +8,18 @@ import {
   deleteRegistration
 } from "../../redux/actions/registrationActions";
 import Typography from "@material-ui/core/Typography";
-import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
-import EditIcon from "@material-ui/icons/Edit";
-import Fab from "@material-ui/core/Fab";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { DASHBOARD_ROUTE } from "../../routes";
 import Page from "../page/Page";
 import HackathonCard from "../dashboard/HackathonCard";
 import ReorderableCardForm from "../reusable/ReorderableCardForm";
 import MdEditor from "../hack_forms/details/MdEditor";
-import { makeStyles } from "@material-ui/core/styles";
 import MegaModal from "../reusable/Modal";
 import RegQuestionViewer from "../hack_forms/questions/RegQuestionViewer";
 import SaveButtonBar from "./SaveButtonBar";
 import SignInModal from "../signin_forms/SignInModal";
-
-/** This defines the styles for the React component */
-const useStyles = makeStyles(theme => {
-  return {
-    button: {
-      marginLeft: theme.spacing(1)
-    },
-    fab: {
-      position: "fixed",
-      right: 20,
-      bottom: 20
-    },
-    icon: {
-      marginRight: 10
-    }
-  };
-});
+import LoadingCard from "../reusable/LoadingCard";
+import UserRegFab from "./UserRegFab";
 
 /** Where to redirect to, if applicable */
 const REDIRECT = {
@@ -53,7 +33,6 @@ const REDIRECT = {
  * hackathon.
  */
 function UserViewHackathonPage(props) {
-  const classes = useStyles();
   // The hackathon to display
   const hackathon = props.hackathon || {};
   const draft = (hackathon.overview || {}).draft;
@@ -67,7 +46,7 @@ function UserViewHackathonPage(props) {
   // Hold answers to the registration questions
   // Initializes to an array of empty arrays
   const [answers, setAnswers] = useState(
-    Array.from(hackathon.questions, _ => [])
+    Array.from(hackathon.questions || [], () => [])
   );
 
   // Auto-redirect if don't have permission to view
@@ -81,7 +60,7 @@ function UserViewHackathonPage(props) {
         View Hackathon
       </Typography>
       <Typography variant="body1" component="p">
-        {hackathon.overview.name}
+        {(hackathon.overview || {}).name || "Loading..."}
       </Typography>
     </div>
   );
@@ -96,52 +75,17 @@ function UserViewHackathonPage(props) {
   ];
 
   /**
-   * Gets the floating action button. Shows "Edit" if already registered,
-   * or "Register" if not yet registered.
+   * Opens the modal and resets the answers (otherwise, things
+   * could get messy if things are loaded in too late).
    */
-  const getFab = () => {
-    if (hackathon.overview.regDeadline > new Date()) {
-      if (!props.loggedIn) {
-        return (
-          <Fab
-            variant="extended"
-            color="primary"
-            className={classes.fab}
-            onClick={() => setModalOpen(true)}
-          >
-            <ArrowForwardIcon className={classes.icon} />
-            Sign In to Register
-          </Fab>
-        );
-      } else if (props.registered) {
-        return (
-          <Fab
-            variant="extended"
-            color="primary"
-            className={classes.fab}
-            onClick={() => {
-              setAnswers(props.oldRegistration);
-              setModalOpen(true);
-            }}
-          >
-            <EditIcon className={classes.icon} />
-            Edit Registration
-          </Fab>
-        );
-      } else {
-        return (
-          <Fab
-            variant="extended"
-            color="primary"
-            className={classes.fab}
-            onClick={() => setModalOpen(true)}
-          >
-            <EmojiPeopleIcon className={classes.icon} />
-            Register
-          </Fab>
-        );
-      }
+  const openModal = () => {
+    // Reset the answers
+    setAnswers(Array.from(hackathon.questions || [], () => []));
+    // But if already registered, use the old registration
+    if (props.registered) {
+      setAnswers(props.oldRegistration);
     }
+    setModalOpen(true);
   };
 
   /** Gets the modal for registering for the hackathon */
@@ -194,6 +138,28 @@ function UserViewHackathonPage(props) {
     }
   };
 
+  /** Gets the info card on the hackathon, if loaded */
+  const getHackathonCard = () => {
+    if (hackathon.overview) {
+      return <HackathonCard overview={hackathon.overview} />;
+    } else return <LoadingCard />;
+  };
+
+  /** Gets the details for the hackathon, if loaded */
+  const getHackathonDetails = () => {
+    if (hackathon.details) {
+      return (
+        <ReorderableCardForm
+          array={hackathon.details}
+          getCardContents={index => (
+            <MdEditor text={hackathon.details[index]} viewMode />
+          )}
+          viewMode
+        />
+      );
+    } else return <LoadingCard />;
+  };
+
   return (
     <Page
       title="View Hackathon"
@@ -201,15 +167,14 @@ function UserViewHackathonPage(props) {
       drawerPrimary={drawerPrimary}
     >
       {getRegistrationModal()}
-      <HackathonCard overview={hackathon.overview} />
-      <ReorderableCardForm
-        array={hackathon.details}
-        getCardContents={index => (
-          <MdEditor text={hackathon.details[index]} viewMode />
-        )}
-        viewMode
+      {getHackathonCard()}
+      {getHackathonDetails()}
+      <UserRegFab
+        openModal={openModal}
+        hackathon={hackathon}
+        loggedIn={props.loggedIn}
+        registered={props.registered}
       />
-      {getFab()}
     </Page>
   );
 }

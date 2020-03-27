@@ -14,6 +14,7 @@ import ReorderableCardForm from "../reusable/ReorderableCardForm";
 import RegQuestionEditor from "./questions/RegQuestionEditor";
 import MdEditor from "./details/MdEditor";
 import HackathonCard from "../dashboard/HackathonCard";
+import LoadingCard from "../reusable/LoadingCard";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -49,35 +50,40 @@ export default function HackathonPreviewForm(props) {
 
   /** Gets a read-only preview of the hackathon overview. */
   const previewOverview = () => {
-    return <HackathonCard overview={props.overview} />;
+    if (props.overview) return <HackathonCard overview={props.overview} />;
+    else return <LoadingCard />;
   };
 
   /** Gets a read-only preview of the hackathon details. */
   const previewDetails = () => {
-    return (
-      <ReorderableCardForm
-        array={props.details}
-        key="preview-details" // Key required to avoid React errors reusing components
-        getCardContents={index => (
-          <MdEditor text={props.details[index]} viewMode />
-        )}
-        viewMode
-      />
-    );
+    if (props.details) {
+      return (
+        <ReorderableCardForm
+          array={props.details}
+          key="preview-details" // Key required to avoid React errors reusing components
+          getCardContents={index => (
+            <MdEditor text={props.details[index]} viewMode />
+          )}
+          viewMode
+        />
+      );
+    } else return <LoadingCard />;
   };
 
   /** Gets a read-only preview of the hackathon questions. */
   const previewRegQuestions = () => {
-    return (
-      <ReorderableCardForm
-        array={props.questions}
-        key="preview-questions"
-        getCardContents={index => (
-          <RegQuestionEditor question={props.questions[index]} viewMode />
-        )}
-        viewMode
-      />
-    );
+    if (props.questions) {
+      return (
+        <ReorderableCardForm
+          array={props.questions}
+          key="preview-questions"
+          getCardContents={index => (
+            <RegQuestionEditor question={props.questions[index]} viewMode />
+          )}
+          viewMode
+        />
+      );
+    } else return <LoadingCard />;
   };
 
   /** Gets the current page to preview. */
@@ -126,7 +132,7 @@ HackathonPreviewForm.propTypes = {
     location: PropTypes.string.isRequired,
     maxReg: PropTypes.number.isRequired,
     regDeadline: PropTypes.instanceOf(Date).isRequired
-  }).isRequired,
+  }),
   // The questions for the registration form, which is an array of
   // objects
   questions: PropTypes.arrayOf(
@@ -137,9 +143,9 @@ HackathonPreviewForm.propTypes = {
       required: PropTypes.bool.isRequired,
       type: PropTypes.string.isRequired
     })
-  ).isRequired,
+  ),
   // The list of markdown text strings
-  details: PropTypes.arrayOf(PropTypes.string).isRequired,
+  details: PropTypes.arrayOf(PropTypes.string),
   // The page to preview
   // (if supplied, this becomes a controlled component)
   page: PropTypes.number,
