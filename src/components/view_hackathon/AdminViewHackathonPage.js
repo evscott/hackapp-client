@@ -19,7 +19,7 @@ import Page from "../page/Page";
 import { DASHBOARD_ROUTE } from "../../routes";
 import HackathonPreviewForm from "../hack_forms/HackathonPreviewForm";
 import { connect } from "react-redux";
-import FabNav from "../reusable/FabNav";
+import EditFab from "../reusable/EditFab";
 import MegaModal from "../reusable/Modal";
 import OverviewEditor from "../hack_forms/overview/OverviewEditor";
 import RegistrationDetailsForm from "../hack_forms/questions/RegistrationDetailsForm";
@@ -196,7 +196,10 @@ function AdminViewHackathonPage(props) {
           page={page}
           setPage={setPage}
         />
-        <FabNav onClickPreview={() => openModal()} viewMode={true} />
+        <EditFab
+          onClick={openModal}
+          loading={!hackathon.overview || !hackathon.details || !hackathon.questions}
+        />
         <MegaModal open={modalOpen} setOpen={setModalOpen}>
           <Typography variant="h2" component="h2">
             {PAGE_TITLES[page]}
