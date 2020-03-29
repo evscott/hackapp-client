@@ -51,7 +51,6 @@ const useStyles = makeStyles(theme => {
 function AdminViewHackathonPage(props) {
   const classes = useStyles();
   const hackathon = props.hackathon || {};
-  console.log(hackathon);
   // Get the draft property without crashing when things are null
   const draft = (hackathon.overview || {}).draft;
 

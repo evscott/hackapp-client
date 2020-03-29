@@ -104,27 +104,27 @@ const initialState = {
       details: ["# This is a hackathon", "With even more cool stuff"],
       // Registration questions for the hackathon
       questions: [
-        {
-          question: "Most important question",
-          desc: "This is fun!",
-          options: ["Option 1", "Option 2", "Option 3"],
-          required: true,
-          type: QUESTION_TYPE.CK
-        },
-        {
-          question: "Answer me!",
-          desc: "Please.",
-          options: ["Option 1!", "Option 2!", "Option 3!"],
-          required: false,
-          type: QUESTION_TYPE.RD
-        },
-        {
-          question: "Additional information",
-          desc: "",
-          options: [],
-          required: false,
-          type: QUESTION_TYPE.TXT
-        }
+    {
+      question: "Most important question",
+      desc: "This is fun!",
+      options: ["Option 1", "Option 2", "Option 3"],
+      required: true,
+      type: QUESTION_TYPE.CK
+    },
+    {
+      question: "Answer me!",
+      desc: "Please.",
+      options: ["Option 1!", "Option 2!", "Option 3!"],
+      required: false,
+      type: QUESTION_TYPE.RD
+    },
+    {
+      question: "Additional information",
+      desc: "",
+      options: [],
+      required: false,
+      type: QUESTION_TYPE.TXT
+    }
       ]
     }
   }

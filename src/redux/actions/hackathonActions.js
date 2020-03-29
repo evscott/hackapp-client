@@ -99,5 +99,5 @@ export const addHackathon = hackathon => (dispatch, getState) => {
  * @returns {Function} A redux-thunk function that fetchs from the server
  */
 export const updateHackathon = hackathon => (dispatch, state) => {
-  dispatch(updateHackathonOverviewInState(hackathon.overview));
+  dispatch(updateHackathonOverviewInState(hackathon.overview, hackathon.overview.hid));
 };
