@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { addHackathon } from "../../redux/actions/hackathonActions";
+import { createHackathon } from "../../redux/actions/hackathonActions";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
@@ -81,7 +81,7 @@ function CreateHackathonPage(props) {
    * @param draft Whether to mark the hackathon as a draft.
    */
   const saveHackathon = draft => {
-    props.addHackathon({
+    props.createHackathon({
       overview: { ...overview, draft },
       details,
       questions
@@ -222,4 +222,4 @@ function CreateHackathonPage(props) {
 }
 
 // Connects redux store to add hackathons
-export default connect(null, { addHackathon })(CreateHackathonPage);
+export default connect(null, { createHackathon })(CreateHackathonPage);

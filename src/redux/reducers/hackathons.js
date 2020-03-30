@@ -1,5 +1,9 @@
 import { QUESTION_TYPE } from "../../components/hack_forms/questions/QuestionType";
-import { ADD_HACKATHONS_TO_STATE, UPDATE_HACKATHON_OVERVIEW_IN_STATE, DELETE_HACKATHON } from "../actions/actionTypes";
+import {
+  ADD_HACKATHON_OVERVIEWS_TO_STATE,
+  UPDATE_HACKATHON_OVERVIEW_IN_STATE,
+  DELETE_HACKATHON_FROM_STATE
+} from "../actions/actionTypes";
 
 /**
  * The initial state for this branch of the Redux store tree.
@@ -104,27 +108,27 @@ const initialState = {
       details: ["# This is a hackathon", "With even more cool stuff"],
       // Registration questions for the hackathon
       questions: [
-    {
-      question: "Most important question",
-      desc: "This is fun!",
-      options: ["Option 1", "Option 2", "Option 3"],
-      required: true,
-      type: QUESTION_TYPE.CK
-    },
-    {
-      question: "Answer me!",
-      desc: "Please.",
-      options: ["Option 1!", "Option 2!", "Option 3!"],
-      required: false,
-      type: QUESTION_TYPE.RD
-    },
-    {
-      question: "Additional information",
-      desc: "",
-      options: [],
-      required: false,
-      type: QUESTION_TYPE.TXT
-    }
+        {
+          question: "Most important question",
+          desc: "This is fun!",
+          options: ["Option 1", "Option 2", "Option 3"],
+          required: true,
+          type: QUESTION_TYPE.CK
+        },
+        {
+          question: "Answer me!",
+          desc: "Please.",
+          options: ["Option 1!", "Option 2!", "Option 3!"],
+          required: false,
+          type: QUESTION_TYPE.RD
+        },
+        {
+          question: "Additional information",
+          desc: "",
+          options: [],
+          required: false,
+          type: QUESTION_TYPE.TXT
+        }
       ]
     }
   }
@@ -140,11 +144,11 @@ export default function hackathons(state = initialState, action) {
   let hid = 0;
   let oldHackathon = {};
   switch (action.type) {
-    case ADD_HACKATHONS_TO_STATE:
+    case ADD_HACKATHON_OVERVIEWS_TO_STATE:
       return {
         ...state,
         loading: false,
-        byHID: action.hackathons.reduce((map, hack) => {
+        byHID: action.overviews.reduce((map, hack) => {
           map[hack.hid] = hack;
           return map;
         }, {})
@@ -162,9 +166,9 @@ export default function hackathons(state = initialState, action) {
           }
         }
       };
-    case DELETE_HACKATHON:
+    case DELETE_HACKATHON_FROM_STATE:
       hid = action.hid;
-      let byHID = {...state.byHID};
+      let byHID = { ...state.byHID };
       delete byHID[hid];
       return {
         ...state,

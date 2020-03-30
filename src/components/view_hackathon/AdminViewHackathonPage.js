@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
-import {
-  deleteHackathon,
-  updateHackathon
-} from "../../redux/actions/hackathonActions";
+import { updateHackathonOverview } from "../../redux/actions/hackOverviewActions";
+import { deleteHackathon } from "../../redux/actions/hackathonActions";
 import {
   PAGE_TITLES,
   PAGES
@@ -100,10 +98,7 @@ function AdminViewHackathonPage(props) {
       text: draft ? "Publish Hackathon" : "Unpublish Hackathon",
       // On clicking unpublish, we should change the draft flag
       onClick: () => {
-        props.updateHackathon({
-          ...hackathon,
-          overview: { ...hackathon.overview, draft: !draft }
-        });
+        props.updateHackathonOverview({ ...hackathon.overview, draft: !draft });
       }
     },
     {
@@ -127,12 +122,7 @@ function AdminViewHackathonPage(props) {
 
   /** Saves the changes to the hackathon in the redux store */
   const save = () => {
-    props.updateHackathon({
-      ...hackathon,
-      overview,
-      details,
-      questions
-    });
+    props.updateHackathonOverview(overview);
     setModalOpen(false);
   };
 
@@ -197,7 +187,9 @@ function AdminViewHackathonPage(props) {
         />
         <EditFab
           onClick={openModal}
-          loading={!hackathon.overview || !hackathon.details || !hackathon.questions}
+          loading={
+            !hackathon.overview || !hackathon.details || !hackathon.questions
+          }
         />
         <MegaModal open={modalOpen} setOpen={setModalOpen}>
           <Typography variant="h2" component="h2">
@@ -222,6 +214,7 @@ const mapStateToProps = (state, ownProps) => ({
   hackathon: state.hackathons.byHID[ownProps.hid]
 });
 
-export default connect(mapStateToProps, { updateHackathon, deleteHackathon })(
-  AdminViewHackathonPage
-);
+export default connect(mapStateToProps, {
+  updateHackathonOverview,
+  deleteHackathon
+})(AdminViewHackathonPage);
