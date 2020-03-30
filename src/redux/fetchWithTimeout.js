@@ -10,7 +10,7 @@ const addTimeout = (promise, timeout) => {
   const timer = new Promise((resolve, reject) => {
     let id = setTimeout(() => {
       clearTimeout(id);
-      reject("Request timed out");
+      reject(new Error("Request timed out"));
     }, timeout);
   });
   // Applies a timeout to the given promise

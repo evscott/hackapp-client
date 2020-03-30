@@ -24,17 +24,18 @@ export const signIn = user => dispatch => {
       "Content-Type": "application/json"
     }
   })
-    .then(res => res.json())
     .then(res => {
-      if (res.token && res.user) {
-        dispatch(showNotification(`Welcome back, ${res.user.firstName}!`));
-        dispatch(addUserToState(res.user, res.token));
-      } else {
-        dispatch(showError("Sign in failed. Shucks."));
-      }
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
     })
-    .catch(() => {
-      dispatch(showError("Sign in failed. Tragic."));
+    .then(res => {
+      if (res.token) {
+        dispatch(showNotification(`Welcome back, ${res.firstName}!`));
+        dispatch(addUserToState(res, res.token));
+      } else throw new Error("Unexpected server response");
+    })
+    .catch(err => {
+      dispatch(showError(`Sign in failed: ${err.message}`));
     });
 };
 
@@ -48,21 +49,18 @@ export const signUp = user => dispatch => {
     }
   })
     .then(res => {
-      if (!res.ok) throw new Error(`Sign up failed: ${res.statusText}`);
+      if (!res.ok) throw new Error(res.statusText);
       return res.json();
     })
     .then(res => {
-      if (res.token && res.user) {
+      console.log(res);
+      if (res.token) {
         dispatch(showNotification(`Let's get hacking, ${res.user.firstName}!`));
-        dispatch(addUserToState(res.user, res.token));
-      } else {
-        throw new Error(
-          "Sign up failed: The server's response got scrambled like my eggs."
-        );
-      }
+        dispatch(addUserToState(res, res.token));
+      } else throw new Error("Unexpected server response");
     })
     .catch(err => {
-      dispatch(showError(err.message));
+      dispatch(showError(`Sign up failed: ${err.message}`));
     });
 };
 

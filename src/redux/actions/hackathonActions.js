@@ -3,7 +3,11 @@ import {
   UPDATE_HACKATHON_OVERVIEW_IN_STATE,
   DELETE_HACKATHON
 } from "./actionTypes";
-import { CREATE_NEW_HACK_PATH, GET_ALL_HACKS_PATH } from "../apiPaths";
+import {
+  CREATE_NEW_HACK_PATH,
+  GET_ALL_HACKS_PATH,
+  UPDATE_HACK_PATH
+} from "../apiPaths";
 import fetch from "../fetchWithTimeout";
 import { showError, showNotification } from "./notificationActions";
 import { convertOverview } from "../util/dateConverter";
@@ -40,17 +44,15 @@ export const getHackathons = () => dispatch => {
     }
   })
     .then(res => {
-      console.log("ALL HACKATHONS:");
       if (!res.ok) throw new Error(res.statusText);
       return res.json();
     })
     .then(res => {
-      console.log(res);
-      const hacks = res.hacks.map(item => ({
+      // Convert them for the redux store
+      const hacks = res.map(item => ({
         overview: convertOverview(item),
         hid: item.hid
       }));
-      console.log(hacks);
       dispatch(addHackathonsToState(hacks));
     })
     .catch(err => {
@@ -81,10 +83,9 @@ export const addHackathon = hackathon => (dispatch, getState) => {
       return res.json();
     })
     .then(res => {
-      // TODO: Remove this when server is fixed
-      res = convertOverview(res.hack);
+      res = convertOverview(res);
       dispatch(updateHackathonOverviewInState(res, res.hid));
-      dispatch(showNotification(""));
+      dispatch(showNotification("Hackathon created!"));
     })
     .catch(err => {
       dispatch(showError(`Failed to add hackathon: ${err.message}`));
@@ -98,6 +99,25 @@ export const addHackathon = hackathon => (dispatch, getState) => {
  * @param hackathon The hackathon to update
  * @returns {Function} A redux-thunk function that fetchs from the server
  */
-export const updateHackathon = hackathon => (dispatch, state) => {
-  dispatch(updateHackathonOverviewInState(hackathon.overview, hackathon.overview.hid));
+export const updateHackathon = hackathon => (dispatch, getState) => {
+  const state = getState();
+  return fetch(UPDATE_HACK_PATH, {
+    method: "PUT",
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(hackathon.overview)
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    })
+    .then(res => {
+      dispatch(updateHackathonOverviewInState(res, res.hid));
+      dispatch(showNotification("Hackathon updated!"));
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to update hackathon: ${err.message}`));
+    });
 };
