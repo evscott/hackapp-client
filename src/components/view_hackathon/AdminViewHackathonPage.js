@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { updateHackathonOverview } from "../../redux/actions/hackOverviewActions";
+import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
 import { deleteHackathon } from "../../redux/actions/hackathonActions";
+import { convertDetailsFromReduxToUI } from "../../redux/util/detailsAdapter";
 import {
   PAGE_TITLES,
   PAGES
@@ -48,16 +50,20 @@ const useStyles = makeStyles(theme => {
  */
 function AdminViewHackathonPage(props) {
   const classes = useStyles();
-  const hackathon = props.hackathon || {};
   // Get the draft property without crashing when things are null
-  const draft = (hackathon.overview || {}).draft;
+  const draft = (props.overview || {}).draft;
+
+  // If hackathon details not present but the overview is
+  if (!props.details && props.overview) {
+    props.getHackathonDetails(props.hid);
+  }
 
   // Hold onto temporary versions of the overview/details/questions
   // for edits: we only want to save and send to the redux store if
   // the user clicks "Save".
-  const [overview, setOverview] = useState(hackathon.overview);
-  const [details, setDetails] = useState(hackathon.details);
-  const [questions, setQuestions] = useState(hackathon.questions);
+  const [overview, setOverview] = useState(props.overview);
+  const [details, setDetails] = useState(props.details);
+  const [questions, setQuestions] = useState(props.questions);
 
   // When we redirect, we set the state here
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
@@ -79,7 +85,7 @@ function AdminViewHackathonPage(props) {
         View Hackathon
       </Typography>
       <Typography variant="body1" component="p">
-        {(hackathon.overview || {}).name || "Loading..."}
+        {(props.overview || {}).name || "Loading..."}
       </Typography>
     </div>
   );
@@ -98,14 +104,14 @@ function AdminViewHackathonPage(props) {
       text: draft ? "Publish Hackathon" : "Unpublish Hackathon",
       // On clicking unpublish, we should change the draft flag
       onClick: () => {
-        props.updateHackathonOverview({ ...hackathon.overview, draft: !draft });
+        props.updateHackathonOverview({ ...overview, draft: !draft });
       }
     },
     {
       icon: <DeleteIcon />,
       text: "Delete Hackathon",
       onClick: () => {
-        props.deleteHackathon(hackathon.hid);
+        props.deleteHackathon(props.hid);
         setRedirect(REDIRECT.DASHBOARD);
       }
     }
@@ -131,10 +137,9 @@ function AdminViewHackathonPage(props) {
    * Discards changes to the overview, details, and questions.
    */
   const discard = () => {
-    const { overview, details, questions } = hackathon;
-    setOverview(overview);
-    setDetails(details);
-    setQuestions(questions);
+    setOverview(props.overview);
+    setDetails(props.details);
+    setQuestions(props.questions);
     setModalOpen(false);
   };
 
@@ -143,9 +148,9 @@ function AdminViewHackathonPage(props) {
    * to the original state.
    */
   const openModal = () => {
-    setOverview(hackathon.overview);
-    setDetails(hackathon.details);
-    setQuestions(hackathon.questions);
+    setOverview(props.overview);
+    setDetails(props.details);
+    setQuestions(props.questions);
     setModalOpen(true);
   };
 
@@ -179,16 +184,16 @@ function AdminViewHackathonPage(props) {
     >
       <React.Fragment>
         <HackathonPreviewForm
-          overview={hackathon.overview}
-          questions={hackathon.questions}
-          details={hackathon.details}
+          overview={props.overview}
+          questions={props.questions}
+          details={props.details}
           page={page}
           setPage={setPage}
         />
         <EditFab
           onClick={openModal}
           loading={
-            !hackathon.overview || !hackathon.details || !hackathon.questions
+            !props.overview || !props.details || !props.questions
           }
         />
         <MegaModal open={modalOpen} setOpen={setModalOpen}>
@@ -210,11 +215,17 @@ AdminViewHackathonPage.propTypes = {
 };
 
 // Gets the hackathon using the URL
-const mapStateToProps = (state, ownProps) => ({
-  hackathon: state.hackathons.byHID[ownProps.hid]
-});
+const mapStateToProps = (state, ownProps) => {
+  const hackathon = state.hackathons.byHID[ownProps.hid] || {};
+  return {
+    overview: hackathon.overview,
+    details: convertDetailsFromReduxToUI(hackathon.details),
+    questions: hackathon.questions
+  };
+};
 
 export default connect(mapStateToProps, {
   updateHackathonOverview,
-  deleteHackathon
+  deleteHackathon,
+  getHackathonDetails
 })(AdminViewHackathonPage);

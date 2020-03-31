@@ -43,7 +43,7 @@ const overviewState = {
  * The initial state for the hackathon details page.
  * It's a list of markdown strings.
  */
-const detailsState = ["# What the Hack?"];
+const detailsState = [{detail: "# What the Hack?"}];
 
 /** The initial set of questions for registration. */
 const questionsState = [

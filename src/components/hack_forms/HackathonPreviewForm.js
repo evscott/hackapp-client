@@ -62,7 +62,7 @@ export default function HackathonPreviewForm(props) {
           array={props.details}
           key="preview-details" // Key required to avoid React errors reusing components
           getCardContents={index => (
-            <MdEditor text={props.details[index]} viewMode />
+            <MdEditor text={props.details[index].detail} viewMode />
           )}
           viewMode
         />

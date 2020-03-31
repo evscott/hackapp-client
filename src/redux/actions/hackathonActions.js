@@ -3,6 +3,7 @@ import fetch from "../fetchWithTimeout";
 import { getDeleteHackPath } from "../apiPaths";
 import { showError, showNotification } from "./notificationActions";
 import { createHackathonOverview } from "./hackOverviewActions";
+import { createHackathonDetails } from "./hackDetailsActions";
 
 /** Action for deleting a hackathon from the app */
 const deleteHackathonFromState = hid => ({
@@ -18,7 +19,8 @@ const deleteHackathonFromState = hid => ({
 export const createHackathon = hackathon => (dispatch, getState) => {
   dispatch(createHackathonOverview(hackathon.overview)).then(hid => {
     if(!hid) return;
-    // Now, we can create the hackathon details and questions!
+    console.log(`Currently creating a hackathon, got hid ${hid}`);
+    dispatch(createHackathonDetails(hackathon.details, hid));
   });
 };
 
@@ -38,11 +40,6 @@ export const deleteHackathon = hid => (dispatch, getState) => {
   })
     .then(res => {
       if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    })
-    .then(res => {
-      console.log(res);
-      // TODO: Find out what the return value is—this functionality is broken on the server.
       dispatch(deleteHackathonFromState(hid));
       dispatch(showNotification("Hackathon deleted!"));
     })

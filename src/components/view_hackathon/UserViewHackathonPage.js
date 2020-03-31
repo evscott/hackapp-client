@@ -7,6 +7,7 @@ import {
   updateRegistration,
   deleteRegistration
 } from "../../redux/actions/registrationActions";
+import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
 import Typography from "@material-ui/core/Typography";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { DASHBOARD_ROUTE } from "../../routes";
@@ -157,7 +158,12 @@ function UserViewHackathonPage(props) {
           viewMode
         />
       );
-    } else return <LoadingCard />;
+    } else {
+      // If we have an overview but no details, get the details
+      if(hackathon.overview)
+        props.getHackathonDetails(hackathon.overview.hid);
+      return <LoadingCard />;
+    }
   };
 
   return (
@@ -193,5 +199,6 @@ const mapStateToProps = (state, ownProps) => ({
 export default connect(mapStateToProps, {
   addRegistration,
   updateRegistration,
-  deleteRegistration
+  deleteRegistration,
+  getHackathonDetails
 })(UserViewHackathonPage);

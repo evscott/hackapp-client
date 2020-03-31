@@ -37,10 +37,13 @@ export default function HackathonDetailsForm(props) {
       setArray={props.setDetails}
       getCardContents={index => (
         <MdEditor
-          text={props.details[index]}
+          text={props.details[index].detail}
           setText={newDetail => {
             const newDetails = [...props.details];
-            newDetails[index] = newDetail;
+            newDetails[index] = {
+              ...newDetails[index],
+              detail: newDetail
+            };
             props.setDetails(newDetails);
           }}
           viewMode={props.viewMode}
@@ -54,7 +57,7 @@ export default function HackathonDetailsForm(props) {
 
 HackathonDetailsForm.propTypes = {
   // The list of markdown text strings
-  details: PropTypes.arrayOf(PropTypes.string).isRequired,
+  details: PropTypes.array.isRequired,
   // A function that sets the details
   setDetails: PropTypes.func.isRequired,
   // Whether the form is in view-only mode or not

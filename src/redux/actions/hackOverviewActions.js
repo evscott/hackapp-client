@@ -1,6 +1,6 @@
 import {
   ADD_HACKATHON_OVERVIEWS_TO_STATE,
-  UPDATE_HACKATHON_OVERVIEW_IN_STATE,
+  UPDATE_HACKATHON_OVERVIEW_IN_STATE
 } from "./actionTypes";
 import {
   CREATE_NEW_HACK_OVERVIEW_PATH,
@@ -11,7 +11,7 @@ import fetch from "../fetchWithTimeout";
 import { showError, showNotification } from "./notificationActions";
 import { convertOverview } from "../util/dateConverter";
 
-/** Action for loading an array of hackathons into the app */
+/** Action for loading an array of hackathon overviews into the app */
 const addHackathonOverviewsToState = overviews => ({
   type: ADD_HACKATHON_OVERVIEWS_TO_STATE,
   overviews
@@ -23,8 +23,6 @@ const updateHackathonOverviewInState = (overview, hid) => ({
   overview,
   hid
 });
-
-
 
 /**
  * Action for loading in all hackathon overviews from the server.
@@ -77,15 +75,15 @@ export const createHackathonOverview = overview => (dispatch, getState) => {
       return res.json();
     })
     .then(res => {
+      console.log("NEW OVERVIEW:");
+      console.log(res);
       res = convertOverview(res);
       dispatch(updateHackathonOverviewInState(res, res.hid));
-      dispatch(showNotification("Hackathon overview created!"));
+      dispatch(showNotification("Hackathon created!"));
       return res.hid; // Pass on the hid if all is well
     })
     .catch(err => {
-      dispatch(
-        showError(`Failed to create hackathon overview: ${err.message}`)
-      );
+      dispatch(showError(`Failed to create hackathon: ${err.message}`));
     });
 };
 
