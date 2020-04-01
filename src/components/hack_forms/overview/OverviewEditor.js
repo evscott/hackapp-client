@@ -126,7 +126,7 @@ OverviewEditor.propTypes = {
     location: PropTypes.string.isRequired,
     maxReg: PropTypes.number.isRequired,
     regDeadline: PropTypes.instanceOf(Date).isRequired
-  }).isRequired,
+  }),
   // The function for setting changes to the overview object
   setOverview: PropTypes.func.isRequired
 };

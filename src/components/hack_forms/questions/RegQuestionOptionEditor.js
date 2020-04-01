@@ -77,7 +77,7 @@ export default function RegQuestionOptionEditor(props) {
         className={classes.textField}
         name={`option-${index + 1}`}
         label={`Option ${index + 1}`}
-        value={index < props.options.length ? props.options[index] : ""}
+        value={index < props.options.length ? props.options[index].option : ""}
         onChange={event => handleEdit(event, index)}
       />
     );
@@ -152,7 +152,7 @@ RegQuestionOptionEditor.propTypes = {
   // The type of the question (radio button, checkbox, text)
   type: PropTypes.string.isRequired,
   // The options for the question
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  options: PropTypes.array.isRequired,
   // A setter for the options of the question
   setRegOptions: PropTypes.func.isRequired
 };

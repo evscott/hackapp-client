@@ -3,9 +3,9 @@ import {
   ADD_HACKATHON_OVERVIEWS_TO_STATE,
   UPDATE_HACKATHON_OVERVIEW_IN_STATE,
   DELETE_HACKATHON_FROM_STATE,
-  UPDATE_HACKATHON_DETAILS_ARRAY_IN_STATE
+  UPDATE_HACKATHON_DETAILS_ARRAY_IN_STATE,
+  UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE
 } from "../actions/actionTypes";
-import { convertDetailsFromServerToRedux } from "../util/detailsAdapter";
 
 /**
  * The initial state for this branch of the Redux store tree.
@@ -176,12 +176,22 @@ export default function hackathons(state = initialState, action) {
         ...state,
         byHID: {
           ...state.byHID,
-          [action.hid]: {
+          [hid]: {
             ...oldHackathon,
-            details: convertDetailsFromServerToRedux(
-              action.details,
-              oldHackathon.details
-            )
+            details: action.details
+          }
+        }
+      };
+    case UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE:
+      hid = action.hid;
+      oldHackathon = state.byHID[hid] || {};
+      return {
+        ...state,
+        byHID: {
+          ...state.byHID,
+          [hid]: {
+            ...oldHackathon,
+            questions: action.questions
           }
         }
       };

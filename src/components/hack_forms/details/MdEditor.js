@@ -53,7 +53,7 @@ export default function MdEditor(props) {
 
 MdEditor.propTypes = {
   // The text to edit/preview
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   // The function for changing the text
   setText: (props, propName) => {
     // Type check to ensure we have a function defined when viewMode is true

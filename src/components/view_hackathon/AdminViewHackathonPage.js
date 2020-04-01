@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { updateHackathonOverview } from "../../redux/actions/hackOverviewActions";
 import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
+import { getHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
 import { deleteHackathon } from "../../redux/actions/hackathonActions";
 import { convertDetailsFromReduxToUI } from "../../redux/util/detailsAdapter";
 import {
@@ -26,6 +27,7 @@ import RegistrationDetailsForm from "../hack_forms/questions/RegistrationDetails
 import HackathonDetailsForm from "../hack_forms/details/HackathonDetailsForm";
 import SaveButtonBar from "./SaveButtonBar";
 import { makeStyles } from "@material-ui/core/styles";
+import { convertQuestionsFromReduxToUI } from "../../redux/util/questionsAdapter";
 
 /** Where to redirect to, if applicable */
 const REDIRECT = {
@@ -53,10 +55,11 @@ function AdminViewHackathonPage(props) {
   // Get the draft property without crashing when things are null
   const draft = (props.overview || {}).draft;
 
-  // If hackathon details not present but the overview is
-  if (!props.details && props.overview) {
-    props.getHackathonDetails(props.hid);
-  }
+  // Load in the data on mount
+  useEffect(() => {
+    if(!props.details) props.getHackathonDetails(props.hid);
+    if(!props.questions) props.getHackathonQuestions(props.hid);
+  }, [props]); // Reload if there are changes to the props
 
   // Hold onto temporary versions of the overview/details/questions
   // for edits: we only want to save and send to the redux store if
@@ -64,6 +67,11 @@ function AdminViewHackathonPage(props) {
   const [overview, setOverview] = useState(props.overview);
   const [details, setDetails] = useState(props.details);
   const [questions, setQuestions] = useState(props.questions);
+
+  // Change the state whenever redux changes something
+  useEffect(() => setOverview(props.overview), [props.overview]);
+  useEffect(() => setDetails(props.details), [props.details]);
+  useEffect(() => setQuestions(props.questions), [props.questions]);
 
   // When we redirect, we set the state here
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
@@ -143,17 +151,6 @@ function AdminViewHackathonPage(props) {
     setModalOpen(false);
   };
 
-  /**
-   * Opens the modal and resets the data for the hackathon back
-   * to the original state.
-   */
-  const openModal = () => {
-    setOverview(props.overview);
-    setDetails(props.details);
-    setQuestions(props.questions);
-    setModalOpen(true);
-  };
-
   /** Gets the modal for editing, based on the page being viewed. */
   const currModal = () => {
     switch (page) {
@@ -191,10 +188,8 @@ function AdminViewHackathonPage(props) {
           setPage={setPage}
         />
         <EditFab
-          onClick={openModal}
-          loading={
-            !props.overview || !props.details || !props.questions
-          }
+          onClick={() => setModalOpen(true)}
+          loading={!props.overview || !props.details || !props.questions}
         />
         <MegaModal open={modalOpen} setOpen={setModalOpen}>
           <Typography variant="h2" component="h2">
@@ -220,12 +215,13 @@ const mapStateToProps = (state, ownProps) => {
   return {
     overview: hackathon.overview,
     details: convertDetailsFromReduxToUI(hackathon.details),
-    questions: hackathon.questions
+    questions: convertQuestionsFromReduxToUI(hackathon.questions)
   };
 };
 
 export default connect(mapStateToProps, {
   updateHackathonOverview,
   deleteHackathon,
-  getHackathonDetails
+  getHackathonDetails,
+  getHackathonQuestions
 })(AdminViewHackathonPage);

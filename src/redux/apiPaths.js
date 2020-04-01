@@ -16,3 +16,9 @@ export const CREATE_HACK_DETAILS_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/
 /** The path for getting an array of hackathon details */
 export const getGetHackDetailsPath = hid =>
   `${process.env.REACT_APP_API_ADDRESS}/hacks/det/search?hid=${hid}`;
+
+/** The path for creating an array of hackathon questions */
+export const CREATE_HACK_QUESTIONS_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/hacks/reg/quest/`;
+/** The path for getting an array of hackathon questions */
+export const getGetHackQuestionsPath = hid =>
+  `${process.env.REACT_APP_API_ADDRESS}/hacks/reg/search?hid=${hid}`;

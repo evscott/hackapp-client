@@ -38,11 +38,11 @@ export default function RegQuestionViewer(props) {
   const createCKOptions = () => {
     return (
       <FormGroup>
-        {props.question.options.map((option, idx) => (
+        {props.question.options.map((item, idx) => (
           <FormControlLabel
             control={
               <Checkbox
-                checked={props.answers.includes(option)}
+                checked={props.answers.includes(item.option)}
                 onChange={event => {
                   if (props.answers.includes(event.target.checked)) {
                     props.setAnswers(
@@ -52,10 +52,10 @@ export default function RegQuestionViewer(props) {
                     props.setAnswers([...props.answers, event.target.value]);
                   }
                 }}
-                value={option}
+                value={item.option}
               />
             }
-            label={option}
+            label={item.option}
             key={idx}
           />
         ))}
@@ -71,12 +71,12 @@ export default function RegQuestionViewer(props) {
         value={props.answers[0]}
         onChange={event => props.setAnswers([event.target.value])}
       >
-        {props.question.options.map((option, idx) => (
+        {props.question.options.map((item, idx) => (
           <FormControlLabel
             control={<Radio />}
-            label={option}
+            label={item.option}
             key={idx}
-            value={option}
+            value={item.option}
           />
         ))}
       </RadioGroup>
@@ -129,7 +129,7 @@ RegQuestionViewer.propTypes = {
     // The description of the question
     desc: PropTypes.string.isRequired,
     // The options to choose from for the question
-    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    options: PropTypes.array.isRequired,
     // Whether filling out the question is required
     required: PropTypes.bool.isRequired,
     // The type of the question (multiple choice, radio, text)

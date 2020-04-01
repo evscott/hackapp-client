@@ -137,7 +137,7 @@ RegQuestionEditor.propTypes = {
     // The description of the question
     desc: PropTypes.string.isRequired,
     // The options to choose from for the question
-    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    options: PropTypes.array.isRequired,
     // Whether filling out the question is required
     required: PropTypes.bool.isRequired,
     // The type of the question (multiple choice, radio, text)

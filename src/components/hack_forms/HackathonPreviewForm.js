@@ -139,13 +139,13 @@ HackathonPreviewForm.propTypes = {
     PropTypes.shape({
       question: PropTypes.string.isRequired,
       desc: PropTypes.string.isRequired,
-      options: PropTypes.arrayOf(PropTypes.string),
+      options: PropTypes.array,
       required: PropTypes.bool.isRequired,
       type: PropTypes.string.isRequired
     })
   ),
   // The list of markdown text strings
-  details: PropTypes.arrayOf(PropTypes.string),
+  details: PropTypes.array,
   // The page to preview
   // (if supplied, this becomes a controlled component)
   page: PropTypes.number,

@@ -82,7 +82,7 @@ RegistrationDetailsForm.propTypes = {
     PropTypes.shape({
       question: PropTypes.string.isRequired,
       desc: PropTypes.string.isRequired,
-      options: PropTypes.arrayOf(PropTypes.string),
+      options: PropTypes.array.isRequired,
       required: PropTypes.bool.isRequired,
       type: PropTypes.string.isRequired
     })
