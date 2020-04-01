@@ -75,8 +75,6 @@ export const createHackathonOverview = overview => (dispatch, getState) => {
       return res.json();
     })
     .then(res => {
-      console.log("NEW OVERVIEW:");
-      console.log(res);
       res = convertOverview(res);
       dispatch(updateHackathonOverviewInState(res, res.hid));
       dispatch(showNotification("Hackathon created!"));
@@ -108,6 +106,7 @@ export const updateHackathonOverview = overview => (dispatch, getState) => {
       return res.json();
     })
     .then(res => {
+      res = convertOverview(res);
       dispatch(updateHackathonOverviewInState(res, res.hid));
       dispatch(showNotification("Hackathon updated!"));
     })
