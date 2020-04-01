@@ -6,7 +6,7 @@ import {
 import fetch from "../fetchWithTimeout";
 import {
   CREATE_HACK_QUESTIONS_PATH,
-  getGetHackQuestionsPath
+  getGetHackQuestionsPath, UPDATE_HACK_QUESTIONS_PATH
 } from "../apiPaths";
 import { showError } from "./notificationActions";
 
@@ -44,12 +44,82 @@ export const createHackathonQuestions = (questions, hid) => (
       return res.json();
     })
     .then(res => {
-      // Update in the store!
+      dispatch(updateHackathonQuestionsArrayInState(res, hid));
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to create questions: ${err.message}`));
+    });
+};
+
+const updateHackathonQuestions = (questions, hid) => (dispatch, getState) => {
+  const state = getState();
+  return fetch(UPDATE_HACK_QUESTIONS_PATH, {
+    method: "PUT",
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ questions, hid })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    })
+    .then(res => {
       dispatch(updateHackathonQuestionsArrayInState(res, hid));
     })
     .catch(err => {
       dispatch(showError(`Failed to update questions: ${err.message}`));
     });
+};
+
+const deleteHackathonQuestion = (question, hid) => (dispatch, getState) => {
+
+};
+
+const createHackathonQuestionOption = (option, qid, hid) => (dispatch, getState) => {
+
+};
+
+const updateHackathonQuestionOption = (option, qid, hid) => (dispatch, getState) => {
+
+};
+
+const deleteHackathonQuestionOption = (option, qid, hid) => (dispatch, getState) => {
+
+};
+
+export const updateAllHackathonQuestions = (questions, hid) => (dispatch, getState) => {
+  const state = getState();
+  const storedQuestions = state.hackathons.byHID[hid].questions;
+  console.log(storedQuestions);
+  // Get the questions in the correct format for the server
+  questions = convertQuestionsFromUIToServer(questions);
+  console.log(questions);
+
+  // Find all the questions that need to be updated/created/deleted
+  const qToDelete = new Set(Object.keys(storedQuestions));
+  const qToUpdate = [];
+  const qToCreate = [];
+  questions.forEach(item => {
+    // If the question existed before, it's a potential update
+    if (item.qid) {
+      // Remove this from qToDelete
+      qToDelete.delete(item.qid);
+      const options = item.options;
+      delete item[options]; // Don't consider the options in our comparison
+      // If the detail has been changed, update the server
+      if (JSON.stringify(item) !== JSON.stringify(storedQuestions[item.qid]))
+        qToUpdate.push(item);
+    } else {
+      // The question did not exist so we need to create it
+      // We don't need to remove the options in this case,
+      // since they'll get created
+      qToCreate.push(item);
+    }
+  });
+  dispatch(updateHackathonQuestions(qToUpdate, hid));
+  dispatch(createHackathonQuestions(qToCreate, hid));
 };
 
 /**

@@ -1,4 +1,3 @@
-import { QUESTION_TYPE } from "../../components/hack_forms/questions/QuestionType";
 import {
   ADD_HACKATHON_OVERVIEWS_TO_STATE,
   UPDATE_HACKATHON_OVERVIEW_IN_STATE,

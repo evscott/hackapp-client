@@ -43,9 +43,17 @@ export const convertQuestionsFromReduxToUI = questions => {
  * @returns {Array} The questions in server format
  */
 export const convertQuestionsFromUIToServer = questions => {
-  return questions.map((q, index) => ({
-    ...q,
-    descr: q.desc,
-    index
-  }));
+  return questions.map((q, index) => {
+    // Add indices to each option
+    const options = q.options.map((option, idx) => ({
+      ...option,
+      index: idx
+    }));
+    return {
+      ...q,
+      descr: q.desc,
+      options,
+      index
+    }
+  });
 };

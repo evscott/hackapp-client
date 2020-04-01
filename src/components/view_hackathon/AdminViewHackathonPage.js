@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { updateHackathonOverview } from "../../redux/actions/hackOverviewActions";
 import { updateAllHackathonDetails } from "../../redux/actions/hackDetailsActions";
+import { updateAllHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
 import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
 import { getHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
 import { deleteHackathon, publishHackathon } from "../../redux/actions/hackathonActions";
@@ -145,6 +146,7 @@ function AdminViewHackathonPage(props) {
         props.updateAllHackathonDetails(details, props.hid);
         break;
       case PAGES.REGISTRATION:
+        props.updateAllHackathonQuestions(questions, props.hid);
         break;
       default:
         break;
@@ -236,6 +238,7 @@ export default connect(mapStateToProps, {
   deleteHackathon,
   getHackathonDetails,
   updateAllHackathonDetails,
+  updateAllHackathonQuestions,
   getHackathonQuestions,
   publishHackathon
 })(AdminViewHackathonPage);

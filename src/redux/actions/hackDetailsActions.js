@@ -131,7 +131,7 @@ export const updateAllHackathonDetails = (details, hid) => (
   // Get the details into the correct format for the server
   details = convertDetailsFromUIToServer(details);
 
-  // Find the details that need to be updated and created
+  // Find the details that need to be updated/created/deleted
   const toDelete = new Set(Object.keys(storedDetails));
   const toUpdate = [];
   const toCreate = [];
