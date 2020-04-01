@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -8,6 +8,7 @@ import {
   deleteRegistration
 } from "../../redux/actions/registrationActions";
 import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
+import { getHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
 import Typography from "@material-ui/core/Typography";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { DASHBOARD_ROUTE } from "../../routes";
@@ -21,6 +22,8 @@ import SaveButtonBar from "./SaveButtonBar";
 import SignInModal from "../signin_forms/SignInModal";
 import LoadingCard from "../reusable/LoadingCard";
 import UserRegFab from "./UserRegFab";
+import { convertDetailsFromReduxToUI } from "../../redux/util/detailsAdapter";
+import { convertQuestionsFromReduxToUI } from "../../redux/util/questionsAdapter";
 
 /** Where to redirect to, if applicable */
 const REDIRECT = {
@@ -34,9 +37,11 @@ const REDIRECT = {
  * hackathon.
  */
 function UserViewHackathonPage(props) {
-  // The hackathon to display
-  const hackathon = props.hackathon || {};
-  const draft = (hackathon.overview || {}).draft;
+  // Load in the data on mount
+  useEffect(() => {
+    if(!props.details) props.getHackathonDetails(props.hid);
+    if(!props.questions) props.getHackathonQuestions(props.hid);
+  }, [props]); // Reload if there are changes to the props
 
   // Redirect when certain buttons are pressed
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
@@ -47,10 +52,11 @@ function UserViewHackathonPage(props) {
   // Hold answers to the registration questions
   // Initializes to an array of empty arrays
   const [answers, setAnswers] = useState(
-    Array.from(hackathon.questions || [], () => [])
+    Array.from(props.questions || [], () => [])
   );
 
   // Auto-redirect if don't have permission to view
+  const draft = (props.overview || {}).draft;
   if (draft) return REDIRECT.DASHBOARD;
   if (redirect !== REDIRECT.NONE) return redirect;
 
@@ -61,7 +67,7 @@ function UserViewHackathonPage(props) {
         View Hackathon
       </Typography>
       <Typography variant="body1" component="p">
-        {(hackathon.overview || {}).name || "Loading..."}
+        {(props.overview || {}).name || "Loading..."}
       </Typography>
     </div>
   );
@@ -81,7 +87,7 @@ function UserViewHackathonPage(props) {
    */
   const openModal = () => {
     // Reset the answers
-    setAnswers(Array.from(hackathon.questions || [], () => []));
+    setAnswers(Array.from(props.questions || [], () => []));
     // But if already registered, use the old registration
     if (props.registered) {
       setAnswers(props.oldRegistration);
@@ -96,10 +102,10 @@ function UserViewHackathonPage(props) {
         <MegaModal open={modalOpen} setOpen={setModalOpen}>
           <Typography variant="h2">Register</Typography>
           <ReorderableCardForm
-            array={hackathon.questions}
+            array={props.questions}
             getCardContents={index => (
               <RegQuestionViewer
-                question={hackathon.questions[index]}
+                question={props.questions[index]}
                 answers={answers[index]}
                 setAnswers={ans => {
                   // Replace the answer in the array
@@ -141,27 +147,26 @@ function UserViewHackathonPage(props) {
 
   /** Gets the info card on the hackathon, if loaded */
   const getHackathonCard = () => {
-    if (hackathon.overview) {
-      return <HackathonCard overview={hackathon.overview} />;
+    if (props.overview) {
+      return <HackathonCard overview={props.overview} />;
     } else return <LoadingCard />;
   };
 
   /** Gets the details for the hackathon, if loaded */
   const getHackathonDetails = () => {
-    if (hackathon.details) {
+    if (props.details) {
       return (
         <ReorderableCardForm
-          array={hackathon.details}
+          array={props.details}
           getCardContents={index => (
-            <MdEditor text={hackathon.details[index]} viewMode />
+            <MdEditor text={props.details[index].detail} viewMode />
           )}
           viewMode
         />
       );
     } else {
       // If we have an overview but no details, get the details
-      if(hackathon.overview)
-        props.getHackathonDetails(hackathon.overview.hid);
+      props.getHackathonDetails(props.hid);
       return <LoadingCard />;
     }
   };
@@ -177,7 +182,8 @@ function UserViewHackathonPage(props) {
       {getHackathonDetails()}
       <UserRegFab
         openModal={openModal}
-        hackathon={hackathon}
+        loading={props.questions === undefined}
+        regDeadline={(props.overview || {}).regDeadline}
         loggedIn={props.loggedIn}
         registered={props.registered}
       />
@@ -189,16 +195,22 @@ UserViewHackathonPage.propTypes = {
   hid: PropTypes.string.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  hackathon: state.hackathons.byHID[ownProps.hid],
-  registered: state.registrations.byHID[ownProps.hid] !== undefined,
-  oldRegistration: state.registrations.byHID[ownProps.hid],
-  loggedIn: state.user.loggedIn
-});
+const mapStateToProps = (state, ownProps) => {
+  const hackathon = state.hackathons.byHID[ownProps.hid] || {};
+  return {
+    overview: hackathon.overview,
+    details: convertDetailsFromReduxToUI(hackathon.details),
+    questions: convertQuestionsFromReduxToUI(hackathon.questions),
+    registered: state.registrations.byHID[ownProps.hid] !== undefined,
+    oldRegistration: state.registrations.byHID[ownProps.hid],
+    loggedIn: state.user.loggedIn
+  };
+};
 
 export default connect(mapStateToProps, {
   addRegistration,
   updateRegistration,
   deleteRegistration,
-  getHackathonDetails
+  getHackathonDetails,
+  getHackathonQuestions
 })(UserViewHackathonPage);

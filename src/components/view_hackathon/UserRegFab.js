@@ -31,15 +31,15 @@ const useStyles = makeStyles(theme => {
  *  - If the user is logged in and able to register
  */
 export default function UserRegFab(props) {
-  const { hackathon, openModal, loggedIn, registered } = props;
+  const { loading, regDeadline, openModal, loggedIn, registered } = props;
   const classes = useStyles();
-  if (!hackathon || !hackathon.questions) {
+  if (loading) {
     return (
       <Fab className={classes.fab} disabled>
         <CircularProgress />
       </Fab>
     );
-  } else if (hackathon.overview.regDeadline <= new Date()) {
+  } else if (regDeadline <= new Date()) {
     return (
       <Fab variant="extended" className={classes.fab} disabled>
         <EmojiPeopleIcon className={classes.icon} />
@@ -88,8 +88,10 @@ export default function UserRegFab(props) {
 UserRegFab.propTypes = {
   // Funtion to open the registration modal
   openModal: PropTypes.func.isRequired,
-  // The hackathon for registration
-  hackathon: PropTypes.object,
+  // Whether or not it's loading
+  loading: PropTypes.bool,
+  // The registration deadline
+  regDeadline: PropTypes.object,
   // Whether the user is logged in
   loggedIn: PropTypes.bool,
   // Whether the user has already been registered or not

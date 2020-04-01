@@ -104,7 +104,7 @@ export default function ReorderableCardForm(props) {
 ReorderableCardForm.propTypes = {
   // A mystery array. Each item becomes a card, which is created using
   // getCardContents (a function from the parent).
-  array: PropTypes.array.isRequired,
+  array: PropTypes.array,
   // Sets the array. Required, unless we're in view mode.
   setArray: (props, propName) => {
     // Type check to ensure we have a function defined when viewMode is true
