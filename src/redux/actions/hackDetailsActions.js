@@ -21,6 +21,7 @@ const updateHackathonDetailsArrayInState = (details, hid) => ({
   hid
 });
 
+/** Action for deleting a hackathon detail object in the state */
 const deleteHackathonDetailInState = (did, hid) => ({
   type: DELETE_HACKATHON_DETAIL_IN_STATE,
   did,
@@ -89,6 +90,12 @@ const updateHackathonDetails = (details, hid) => (dispatch, getState) => {
     });
 };
 
+/**
+ * Deletes a detail for a hackathon by pinging the server to delete it.
+ *
+ * @param did {String} The id for the detail object to delete
+ * @param hid {String} The id for the hackathon that has the detail
+ */
 const deleteHackathonDetail = (did, hid) => (dispatch, getState) => {
   const state = getState();
   return fetch(getDeleteHackDetailPath(did), {
