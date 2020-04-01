@@ -19,6 +19,9 @@ const updateHackathonQuestionsArrayInState = (questions, hid) => ({
 
 /**
  * Action for creating an array of hackathon questions.
+ * Note: make sure to call convertDetailsFromUIToServer on
+ * questions beforehand if you're creating an all-new
+ * hackathon.
  *
  * @param questions {Array} Question objects
  * @param hid {String} The id of the hackathon to add questions to
@@ -28,9 +31,6 @@ export const createHackathonQuestions = (questions, hid) => (
   getState
 ) => {
   const state = getState();
-  questions = convertQuestionsFromUIToServer(questions);
-  console.log("SENDING THE FOLLOWING QUESTIONS:");
-  console.log(questions);
   return fetch(CREATE_HACK_QUESTIONS_PATH, {
     method: "POST",
     headers: {
@@ -51,7 +51,6 @@ export const createHackathonQuestions = (questions, hid) => (
       );
       // Update in the store!
       dispatch(updateHackathonQuestionsArrayInState(newQuestions, hid));
-      console.log(res);
     })
     .catch(err => {
       dispatch(showError(`Failed to update questions: ${err.message}`));
@@ -80,7 +79,6 @@ export const getHackathonQuestions = hid => dispatch => {
       dispatch(updateHackathonQuestionsArrayInState(newQuestions, hid));
     })
     .catch(err => {
-      console.log(err);
       dispatch(showError(`Failed to get questions: ${err.message}`));
     });
 };

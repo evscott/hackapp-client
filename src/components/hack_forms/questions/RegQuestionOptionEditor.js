@@ -45,9 +45,12 @@ export default function RegQuestionOptionEditor(props) {
   const handleEdit = (event, index) => {
     const newOptions = [...props.options];
     if (index === props.options.length) {
-      newOptions.push(event.target.value);
+      newOptions.push({ option: event.target.value });
     } else {
-      newOptions[index] = event.target.value;
+      newOptions[index] = {
+        ...props.options[index],
+        option: event.target.value
+      };
     }
     props.setRegOptions(newOptions);
   };
@@ -62,7 +65,7 @@ export default function RegQuestionOptionEditor(props) {
     const newOptions = [...props.options];
     if (index === props.options.length) {
       // Add new option
-      newOptions.push("");
+      newOptions.push({ option: "" });
     } else {
       // Delete the option
       newOptions.splice(index, 1);

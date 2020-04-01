@@ -5,6 +5,8 @@ import { showError, showNotification } from "./notificationActions";
 import { createHackathonOverview } from "./hackOverviewActions";
 import { createHackathonDetails } from "./hackDetailsActions";
 import { createHackathonQuestions } from "./hackQuestionsActions";
+import { convertDetailsFromUIToServer } from "../util/detailsAdapter";
+import { convertQuestionsFromUIToServer } from "../util/questionsAdapter";
 
 /** Action for deleting a hackathon from the app */
 const deleteHackathonFromState = hid => ({
@@ -20,9 +22,10 @@ const deleteHackathonFromState = hid => ({
 export const createHackathon = hackathon => (dispatch, getState) => {
   dispatch(createHackathonOverview(hackathon.overview)).then(hid => {
     if(!hid) return;
-    console.log(`Currently creating a hackathon, got hid ${hid}`);
-    dispatch(createHackathonDetails(hackathon.details, hid));
-    dispatch(createHackathonQuestions(hackathon.questions, hid));
+    const details = convertDetailsFromUIToServer(hackathon.details);
+    const questions = convertQuestionsFromUIToServer(hackathon.questions);
+    dispatch(createHackathonDetails(details, hid));
+    dispatch(createHackathonQuestions(questions, hid));
   });
 };
 

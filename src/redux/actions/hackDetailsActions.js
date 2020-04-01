@@ -25,7 +25,6 @@ export const createHackathonDetails = (details, hid) => (
   getState
 ) => {
   const state = getState();
-  details = convertDetailsFromUIToServer(details);
   return fetch(CREATE_HACK_DETAILS_PATH, {
     method: "POST",
     headers: {
@@ -72,7 +71,6 @@ export const getHackathonDetails = hid => dispatch => {
       dispatch(updateHackathonDetailsArrayInState(newDetails, hid));
     })
     .catch(err => {
-      console.log(err);
       dispatch(showError(`Failed to get details: ${err.message}`));
     });
 };
