@@ -44,13 +44,8 @@ export const createHackathonQuestions = (questions, hid) => (
       return res.json();
     })
     .then(res => {
-      // Get the new array of questions that we'll need
-      const newQuestions = convertQuestionsFromServerToRedux(
-        res,
-        state.hackathons.byHID[hid].questions
-      );
       // Update in the store!
-      dispatch(updateHackathonQuestionsArrayInState(newQuestions, hid));
+      dispatch(updateHackathonQuestionsArrayInState(res, hid));
     })
     .catch(err => {
       dispatch(showError(`Failed to update questions: ${err.message}`));
@@ -75,8 +70,7 @@ export const getHackathonQuestions = hid => dispatch => {
       return res.json();
     })
     .then(res => {
-      const newQuestions = convertQuestionsFromServerToRedux(res);
-      dispatch(updateHackathonQuestionsArrayInState(newQuestions, hid));
+      dispatch(updateHackathonQuestionsArrayInState(res, hid));
     })
     .catch(err => {
       dispatch(showError(`Failed to get questions: ${err.message}`));

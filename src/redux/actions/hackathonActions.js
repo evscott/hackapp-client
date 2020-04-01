@@ -85,6 +85,8 @@ export const publishHackathon = (hid, draft) => (dispatch, getState) => {
     .then(res => {
       if (!res.ok) throw new Error(res.statusText);
       dispatch(setHackathonDraftInState(hid, draft));
+      const publishText = draft ? "unpublished" : "published";
+      dispatch(showNotification(`Hackathon ${publishText}!`));
     })
     .catch(err => {
       const publishText = draft ? "unpublish" : "publish";

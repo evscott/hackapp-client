@@ -1,13 +1,16 @@
-import { UPDATE_HACKATHON_DETAILS_ARRAY_IN_STATE } from "./actionTypes";
+import {
+  UPDATE_HACKATHON_DETAILS_ARRAY_IN_STATE,
+  DELETE_HACKATHON_DETAIL_IN_STATE
+} from "./actionTypes";
 import {
   CREATE_HACK_DETAILS_PATH,
   getGetHackDetailsPath,
-  UPDATE_HACK_DETAILS_PATH
+  UPDATE_HACK_DETAILS_PATH,
+  getDeleteHackDetailPath
 } from "../apiPaths";
 import { showError } from "./notificationActions";
 import fetch from "../fetchWithTimeout";
 import {
-  convertDetailsFromServerToRedux,
   convertDetailsFromUIToServer
 } from "../util/detailsAdapter";
 
@@ -15,6 +18,12 @@ import {
 const updateHackathonDetailsArrayInState = (details, hid) => ({
   type: UPDATE_HACKATHON_DETAILS_ARRAY_IN_STATE,
   details,
+  hid
+});
+
+const deleteHackathonDetailInState = (did, hid) => ({
+  type: DELETE_HACKATHON_DETAIL_IN_STATE,
+  did,
   hid
 });
 
@@ -43,11 +52,7 @@ export const createHackathonDetails = (details, hid) => (
       return res.json();
     })
     .then(res => {
-      const newDetails = convertDetailsFromServerToRedux(
-        res,
-        state.hackathons.byHID[hid].details
-      );
-      dispatch(updateHackathonDetailsArrayInState(newDetails, hid));
+      dispatch(updateHackathonDetailsArrayInState(res, hid));
     })
     .catch(err => {
       dispatch(showError(`Failed to create details: ${err.message}`));
@@ -77,14 +82,28 @@ const updateHackathonDetails = (details, hid) => (dispatch, getState) => {
       return res.json();
     })
     .then(res => {
-      const newDetails = convertDetailsFromServerToRedux(
-        res,
-        state.hackathons.byHID[hid].details
-      );
-      dispatch(updateHackathonDetailsArrayInState(newDetails, hid));
+      dispatch(updateHackathonDetailsArrayInState(res, hid));
     })
     .catch(err => {
       dispatch(showError(`Failed to update details: ${err.message}`));
+    });
+};
+
+const deleteHackathonDetail = (did, hid) => (dispatch, getState) => {
+  const state = getState();
+  return fetch(getDeleteHackDetailPath(did), {
+    method: "DELETE",
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      dispatch(deleteHackathonDetailInState(did, hid));
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to delete hackathon detail: ${err.message}`));
     });
 };
 
@@ -106,11 +125,14 @@ export const updateAllHackathonDetails = (details, hid) => (
   details = convertDetailsFromUIToServer(details);
 
   // Find the details that need to be updated and created
+  const toDelete = new Set(Object.keys(storedDetails));
   const toUpdate = [];
   const toCreate = [];
   details.forEach(item => {
     // If the detail existed before, it's a potential update
     if (item.did) {
+      // Remove it from toDelete
+      toDelete.delete(item.did);
       // If the detail has been changed, then update the server
       if (JSON.stringify(item) !== JSON.stringify(storedDetails[item.did]))
         toUpdate.push(item);
@@ -121,6 +143,7 @@ export const updateAllHackathonDetails = (details, hid) => (
   });
   dispatch(updateHackathonDetails(toUpdate, hid));
   dispatch(createHackathonDetails(toCreate, hid));
+  toDelete.forEach(did => dispatch(deleteHackathonDetail(did, hid)));
 };
 
 /**
@@ -141,8 +164,7 @@ export const getHackathonDetails = hid => dispatch => {
       return res.json();
     })
     .then(res => {
-      const newDetails = convertDetailsFromServerToRedux(res);
-      dispatch(updateHackathonDetailsArrayInState(newDetails, hid));
+      dispatch(updateHackathonDetailsArrayInState(res, hid));
     })
     .catch(err => {
       dispatch(showError(`Failed to get details: ${err.message}`));

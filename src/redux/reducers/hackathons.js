@@ -4,8 +4,12 @@ import {
   UPDATE_HACKATHON_OVERVIEW_IN_STATE,
   DELETE_HACKATHON_FROM_STATE,
   UPDATE_HACKATHON_DETAILS_ARRAY_IN_STATE,
-  UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE, SET_HACKATHON_DRAFT_IN_STATE
+  UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE,
+  SET_HACKATHON_DRAFT_IN_STATE,
+  DELETE_HACKATHON_DETAIL_IN_STATE
 } from "../actions/actionTypes";
+import { convertDetailsFromServerToRedux } from "../util/detailsAdapter";
+import { convertQuestionsFromServerToRedux } from "../util/questionsAdapter";
 
 /**
  * The initial state for this branch of the Redux store tree.
@@ -178,7 +182,10 @@ export default function hackathons(state = initialState, action) {
           ...state.byHID,
           [hid]: {
             ...oldHackathon,
-            details: action.details
+            details: convertDetailsFromServerToRedux(
+              action.details,
+              oldHackathon.details
+            )
           }
         }
       };
@@ -191,7 +198,25 @@ export default function hackathons(state = initialState, action) {
           ...state.byHID,
           [hid]: {
             ...oldHackathon,
-            questions: action.questions
+            questions: convertQuestionsFromServerToRedux(
+              action.questions,
+              oldHackathon.questions
+            )
+          }
+        }
+      };
+    case DELETE_HACKATHON_DETAIL_IN_STATE:
+      hid = action.hid;
+      oldHackathon = state.byHID[hid] || {};
+      let details = oldHackathon.details;
+      delete details[action.did];
+      return {
+        ...state,
+        byHID: {
+          ...state.byHID,
+          [hid]: {
+            ...oldHackathon,
+            details
           }
         }
       };
