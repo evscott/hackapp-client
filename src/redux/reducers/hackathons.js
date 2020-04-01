@@ -4,7 +4,7 @@ import {
   UPDATE_HACKATHON_OVERVIEW_IN_STATE,
   DELETE_HACKATHON_FROM_STATE,
   UPDATE_HACKATHON_DETAILS_ARRAY_IN_STATE,
-  UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE
+  UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE, SET_HACKATHON_DRAFT_IN_STATE
 } from "../actions/actionTypes";
 
 /**
@@ -202,6 +202,22 @@ export default function hackathons(state = initialState, action) {
       return {
         ...state,
         byHID: byHID
+      };
+    case SET_HACKATHON_DRAFT_IN_STATE:
+      hid = action.hid;
+      oldHackathon = state.byHID[hid];
+      return {
+        ...state,
+        byHID: {
+          ...state.byHID,
+          [hid]: {
+            ...oldHackathon,
+            overview: {
+              ...oldHackathon.overview,
+              draft: action.draft
+            }
+          }
+        }
       };
     default:
       return state;

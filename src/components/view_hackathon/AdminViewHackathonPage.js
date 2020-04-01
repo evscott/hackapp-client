@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import { updateHackathonOverview } from "../../redux/actions/hackOverviewActions";
 import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
 import { getHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
-import { deleteHackathon } from "../../redux/actions/hackathonActions";
+import { deleteHackathon, publishHackathon } from "../../redux/actions/hackathonActions";
 import { convertDetailsFromReduxToUI } from "../../redux/util/detailsAdapter";
 import {
   PAGE_TITLES,
@@ -112,7 +112,7 @@ function AdminViewHackathonPage(props) {
       text: draft ? "Publish Hackathon" : "Unpublish Hackathon",
       // On clicking unpublish, we should change the draft flag
       onClick: () => {
-        props.updateHackathonOverview({ ...overview, draft: !draft });
+        props.publishHackathon(props.hid, !draft);
       }
     },
     {
@@ -223,5 +223,6 @@ export default connect(mapStateToProps, {
   updateHackathonOverview,
   deleteHackathon,
   getHackathonDetails,
-  getHackathonQuestions
+  getHackathonQuestions,
+  publishHackathon
 })(AdminViewHackathonPage);

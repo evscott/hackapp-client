@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { createHackathon } from "../../redux/actions/hackathonActions";
+import {
+  createHackathon,
+  createPublishedHackathon
+} from "../../redux/actions/hackathonActions";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
@@ -43,7 +46,7 @@ const overviewState = {
  * The initial state for the hackathon details page.
  * It's a list of markdown strings.
  */
-const detailsState = [{detail: "# What the Hack?"}];
+const detailsState = [{ detail: "# What the Hack?" }];
 
 /** The initial set of questions for registration. */
 const questionsState = [
@@ -81,11 +84,9 @@ function CreateHackathonPage(props) {
    * @param draft Whether to mark the hackathon as a draft.
    */
   const saveHackathon = draft => {
-    props.createHackathon({
-      overview: { ...overview, draft },
-      details,
-      questions
-    });
+    const hackathon = { overview, details, questions };
+    if(draft) props.createHackathon(hackathon);
+    else props.createPublishedHackathon(hackathon);
   };
 
   /**
@@ -222,4 +223,6 @@ function CreateHackathonPage(props) {
 }
 
 // Connects redux store to add hackathons
-export default connect(null, { createHackathon })(CreateHackathonPage);
+export default connect(null, { createHackathon, createPublishedHackathon })(
+  CreateHackathonPage
+);

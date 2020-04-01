@@ -16,6 +16,8 @@ export const UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE =
 
 /** Action type for deleting a hackathon */
 export const DELETE_HACKATHON_FROM_STATE = "DELETE_HACKATHON_FROM_STATE";
+/** Action type for setting whether a hackathon is a draft in the state */
+export const SET_HACKATHON_DRAFT_IN_STATE = "SET_HACKATHON_DRAFT_IN_STATE";
 
 /** Action type for adding user info in the app */
 export const ADD_USER_TO_STATE = "ADD_USER_TO_STATE";

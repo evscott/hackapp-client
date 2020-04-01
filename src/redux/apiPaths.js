@@ -22,3 +22,6 @@ export const CREATE_HACK_QUESTIONS_PATH = `${process.env.REACT_APP_API_ADDRESS}/
 /** The path for getting an array of hackathon questions */
 export const getGetHackQuestionsPath = hid =>
   `${process.env.REACT_APP_API_ADDRESS}/hacks/reg/search?hid=${hid}`;
+
+/** The path for publishing a hackathon */
+export const PUBLISH_HACK_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/hacks/pub/`;
