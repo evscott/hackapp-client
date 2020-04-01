@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { updateHackathonOverview } from "../../redux/actions/hackOverviewActions";
+import { updateAllHackathonDetails } from "../../redux/actions/hackDetailsActions";
 import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
 import { getHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
 import { deleteHackathon, publishHackathon } from "../../redux/actions/hackathonActions";
@@ -136,7 +137,18 @@ function AdminViewHackathonPage(props) {
 
   /** Saves the changes to the hackathon in the redux store */
   const save = () => {
-    props.updateHackathonOverview(overview);
+    switch (page) {
+      case PAGES.OVERVIEW:
+        props.updateHackathonOverview(overview);
+        break;
+      case PAGES.DETAILS:
+        props.updateAllHackathonDetails(details, props.hid);
+        break;
+      case PAGES.REGISTRATION:
+        break;
+      default:
+        break;
+    }
     setModalOpen(false);
   };
 
@@ -223,6 +235,7 @@ export default connect(mapStateToProps, {
   updateHackathonOverview,
   deleteHackathon,
   getHackathonDetails,
+  updateAllHackathonDetails,
   getHackathonQuestions,
   publishHackathon
 })(AdminViewHackathonPage);

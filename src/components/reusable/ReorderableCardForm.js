@@ -28,8 +28,8 @@ export default function ReorderableCardForm(props) {
     if (toIndex >= 0 && toIndex < props.array.length) {
       // First, set up the new array of items
       const newArray = [...props.array];
-      newArray[fromIndex] = props.array[toIndex];
-      newArray[toIndex] = props.array[fromIndex];
+      newArray[fromIndex] = {...props.array[toIndex]}; // Defensive copy
+      newArray[toIndex] = {...props.array[fromIndex]}; // Defensive copy
       props.setArray(newArray);
       // Then, set up the new array of keys for React components
       const newKeys = [...keys];
@@ -69,10 +69,25 @@ export default function ReorderableCardForm(props) {
     setKeys(newKeys);
   };
 
+  /**
+   * Gets a unique React key so that it refreshes with new data
+   * appropriately. If we're in view mode, it needs to be more strict,
+   * so we incorporate the string of the item being displayed into the
+   * key.
+   *
+   * @param item The item being shown in a card
+   * @param idx The index of the card
+   * @returns {String} A unique key for the card for React
+   */
+  const getCardKey = (item, idx) => {
+    if(props.viewMode) return keys[idx] + JSON.stringify(item);
+    return keys[idx];
+  };
+
   return (
     <div>
       {props.array.map((txt, idx) => (
-        <React.Fragment key={keys[idx]}>
+        <React.Fragment key={getCardKey(txt, idx)}>
           <ReorderableCard
             onMoveUp={() => moveCard(idx, idx - 1)}
             onMoveDown={() => moveCard(idx, idx + 1)}

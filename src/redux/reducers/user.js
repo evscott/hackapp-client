@@ -12,7 +12,7 @@ const initialState = {
     firstName: "admin",
     lastName: "admin",
     email: "admin",
-    admin: false
+    admin: true
   }
 };
 

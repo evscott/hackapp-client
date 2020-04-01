@@ -13,6 +13,8 @@ export const getDeleteHackPath = hid =>
 
 /** The path for creating an array of hackathon details */
 export const CREATE_HACK_DETAILS_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/hacks/det/`;
+/** The path for updating a hackathon detail */
+export const UPDATE_HACK_DETAILS_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/hacks/det/`;
 /** The path for getting an array of hackathon details */
 export const getGetHackDetailsPath = hid =>
   `${process.env.REACT_APP_API_ADDRESS}/hacks/det/search?hid=${hid}`;
