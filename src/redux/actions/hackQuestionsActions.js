@@ -111,6 +111,13 @@ const updateHackathonQuestions = (questions, hid) => (dispatch, getState) => {
     });
 };
 
+/**
+ * Action for deleting a question for a hackathon. It pings the database
+ * to remove it and subsequently removes it from the state.
+ *
+ * @param qid {String} The id of the question to delete
+ * @param hid {String} The id of the hackathon with the question
+ */
 const deleteHackathonQuestion = (qid, hid) => (dispatch, getState) => {
   const state = getState();
   return fetch(getDeleteHackQuestionPath(qid), {
@@ -129,6 +136,15 @@ const deleteHackathonQuestion = (qid, hid) => (dispatch, getState) => {
     });
 };
 
+/**
+ * Creates a new option for a hackathon question. Asks the server to
+ * create it, which gets us a new id for the option so we can put
+ * it in our store.
+ *
+ * @param option {Object} The option to create
+ * @param qid {String} The id for the question to create an option for
+ * @param hid {String} The id for the hackathon with the question
+ */
 const createHackathonQuestionOption = (option, qid, hid) => (
   dispatch,
   getState
@@ -154,6 +170,14 @@ const createHackathonQuestionOption = (option, qid, hid) => (
     });
 };
 
+/**
+ * Updates an option for a hackathon registration question. It asks the
+ * server to update it, and if successful, it updates it locally.
+ *
+ * @param option {Object} The option to update (it must have an id already)
+ * @param qid {String} The id of the question to add the option to
+ * @param hid {String} The id of the hackathon with the question
+ */
 const updateHackathonQuestionOption = (option, qid, hid) => (
   dispatch,
   getState
@@ -179,6 +203,14 @@ const updateHackathonQuestionOption = (option, qid, hid) => (
     });
 };
 
+/**
+ * Deletes an option for a hackathon question by asking the server
+ * to do so and then updating it locally if successful.
+ *
+ * @param oid {String} The id of the option to delete
+ * @param qid {String} The id of the question that has the option
+ * @param hid {String} The hackathon that has the question
+ */
 const deleteHackathonQuestionOption = (oid, qid, hid) => (
   dispatch,
   getState
@@ -200,6 +232,16 @@ const deleteHackathonQuestionOption = (oid, qid, hid) => (
     });
 };
 
+/**
+ * Updates all of the options for a given question that is getting
+ * updated. For those options that already exist, we update those that
+ * have changed. For those that did not previously exist, we create the
+ * new options. For those that have been removed, we remove those options.
+ *
+ * @param options {Array} The options to update or create
+ * @param qid {String} The id of the question to update options for
+ * @param hid {String} The id of the hackathon with the question
+ */
 const updateAllHackathonQuestionOptions = (options, qid, hid) => (
   dispatch,
   getState
@@ -226,6 +268,17 @@ const updateAllHackathonQuestionOptions = (options, qid, hid) => (
   );
 };
 
+/**
+ * Updates all hackathon questions for a given hackathon by creating/
+ * updating/deleting questions accordingly to match the provided questions
+ * object.
+ *
+ * @param questions {Array} The questions from the UI that need to be
+ * present on the server (some may already exist; this function does all
+ * the messy work with figuring out what questions and options need to be
+ * created, updated, and deleted)
+ * @param hid {String} The id for the hackathon to update questions for
+ */
 export const updateAllHackathonQuestions = (questions, hid) => (
   dispatch,
   getState
