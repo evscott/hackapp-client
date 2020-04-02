@@ -32,6 +32,8 @@ export const getDeleteHackQuestionPath = qid => `${process.env.REACT_APP_API_ADD
 export const CREATE_HACK_Q_OPTION_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/hacks/reg/opt/`;
 /** The path for updating an option for a hackathon question */
 export const UPDATE_HACK_Q_OPTION_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/hacks/reg/opt/`;
+/** The path for deleting an option for a hackathon question */
+export const getDeleteHackQOptionPath = oid => `${process.env.REACT_APP_API_ADDRESS}/a/hacks/reg/opt/search?oid=${oid}`;
 
 /** The path for publishing a hackathon */
 export const PUBLISH_HACK_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/hacks/pub/`;

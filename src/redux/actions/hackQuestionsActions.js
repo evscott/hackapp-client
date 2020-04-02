@@ -12,7 +12,8 @@ import {
   getGetHackQuestionsPath,
   UPDATE_HACK_QUESTIONS_PATH,
   CREATE_HACK_Q_OPTION_PATH,
-  UPDATE_HACK_Q_OPTION_PATH
+  UPDATE_HACK_Q_OPTION_PATH,
+  getDeleteHackQOptionPath
 } from "../apiPaths";
 import { showError } from "./notificationActions";
 
@@ -171,9 +172,7 @@ const updateHackathonQuestionOption = (option, qid, hid) => (
       return res.json();
     })
     .then(res => {
-      dispatch(
-        updateHackathonQuestionOptionInState(res, option.oid, qid, hid)
-      );
+      dispatch(updateHackathonQuestionOptionInState(res, option.oid, qid, hid));
     })
     .catch(err => {
       dispatch(showError(`Failed to update option: ${err.message}`));
@@ -184,8 +183,21 @@ const deleteHackathonQuestionOption = (oid, qid, hid) => (
   dispatch,
   getState
 ) => {
-  dispatch(deleteHackathonQuestionOptionFromState(oid, qid, hid));
-  console.log("DELETING AN OPTION");
+  const state = getState();
+  return fetch(getDeleteHackQOptionPath(oid), {
+    method: "DELETE",
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      dispatch(deleteHackathonQuestionOptionFromState(oid, qid, hid));
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to delete option: ${err.message}`));
+    });
 };
 
 const updateAllHackathonQuestionOptions = (options, qid, hid) => (
