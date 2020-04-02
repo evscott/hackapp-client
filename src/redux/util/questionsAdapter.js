@@ -12,10 +12,22 @@ export const convertQuestionsFromServerToRedux = (
 ) => {
   const questions = { ...oldQuestions };
   questionsToUpdate.forEach(item => {
-    item.desc = item.descr; // Convert naming conventions
+    // Convert naming conventions
+    item.desc = item.descr;
+    // Now, turn the options into a dictionary
+    const options = {};
+    item.options.forEach(o => (options[o.oid] = o));
+    item.options = options;
+    // Add it to the dict
     questions[item.qid] = item;
   });
   return questions;
+};
+
+const compareIndices = (q1, q2) => {
+  if (q1.index < q2.index) return -1;
+  if (q1.index > q2.index) return 1;
+  return 0;
 };
 
 /**
@@ -28,11 +40,11 @@ export const convertQuestionsFromServerToRedux = (
 export const convertQuestionsFromReduxToUI = questions => {
   if (!questions) return undefined;
   // Unpack the questions into an array
-  return Object.values(questions).sort((q1, q2) => {
-    if (q1.index < q2.index) return -1;
-    if (q1.index > q2.index) return 1;
-    return 0;
-  });
+  const questionArray = Object.values(questions).sort(compareIndices);
+  return questionArray.map(question => ({
+    ...question,
+    options: Object.values(question.options).sort(compareIndices)
+  }));
 };
 
 /**
@@ -54,6 +66,6 @@ export const convertQuestionsFromUIToServer = questions => {
       descr: q.desc,
       options,
       index
-    }
+    };
   });
 };

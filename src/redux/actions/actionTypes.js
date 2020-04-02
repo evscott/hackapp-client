@@ -13,6 +13,11 @@ export const UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE = "UPDATE_HACKATHON_QUEST
 /** Action type for deleting a hackathon question from the state */
 export const DELETE_HACKATHON_QUESTION_FROM_STATE = "DELETE_HACKATHON_QUESTION_FROM_STATE";
 
+/** Action type for updating a hackathon question's option in the state */
+export const UPDATE_HACKATHON_QUESTION_OPTION_IN_STATE = "UPDATE_HACKATHON_QUESTION_OPTION_IN_STATE";
+/** Action type for deleting a hackathon question's option from the state */
+export const DELETE_HACKATHON_QUESTION_OPTION_FROM_STATE = "DELETE_HACKATHON_QUESTION_OPTION_FROM_STATE";
+
 /** Action type for deleting a hackathon */
 export const DELETE_HACKATHON_FROM_STATE = "DELETE_HACKATHON_FROM_STATE";
 /** Action type for setting whether a hackathon is a draft in the state */

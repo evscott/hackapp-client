@@ -1,6 +1,8 @@
 import {
   UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE,
-  DELETE_HACKATHON_QUESTION_FROM_STATE
+  DELETE_HACKATHON_QUESTION_FROM_STATE,
+  UPDATE_HACKATHON_QUESTION_OPTION_IN_STATE,
+  DELETE_HACKATHON_QUESTION_OPTION_FROM_STATE
 } from "./actionTypes";
 import { convertQuestionsFromUIToServer } from "../util/questionsAdapter";
 import fetch from "../fetchWithTimeout";
@@ -8,7 +10,8 @@ import {
   CREATE_HACK_QUESTIONS_PATH,
   getDeleteHackQuestionPath,
   getGetHackQuestionsPath,
-  UPDATE_HACK_QUESTIONS_PATH
+  UPDATE_HACK_QUESTIONS_PATH,
+  CREATE_HACK_Q_OPTION_PATH
 } from "../apiPaths";
 import { showError } from "./notificationActions";
 
@@ -19,8 +22,26 @@ const updateHackathonQuestionsArrayInState = (questions, hid) => ({
   hid
 });
 
+/** Action for deleting a hackathon question in the app */
 const deleteHackathonQuestionFromState = (qid, hid) => ({
   type: DELETE_HACKATHON_QUESTION_FROM_STATE,
+  qid,
+  hid
+});
+
+/** Action for updating a hackathon question option */
+const updateHackathonQuestionOptionInState = (option, oid, qid, hid) => ({
+  type: UPDATE_HACKATHON_QUESTION_OPTION_IN_STATE,
+  option,
+  oid,
+  qid,
+  hid
+});
+
+/** Action for deleting a hackathon question option */
+const deleteHackathonQuestionOptionFromState = (oid, qid, hid) => ({
+  type: DELETE_HACKATHON_QUESTION_OPTION_FROM_STATE,
+  oid,
   qid,
   hid
 });
@@ -109,17 +130,68 @@ const deleteHackathonQuestion = (qid, hid) => (dispatch, getState) => {
 const createHackathonQuestionOption = (option, qid, hid) => (
   dispatch,
   getState
-) => {};
+) => {
+  const state = getState();
+  return fetch(CREATE_HACK_Q_OPTION_PATH, {
+    method: "POST",
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({...option, qid})
+  })
+    .then(res => {
+      if(!res.ok) throw new Error(res.statusText);
+      return res.json();
+    })
+    .then(res => {
+      dispatch(updateHackathonQuestionOptionInState(res, res.oid, qid, hid));
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to create option: ${err.message}`));
+    });
+};
 
 const updateHackathonQuestionOption = (option, qid, hid) => (
   dispatch,
   getState
-) => {};
+) => {
+  dispatch(updateHackathonQuestionOptionInState(option, option.oid, qid, hid));
+  console.log("UPDATING AN OPTION");
+  console.log(option);
+};
 
-const deleteHackathonQuestionOption = (option, qid, hid) => (
+const deleteHackathonQuestionOption = (oid, qid, hid) => (
   dispatch,
   getState
-) => {};
+) => {
+  dispatch(deleteHackathonQuestionOptionFromState(oid, qid, hid));
+  console.log("DELETING AN OPTION");
+};
+
+const updateAllHackathonQuestionOptions = (options, qid, hid) => (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  const storedOptions = state.hackathons.byHID[hid].questions[qid].options;
+
+  const toDelete = new Set(Object.keys(storedOptions));
+  options.forEach(item => {
+    // If the option existed before, it's a potential update
+    if (item.oid) {
+      // We don't want to delete this one
+      toDelete.delete(item.oid);
+      // Check if it has changed
+      if (JSON.stringify(item) !== JSON.stringify(storedOptions[item.oid]))
+        dispatch(updateHackathonQuestionOption(item, qid, hid));
+    } else {
+      // Otherwise, create the option
+      dispatch(createHackathonQuestionOption(item, qid, hid));
+    }
+  });
+  toDelete.forEach(oid => dispatch(deleteHackathonQuestionOption(oid, qid, hid)));
+};
 
 export const updateAllHackathonQuestions = (questions, hid) => (
   dispatch,
@@ -139,11 +211,14 @@ export const updateAllHackathonQuestions = (questions, hid) => (
     if (item.qid) {
       // Remove this from qToDelete
       qToDelete.delete(item.qid);
-      const options = item.options;
-      delete item[options]; // Don't consider the options in our comparison
-      // If the detail has been changed, update the server
-      if (JSON.stringify(item) !== JSON.stringify(storedQuestions[item.qid]))
-        qToUpdate.push(item);
+      // Check if it has changed (excluding options, we do that separately)
+      if (
+        JSON.stringify({ ...item, options: [] }) !==
+        JSON.stringify({ ...storedQuestions[item.qid], options: [] })
+      )
+        qToUpdate.push({ ...item, options: [] }); // remove options from it
+      // Now, update the options appropriately
+      dispatch(updateAllHackathonQuestionOptions(item.options, item.qid, hid));
     } else {
       // The question did not exist so we need to create it
       // We don't need to remove the options in this case,
