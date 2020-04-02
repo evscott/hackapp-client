@@ -11,7 +11,8 @@ import {
   getDeleteHackQuestionPath,
   getGetHackQuestionsPath,
   UPDATE_HACK_QUESTIONS_PATH,
-  CREATE_HACK_Q_OPTION_PATH
+  CREATE_HACK_Q_OPTION_PATH,
+  UPDATE_HACK_Q_OPTION_PATH
 } from "../apiPaths";
 import { showError } from "./notificationActions";
 
@@ -138,10 +139,10 @@ const createHackathonQuestionOption = (option, qid, hid) => (
       "ha-api-token": state.user.token,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({...option, qid})
+    body: JSON.stringify({ ...option, qid })
   })
     .then(res => {
-      if(!res.ok) throw new Error(res.statusText);
+      if (!res.ok) throw new Error(res.statusText);
       return res.json();
     })
     .then(res => {
@@ -156,9 +157,27 @@ const updateHackathonQuestionOption = (option, qid, hid) => (
   dispatch,
   getState
 ) => {
-  dispatch(updateHackathonQuestionOptionInState(option, option.oid, qid, hid));
-  console.log("UPDATING AN OPTION");
-  console.log(option);
+  const state = getState();
+  return fetch(UPDATE_HACK_Q_OPTION_PATH, {
+    method: "PUT",
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(option)
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    })
+    .then(res => {
+      dispatch(
+        updateHackathonQuestionOptionInState(res, option.oid, qid, hid)
+      );
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to update option: ${err.message}`));
+    });
 };
 
 const deleteHackathonQuestionOption = (oid, qid, hid) => (
@@ -190,7 +209,9 @@ const updateAllHackathonQuestionOptions = (options, qid, hid) => (
       dispatch(createHackathonQuestionOption(item, qid, hid));
     }
   });
-  toDelete.forEach(oid => dispatch(deleteHackathonQuestionOption(oid, qid, hid)));
+  toDelete.forEach(oid =>
+    dispatch(deleteHackathonQuestionOption(oid, qid, hid))
+  );
 };
 
 export const updateAllHackathonQuestions = (questions, hid) => (
