@@ -1,4 +1,4 @@
-import { ADD_USER_TO_STATE, REMOVE_USER_FROM_STATE } from "../actions/actionTypes";
+import { ADD_USER_TO_STATE, REMOVE_USER_FROM_STATE, UPDATE_USER_IN_STATE } from "../actions/actionTypes";
 
 /**
  * The initial state for this branch of the redux store containing
@@ -6,7 +6,7 @@ import { ADD_USER_TO_STATE, REMOVE_USER_FROM_STATE } from "../actions/actionType
  */
 const initialState = {
   loggedIn: true,
-  token: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI0MTI3ZTdkNC03NDdhLTExZWEtODhmYi0wMjQyYWMxMjAwMDIiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNTg1Nzg5NjU3LCJleHAiOjE1ODU4MzI4NTd9.LqHRjA5gYtsjRY4tMpltgUYuvftHWvY5Zajj1DrDo4Sw2ueVEJ504L9zNfrWgCFj3kA8vP4bul1zCqitctPh8X_I7XD2vYOSx_-3etTrmQmT7Re9wYvLqz_bXsncEKvaP4ta0ur09KiWYmoK_gkMBOfltlogtW2XObeARLW7HqTV9j3Irsl8LYOA5bQ8RnXpAbE80l9qJnSsp75QL1WN1jwzRfjOgOkFeQqgx4X-hhBzwuLeMWxxNTo_krPwB-4D_tS6YcAXeWt-uZxxxM2bqtZwzdjZTmSoO-SVHbLYoV1LYy4rQT-Xslx2DYCFv6a4mit3WI6Gi_hHMvsxly91WnNi0Ee0WFfltbGs5b_zyvOrG0riumjFopSaCo924otE_aEmBszM2oECXtjxU7tmWzIMM0Ay040kzpZtkQ7TZy4QH1c8BTx9lEF7If1peyvD43jgAoVQfT8eElkB9clJIn4CqEIa2Pb43wlzpqOcl6XRk3pys2D5VdG01xcYheDOXiGL8qekWop_qDYQ2uFwZAwpsOMF1aSIlSJUqLvftB3tAnLJkFj8hZd-3HZd8aacrOdfRhy9ap25VHmU_CtDP4G_GgW_yaB6NTIhm54IQPBtgZN3EHSC4eTB2N3xTqzbbaIM51hqCuSEtYWWqtTymfrmPopRxFr1lm5HbX0EXl4",
+  token: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJkM2QxNGZkNC03NmFiLTExZWEtOGQ3MS0wMjQyYWMxMjAwMDIiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNTg2MDMxMzUyLCJleHAiOjE1ODYwNzQ1NTJ9.brCEGPQM-iWY-ruajV6BstMUWdrcUlcA6Vqn2yNpKk_5ELOxHPxunxjQ5WdJujumGIbuXj2BVWsAwI7bItGbPMKlYhcpTwjonV8A1rzrXB-1KgRS6CvC65N8DF6shkLy6zvww_cTjCIY4r6Mzk7xF94oThzzVqGjfJbUzSMx2Ev8LcsfbSPT-TmRaE3REU33G-CoKWtXtwuMq0joVD3-DQx_P5C-bZGyzXbYN1JNd4RX69FffofyIh0Jzv3NyBw0RMTz31s4zLQhyNOavKQqbdfqMEW9Wc_lMGjwvqLMxV1fGNZto6oyl6z7qGh1POlTDPH72WJ01Z_RYiaB6Rv5XNX93MNzFDnEuxFr2jbm6tHn8G3c0QFG276SaUpWQHoc6aARqVccYdjOAup0pHmGUo4YUxUxtvCK9AoYuFIU47QrDFmWIoL9kSwl5dxQQiF5R9c3XLLI_tg1DXFPwiLo2MwPGkg1qa_Kfd_fliwH8Ip6L70Lf1FDHMLs1JiM61YtApKL2N39pbsEDyEt4LWnNaes0GMfMU-BS5wvUu52kvqVMeQUvgKwaFWexILZcZmNqQTitsTM_kD4CbOEaAOv6d0Fi9PMDUrzNr6bu1yJyRIAEq5tiyiV47-1iYsv_edsoLn38CygT3pYFVBraxRnMC53llSPLhUs0lj_BVjNp4U",
   user: {
     uid: "6bc5a1b6-7051-11ea-ab0c-0242ac140002",
     firstName: "admin",
@@ -27,6 +27,8 @@ export default function user(state = initialState, action) {
   switch (action.type) {
     case ADD_USER_TO_STATE:
       return { loggedIn: true, user: action.user, token: action.token};
+    case UPDATE_USER_IN_STATE:
+      return { ...state, user: action.user };
     case REMOVE_USER_FROM_STATE:
       return { loggedIn: false };
     default:

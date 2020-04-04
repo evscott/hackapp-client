@@ -33,7 +33,7 @@ export const createHackathon = hackathon => dispatch => {
   return dispatch(createHackathonOverview(hackathon.overview)).then(hid => {
     if (!hid) return undefined;
     const details = convertDetailsFromUIToServer(hackathon.details);
-    const questions = convertQuestionsFromUIToServer(hackathon.questions);
+    const questions = convertQuestionsFromUIToServer(hackathon.questions, hid);
     dispatch(createHackathonDetails(details, hid));
     dispatch(createHackathonQuestions(questions, hid));
     return hid;

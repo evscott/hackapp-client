@@ -1,5 +1,9 @@
-import { ADD_USER_TO_STATE, REMOVE_USER_FROM_STATE } from "./actionTypes";
-import { AUTH_PATH } from "../apiPaths";
+import {
+  ADD_USER_TO_STATE,
+  UPDATE_USER_IN_STATE,
+  REMOVE_USER_FROM_STATE
+} from "./actionTypes";
+import { AUTH_PATH, UPDATE_USER_PATH } from "../apiPaths";
 import { showError, showNotification } from "./notificationActions";
 import fetch from "../fetchWithTimeout";
 
@@ -8,6 +12,12 @@ const addUserToState = (user, token) => ({
   type: ADD_USER_TO_STATE,
   user,
   token
+});
+
+/** Action for updating a user's data in the state */
+const updateUserInState = user => ({
+  type: UPDATE_USER_IN_STATE,
+  user
 });
 
 /** Action for removing user data from the state */
@@ -61,6 +71,35 @@ export const signUp = user => dispatch => {
     })
     .catch(err => {
       dispatch(showError(`Sign up failed: ${err.message}`));
+    });
+};
+
+/**
+ * Action for updating a user in the application. It involves
+ * changing the username, password, etc.
+ *
+ * @param user {Object} The new user object to update
+ */
+export const updateUser = user => (dispatch, getState) => {
+  const state = getState();
+  return fetch(UPDATE_USER_PATH, {
+    method: "PUT",
+    body: JSON.stringify(user),
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    })
+    .then(res => {
+      console.log(res);
+      dispatch(updateUserInState(user));
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to update user: ${err.message}`));
     });
 };
 

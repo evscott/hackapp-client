@@ -3,14 +3,12 @@
  * we can load into the redux store.
  *
  * @param questionsToUpdate {Array} Question objects to update
- * @param oldQuestions {Object} A dictionary of questions in the store
  * @returns {Object} New dictionary of questions for the redux store
  */
 export const convertQuestionsFromServerToRedux = (
-  questionsToUpdate,
-  oldQuestions = {}
+  questionsToUpdate
 ) => {
-  const questions = { ...oldQuestions };
+  const questions = {};
   questionsToUpdate.forEach(item => {
     // Convert naming conventions
     item.desc = item.descr;
@@ -24,6 +22,10 @@ export const convertQuestionsFromServerToRedux = (
   return questions;
 };
 
+/**
+ * Comparator for two items with indices. This could be two questions
+ * or two options.
+ */
 const compareIndices = (q1, q2) => {
   if (q1.index < q2.index) return -1;
   if (q1.index > q2.index) return 1;
@@ -52,9 +54,10 @@ export const convertQuestionsFromReduxToUI = questions => {
  * for sending to the server.
  *
  * @param questions {Array} The questions to send to the server
+ * @param hid {String} The id for the hackathon with the questions
  * @returns {Array} The questions in server format
  */
-export const convertQuestionsFromUIToServer = questions => {
+export const convertQuestionsFromUIToServer = (questions, hid) => {
   return questions.map((q, index) => {
     // Add indices to each option
     const options = q.options.map((option, idx) => ({
@@ -65,7 +68,8 @@ export const convertQuestionsFromUIToServer = questions => {
       ...q,
       descr: q.desc,
       options,
-      index
+      index,
+      hid
     };
   });
 };

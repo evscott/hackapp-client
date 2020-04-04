@@ -5,10 +5,7 @@ import {
   UPDATE_HACKATHON_DETAILS_ARRAY_IN_STATE,
   UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE,
   SET_HACKATHON_DRAFT_IN_STATE,
-  DELETE_HACKATHON_DETAIL_IN_STATE,
-  DELETE_HACKATHON_QUESTION_FROM_STATE,
-  UPDATE_HACKATHON_QUESTION_OPTION_IN_STATE,
-  DELETE_HACKATHON_QUESTION_OPTION_FROM_STATE
+  DELETE_HACKATHON_DETAIL_IN_STATE
 } from "../actions/actionTypes";
 import { convertDetailsFromServerToRedux } from "../util/detailsAdapter";
 import { convertQuestionsFromServerToRedux } from "../util/questionsAdapter";
@@ -79,67 +76,8 @@ export default function hackathons(state = initialState, action) {
           [hid]: {
             ...oldHackathon,
             questions: convertQuestionsFromServerToRedux(
-              action.questions,
-              oldHackathon.questions
+              action.questions
             )
-          }
-        }
-      };
-    case UPDATE_HACKATHON_QUESTION_OPTION_IN_STATE:
-      hid = action.hid;
-      oldHackathon = state.byHID[hid] || {};
-      return {
-        ...state,
-        byHID: {
-          ...state.byHID,
-          [hid]: {
-            ...oldHackathon,
-            questions: {
-              ...oldHackathon.questions,
-              [action.qid]: {
-                ...oldHackathon.questions[action.qid],
-                options: {
-                  ...oldHackathon.questions[action.qid].options,
-                  [action.oid]: action.option
-                }
-              }
-            }
-          }
-        }
-      };
-    case DELETE_HACKATHON_QUESTION_OPTION_FROM_STATE:
-      hid = action.hid;
-      oldHackathon = state.byHID[hid] || {};
-      let options = {...oldHackathon.questions[action.qid].options};
-      delete options[action.oid];
-      return {
-        ...state,
-        byHID: {
-          ...state.byHID,
-          [hid]: {
-            ...oldHackathon,
-            questions: {
-              ...oldHackathon.questions,
-              [action.qid]: {
-                ...oldHackathon.questions[action.qid],
-                options
-              }
-            }
-          }
-        }
-      };
-    case DELETE_HACKATHON_QUESTION_FROM_STATE:
-      hid = action.hid;
-      oldHackathon = state.byHID[hid] || {};
-      let questions = {...oldHackathon.questions};
-      delete questions[action.qid];
-      return {
-        ...state,
-        byHID: {
-          ...state.byHID,
-          [hid]: {
-            ...oldHackathon,
-            questions
           }
         }
       };

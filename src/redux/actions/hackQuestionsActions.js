@@ -1,19 +1,12 @@
 import {
-  UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE,
-  DELETE_HACKATHON_QUESTION_FROM_STATE,
-  UPDATE_HACKATHON_QUESTION_OPTION_IN_STATE,
-  DELETE_HACKATHON_QUESTION_OPTION_FROM_STATE
+  UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE
 } from "./actionTypes";
 import { convertQuestionsFromUIToServer } from "../util/questionsAdapter";
 import fetch from "../fetchWithTimeout";
 import {
   CREATE_HACK_QUESTIONS_PATH,
-  getDeleteHackQuestionPath,
   getGetHackQuestionsPath,
-  UPDATE_HACK_QUESTIONS_PATH,
-  CREATE_HACK_Q_OPTION_PATH,
-  UPDATE_HACK_Q_OPTION_PATH,
-  getDeleteHackQOptionPath
+  UPDATE_HACK_QUESTIONS_PATH
 } from "../apiPaths";
 import { showError } from "./notificationActions";
 
@@ -21,30 +14,6 @@ import { showError } from "./notificationActions";
 const updateHackathonQuestionsArrayInState = (questions, hid) => ({
   type: UPDATE_HACKATHON_QUESTIONS_ARRAY_IN_STATE,
   questions,
-  hid
-});
-
-/** Action for deleting a hackathon question in the app */
-const deleteHackathonQuestionFromState = (qid, hid) => ({
-  type: DELETE_HACKATHON_QUESTION_FROM_STATE,
-  qid,
-  hid
-});
-
-/** Action for updating a hackathon question option */
-const updateHackathonQuestionOptionInState = (option, oid, qid, hid) => ({
-  type: UPDATE_HACKATHON_QUESTION_OPTION_IN_STATE,
-  option,
-  oid,
-  qid,
-  hid
-});
-
-/** Action for deleting a hackathon question option */
-const deleteHackathonQuestionOptionFromState = (oid, qid, hid) => ({
-  type: DELETE_HACKATHON_QUESTION_OPTION_FROM_STATE,
-  oid,
-  qid,
   hid
 });
 
@@ -82,190 +51,22 @@ export const createHackathonQuestions = (questions, hid) => (
     });
 };
 
-/**
- * Action for updating an array of questions that already exist in the
- * database.
- *
- * @param questions {Array} The questions to update
- * @param hid {String} The id of the hackathon to update questions for
- */
-const updateHackathonQuestions = (questions, hid) => (dispatch, getState) => {
-  const state = getState();
-  return fetch(UPDATE_HACK_QUESTIONS_PATH, {
-    method: "PUT",
-    headers: {
-      "ha-api-token": state.user.token,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ questions, hid })
-  })
-    .then(res => {
-      if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    })
-    .then(res => {
-      dispatch(updateHackathonQuestionsArrayInState(res, hid));
-    })
-    .catch(err => {
-      dispatch(showError(`Failed to update questions: ${err.message}`));
-    });
-};
-
-/**
- * Action for deleting a question for a hackathon. It pings the database
- * to remove it and subsequently removes it from the state.
- *
- * @param qid {String} The id of the question to delete
- * @param hid {String} The id of the hackathon with the question
- */
-const deleteHackathonQuestion = (qid, hid) => (dispatch, getState) => {
-  const state = getState();
-  return fetch(getDeleteHackQuestionPath(qid), {
-    method: "DELETE",
-    headers: {
-      "ha-api-token": state.user.token,
-      "Content-Type": "application/json"
-    }
-  })
-    .then(res => {
-      if (!res.ok) throw new Error(res.statusText);
-      dispatch(deleteHackathonQuestionFromState(qid, hid));
-    })
-    .catch(err => {
-      dispatch(showError(`Failed to delete question: ${err.message}`));
-    });
-};
-
-/**
- * Creates a new option for a hackathon question. Asks the server to
- * create it, which gets us a new id for the option so we can put
- * it in our store.
- *
- * @param option {Object} The option to create
- * @param qid {String} The id for the question to create an option for
- * @param hid {String} The id for the hackathon with the question
- */
-const createHackathonQuestionOption = (option, qid, hid) => (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  return fetch(CREATE_HACK_Q_OPTION_PATH, {
-    method: "POST",
-    headers: {
-      "ha-api-token": state.user.token,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ ...option, qid })
-  })
-    .then(res => {
-      if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    })
-    .then(res => {
-      dispatch(updateHackathonQuestionOptionInState(res, res.oid, qid, hid));
-    })
-    .catch(err => {
-      dispatch(showError(`Failed to create option: ${err.message}`));
-    });
-};
-
-/**
- * Updates an option for a hackathon registration question. It asks the
- * server to update it, and if successful, it updates it locally.
- *
- * @param option {Object} The option to update (it must have an id already)
- * @param qid {String} The id of the question to add the option to
- * @param hid {String} The id of the hackathon with the question
- */
-const updateHackathonQuestionOption = (option, qid, hid) => (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  return fetch(UPDATE_HACK_Q_OPTION_PATH, {
-    method: "PUT",
-    headers: {
-      "ha-api-token": state.user.token,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(option)
-  })
-    .then(res => {
-      if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    })
-    .then(res => {
-      dispatch(updateHackathonQuestionOptionInState(res, option.oid, qid, hid));
-    })
-    .catch(err => {
-      dispatch(showError(`Failed to update option: ${err.message}`));
-    });
-};
-
-/**
- * Deletes an option for a hackathon question by asking the server
- * to do so and then updating it locally if successful.
- *
- * @param oid {String} The id of the option to delete
- * @param qid {String} The id of the question that has the option
- * @param hid {String} The hackathon that has the question
- */
-const deleteHackathonQuestionOption = (oid, qid, hid) => (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  return fetch(getDeleteHackQOptionPath(oid), {
-    method: "DELETE",
-    headers: {
-      "ha-api-token": state.user.token,
-      "Content-Type": "application/json"
-    }
-  })
-    .then(res => {
-      if (!res.ok) throw new Error(res.statusText);
-      dispatch(deleteHackathonQuestionOptionFromState(oid, qid, hid));
-    })
-    .catch(err => {
-      dispatch(showError(`Failed to delete option: ${err.message}`));
-    });
-};
-
-/**
- * Updates all of the options for a given question that is getting
- * updated. For those options that already exist, we update those that
- * have changed. For those that did not previously exist, we create the
- * new options. For those that have been removed, we remove those options.
- *
- * @param options {Array} The options to update or create
- * @param qid {String} The id of the question to update options for
- * @param hid {String} The id of the hackathon with the question
- */
-const updateAllHackathonQuestionOptions = (options, qid, hid) => (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  const storedOptions = state.hackathons.byHID[hid].questions[qid].options;
-
+const getOptionsToUpdate = (options, storedOptions, qid) => {
   const toDelete = new Set(Object.keys(storedOptions));
+  const toUpdate = [];
+  const toCreate = [];
   options.forEach(item => {
-    // If the option existed before, it's a potential update
+    // If option previously existed, check if need to update
     if (item.oid) {
-      // We don't want to delete this one
-      toDelete.delete(item.oid);
-      // Check if it has changed
+      toDelete.delete(item.oid); // Don't delete it
+      // If it has changed
       if (JSON.stringify(item) !== JSON.stringify(storedOptions[item.oid]))
-        dispatch(updateHackathonQuestionOption(item, qid, hid));
+        toUpdate.push(item);
     } else {
-      // Otherwise, create the option
-      dispatch(createHackathonQuestionOption(item, qid, hid));
+      toCreate.push({ ...item, qid }); // Add qid to item to create it
     }
   });
-  toDelete.forEach(oid =>
-    dispatch(deleteHackathonQuestionOption(oid, qid, hid))
-  );
+  return { toDelete: [...toDelete], toUpdate, toCreate };
 };
 
 /**
@@ -286,35 +87,62 @@ export const updateAllHackathonQuestions = (questions, hid) => (
   const state = getState();
   const storedQuestions = state.hackathons.byHID[hid].questions;
   // Get the questions in the correct format for the server
-  questions = convertQuestionsFromUIToServer(questions);
+  questions = convertQuestionsFromUIToServer(questions, hid);
 
-  // Find all the questions that need to be updated/created/deleted
-  const qToDelete = new Set(Object.keys(storedQuestions));
-  const qToUpdate = [];
-  const qToCreate = [];
+  // Find everything that needs creating/updating/deleting
+  const questionsToDelete = new Set(Object.keys(storedQuestions));
+  const questionsToUpdate = [];
+  const questionsToCreate = [];
+  const optionsToDelete = [];
+  const optionsToUpdate = [];
+  const optionsToCreate = [];
   questions.forEach(item => {
-    // If the question existed before, it's a potential update
     if (item.qid) {
-      // Remove this from qToDelete
-      qToDelete.delete(item.qid);
-      // Check if it has changed (excluding options, we do that separately)
+      // If the question existed before, it's a potential update
+      questionsToDelete.delete(item.qid);
+      // Update the question if necessary
       if (
         JSON.stringify({ ...item, options: [] }) !==
         JSON.stringify({ ...storedQuestions[item.qid], options: [] })
       )
-        qToUpdate.push({ ...item, options: [] }); // remove options from it
+        questionsToUpdate.push(item);
       // Now, update the options appropriately
-      dispatch(updateAllHackathonQuestionOptions(item.options, item.qid, hid));
+      const opts = getOptionsToUpdate(
+        item.options,
+        storedQuestions[item.qid].options,
+        item.qid
+      );
+      optionsToDelete.push(...opts.toDelete);
+      optionsToUpdate.push(...opts.toUpdate);
+      optionsToCreate.push(...opts.toCreate);
     } else {
       // The question did not exist so we need to create it
-      // We don't need to remove the options in this case,
-      // since they'll get created with the request
-      qToCreate.push(item);
+      questionsToCreate.push(item);
     }
   });
-  dispatch(updateHackathonQuestions(qToUpdate, hid));
-  dispatch(createHackathonQuestions(qToCreate, hid));
-  qToDelete.forEach(qid => dispatch(deleteHackathonQuestion(qid, hid)));
+  return fetch(UPDATE_HACK_QUESTIONS_PATH, {
+    method: "PUT",
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      questionsToCreate,
+      questionsToUpdate,
+      questionsToDelete: [...questionsToDelete], // Convert to array
+      optionsToCreate,
+      optionsToUpdate,
+      optionsToDelete
+    })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      dispatch(getHackathonQuestions(hid));
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to update questions: ${err.message}`));
+      dispatch(getHackathonQuestions(hid));
+    });
 };
 
 /**
