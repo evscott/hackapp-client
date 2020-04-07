@@ -44,7 +44,8 @@ function UserViewHackathonPage(props) {
   useEffect(() => {
     if (!props.details) props.getHackathonDetails(props.hid);
     if (!props.questions) props.getHackathonQuestions(props.hid);
-    if (!props.oldRegistration) props.getRegistration(props.hid);
+    if (!props.oldRegistration && props.loggedIn)
+      props.getRegistration(props.hid);
   }, [props.overview]); // Reload if overview changes
 
   useEffect(() => {

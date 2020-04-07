@@ -47,4 +47,4 @@ export const getGetRegAnswersPath = hid => `${process.env.REACT_APP_API_ADDRESS}
 /** The path for removing a user's registration */
 export const getDeleteRegPath = hid => `${process.env.REACT_APP_API_ADDRESS}/u/hacks/search?hid=${hid}`;
 /** The path for getting the registration CSV */
-export const getGetRegCSVPath = hid => `${process.env.REACT_APP_API_ADDRESS}/a/hacks/reg/ans/csv/search?hid=${hid}`;
+export const getGetRegCSVPath = hid => `${process.env.REACT_APP_API_ADDRESS}/a/hacks/reg/csv/search?hid=${hid}`;

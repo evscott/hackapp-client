@@ -65,7 +65,7 @@ export const signUp = user => dispatch => {
     .then(res => {
       console.log(res);
       if (res.token) {
-        dispatch(showNotification(`Let's get hacking, ${res.user.firstName}!`));
+        dispatch(showNotification(`Let's get hacking, ${res.firstName}!`));
         dispatch(addUserToState(res, res.token));
       } else throw new Error("Unexpected server response");
     })
@@ -95,7 +95,6 @@ export const updateUser = user => (dispatch, getState) => {
       return res.json();
     })
     .then(res => {
-      console.log(res);
       dispatch(updateUserInState(user));
       dispatch(showNotification("User updated. Woot woot!"));
     })
