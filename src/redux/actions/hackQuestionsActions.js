@@ -41,16 +41,22 @@ export const createHackathonQuestions = (questions, hid) => (
   })
     .then(res => {
       if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    })
-    .then(res => {
-      dispatch(updateHackathonQuestionsArrayInState(res, hid));
     })
     .catch(err => {
       dispatch(showError(`Failed to create questions: ${err.message}`));
     });
 };
 
+/**
+ * Extracts which options need to be updated on the server by
+ * comparing the options provided with the options in the redux
+ * store.
+ *
+ * @param options {Array} The options to update
+ * @param storedOptions {Object} The options stored in redux store
+ * @param qid {String} The id of the question to get updates for
+ * @returns {{toDelete: string[], toCreate: Array, toUpdate: Array}}
+ */
 const getOptionsToUpdate = (options, storedOptions, qid) => {
   const toDelete = new Set(Object.keys(storedOptions));
   const toUpdate = [];

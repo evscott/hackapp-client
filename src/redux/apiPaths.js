@@ -44,5 +44,7 @@ export const CREATE_REG_ANSWERS_PATH = `${process.env.REACT_APP_API_ADDRESS}/u/h
 export const UPDATE_REG_ANSWERS_PATH = `${process.env.REACT_APP_API_ADDRESS}/u/hacks/reg/ans/`;
 /** The path for getting a user's registration to a hackathon */
 export const getGetRegAnswersPath = hid => `${process.env.REACT_APP_API_ADDRESS}/u/hacks/reg/ans/search?hid=${hid}`;
+/** The path for removing a user's registration */
+export const getDeleteRegPath = hid => `${process.env.REACT_APP_API_ADDRESS}/u/hacks/search?hid=${hid}`;
 /** The path for getting the registration CSV */
 export const getGetRegCSVPath = hid => `${process.env.REACT_APP_API_ADDRESS}/a/hacks/reg/ans/csv/search?hid=${hid}`;

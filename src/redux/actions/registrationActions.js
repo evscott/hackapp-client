@@ -8,7 +8,8 @@ import {
   CREATE_REG_ANSWERS_PATH,
   UPDATE_REG_ANSWERS_PATH,
   getGetRegAnswersPath,
-  getGetRegCSVPath
+  getGetRegCSVPath,
+  getDeleteRegPath
 } from "../apiPaths";
 import { showError, showNotification } from "./notificationActions";
 import {
@@ -24,7 +25,7 @@ export const updateRegistrationInState = (hid, registration) => ({
 });
 
 /** Action for deregistering a user from a hackathon */
-export const deleteRegistration = hid => ({
+export const deleteRegistrationInState = hid => ({
   type: DELETE_REGISTRATION_FROM_STATE,
   hid
 });
@@ -69,7 +70,7 @@ export const updateRegistration = (hid, answers) => (dispatch, getState) => {
       }
     } else if (ans.oid !== null) {
       // Find the old one
-      const oldAns = oldAnswers[ans.qid][ans.oid];
+      const oldAns = (oldAnswers[ans.qid] || {})[ans.oid];
       if (oldAns === undefined) toCreate.push(ans);
       else toDelete.delete(oldAns.aid);
     }
@@ -146,11 +147,36 @@ export const getRegistration = hid => (dispatch, getState) => {
       return res.json();
     })
     .then(res => {
-      const reduxAnswers = convertAnswersFromServerToRedux(res);
-      dispatch(updateRegistrationInState(hid, reduxAnswers));
+      if (res.length > 0) {
+        const reduxAnswers = convertAnswersFromServerToRedux(res);
+        dispatch(updateRegistrationInState(hid, reduxAnswers));
+      }
     })
     .catch(err => {
       dispatch(showError(`Failed to get registration: ${err.message}`));
+    });
+};
+
+/**
+ * Deletes a user's registration for a hackathon from the server.
+ *
+ * @param hid {String} The hackathon for which to remove the registration.
+ */
+export const deleteRegistration = hid => (dispatch, getState) => {
+  const state = getState();
+  return fetch(getDeleteRegPath(hid), {
+    method: "DELETE",
+    headers: {
+      "ha-api-token": state.user.token,
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      dispatch(deleteRegistrationInState(hid));
+    })
+    .catch(err => {
+      dispatch(showError(`Failed to deregister: ${err.message}`));
     });
 };
 

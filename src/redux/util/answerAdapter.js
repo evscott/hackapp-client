@@ -7,10 +7,11 @@
  * @returns {Object} The answers formatted for the redux store
  */
 export const convertAnswersFromServerToRedux = answers => {
+  if (answers === undefined) return undefined;
   const reduxAns = {};
   answers.forEach(ans => {
-    if(reduxAns[ans.qid] === undefined) reduxAns[ans.qid] = {};
-    if(ans.oid) {
+    if (reduxAns[ans.qid] === undefined) reduxAns[ans.qid] = {};
+    if (ans.oid) {
       // For an answer that has an option id, add it here
       reduxAns[ans.qid][ans.oid] = ans;
     } else {
@@ -30,16 +31,16 @@ export const convertAnswersFromServerToRedux = answers => {
  * @returns {Array} The answers to show on the front end
  */
 export const convertAnswersFromReduxToUI = (answers, qidList) => {
-  if(answers === undefined || qidList === undefined) return undefined;
+  if (answers === undefined || qidList === undefined) return undefined;
   const uiAnswers = qidList.reduce((ans, qid) => {
-    ans[qid] = {qid, oid: [], answer: null};
+    ans[qid] = { qid, oid: [], answer: null };
     return ans;
   }, {});
   // Now, plug in the answers!
   qidList.forEach(qid => {
     // First, get all oids
-    const oids = Object.keys(answers[qid]);
-    if(oids.includes("answer")) {
+    const oids = Object.keys(answers[qid] || {});
+    if (oids.includes("answer")) {
       // Put the answer in
       uiAnswers[qid].answer = answers[qid].answer.answer;
       // Remove that oid
@@ -65,7 +66,7 @@ export const convertAnswersFromUIToServer = answers => {
   answers.forEach(ans => {
     if (ans.answer) {
       // It's easy when we have a text answer
-      serverAns.push({...ans, oid: null}); // Remove oids right away
+      serverAns.push({ ...ans, oid: null }); // Remove oids right away
     } else if (ans.oid) {
       // FOR CHECKBOXES AND RADIO BUTTONS:
       // We have to make answers for each option selected
