@@ -37,14 +37,15 @@ const useStyles = makeStyles(theme => {
  * optional cancel button.
  */
 export default function UserForm(props) {
+  const initialUser = props.initialUser || {};
   // The user's inputted first name
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState(initialUser.firstName || "");
   // The user's inputted last name
-  const [lastName, setLastName] = useState("");
+  const [lastName, setLastName] = useState(initialUser.lastName || "");
   // The user's inputted email address
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(initialUser.email || "");
   // The user's inputted password
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(initialUser.password || "");
 
   const classes = useStyles();
 
@@ -151,5 +152,7 @@ UserForm.propTypes = {
   // The function called on clicking an (optional) accessory button
   onAccessory: PropTypes.func,
   // The text on the accessory button
-  accessoryText: PropTypes.string
+  accessoryText: PropTypes.string,
+  // Optional value for presetting values for the user
+  initialUser: PropTypes.object
 };

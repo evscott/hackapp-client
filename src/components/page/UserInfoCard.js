@@ -60,7 +60,12 @@ export default function UserInfoCard(props) {
         </Typography>
       </CardContent>
       <CardActions className={classes.centered}>
-        <Button className={classes.button} size="small" color="primary">
+        <Button
+          className={classes.button}
+          size="small"
+          color="primary"
+          onClick={props.onSettings}
+        >
           <SettingsIcon className={classes.icon} />
           User Settings
         </Button>
@@ -75,7 +80,7 @@ export default function UserInfoCard(props) {
         </Button>
       </CardActions>
     </Card>
-  )
+  );
 }
 
 UserInfoCard.propTypes = {
@@ -84,5 +89,7 @@ UserInfoCard.propTypes = {
   // The details about the user (such as user type)
   details: PropTypes.string,
   // Function called when click sign out
-  onSignOut: PropTypes.func.isRequired
+  onSignOut: PropTypes.func.isRequired,
+  // Function called when click user settings
+  onSettings: PropTypes.func.isRequired
 };

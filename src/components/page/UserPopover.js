@@ -7,6 +7,7 @@ import { signOut } from "../../redux/actions/userActions";
 import UserInfoCard from "./UserInfoCard";
 import UserLoginCard from "./UserLoginCard";
 import SignInModal from "../signin_forms/SignInModal";
+import UserSettingsModal from "../signin_forms/UserSettingsModal";
 
 /**
  * Styles for the user popover.
@@ -32,9 +33,6 @@ function UserPopover(props) {
   const classes = useStyles();
   const open = Boolean(props.anchor);
 
-  // If logged in, set modal to be closed
-  if(props.loggedIn && modalOpen) setModalOpen(false);
-
   const openSignUp = () => {
     setModalOpen(true);
     setSignUpForm(true);
@@ -58,6 +56,7 @@ function UserPopover(props) {
             props.closePopover();
             props.signOut();
           }}
+          onSettings={() => setModalOpen(true)}
         />
       );
     }
@@ -77,8 +76,12 @@ function UserPopover(props) {
         horizontal: "right"
       }}
     >
+      <UserSettingsModal
+        open={modalOpen && props.loggedIn}
+        setOpen={setModalOpen}
+      />
       <SignInModal
-        open={modalOpen}
+        open={modalOpen && !props.loggedIn}
         setOpen={setModalOpen}
         signUpForm={signUpForm}
         setSignUpForm={setSignUpForm}
