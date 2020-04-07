@@ -26,6 +26,10 @@ const useStyles = makeStyles(theme => {
   };
 });
 
+/**
+ * Card that shows that no hackathons are available in the app.
+ * If the user is an admin, it shows a button to create a hackathon.
+ */
 export default function NoHackathonCard(props) {
   const classes = useStyles();
   return (
