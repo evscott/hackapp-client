@@ -11,7 +11,10 @@ function UserSettingsModal(props) {
     <MegaModal open={props.open} setOpen={props.setOpen}>
       <Typography variant="h2">User Settings</Typography>
       <UserForm
-        onComplete={user => props.updateUser(user)}
+        onComplete={user => {
+          props.updateUser(user);
+          props.setOpen(false);
+        }}
         onCompleteText="Update User"
         onCancel={() => props.setOpen(false)}
         initialUser={props.user}

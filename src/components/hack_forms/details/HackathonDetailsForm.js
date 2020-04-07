@@ -24,11 +24,12 @@ export default function HackathonDetailsForm(props) {
       title: "Add Text",
       getNewItem: () => ""
     },
-    {
-      icon: <ImageIcon />,
-      title: "Add Image",
-      getNewItem: () => ""
-    }
+    // Uncomment this to add image functionality
+    // {
+    //   icon: <ImageIcon />,
+    //   title: "Add Image",
+    //   getNewItem: () => ""
+    // }
   ];
 
   return (
