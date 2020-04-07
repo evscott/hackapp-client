@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SubjectIcon from "@material-ui/icons/Subject";
-import ImageIcon from "@material-ui/icons/Image";
+// import ImageIcon from "@material-ui/icons/Image";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import "./mde-override-styles.css";
 import MdEditor from "./MdEditor";
