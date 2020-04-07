@@ -29,7 +29,7 @@ const PREVIEW_PAGES = [PAGES.DETAILS, PAGES.REGISTRATION];
  */
 const REDIRECT = {
   NONE: "",
-  DASHBOARD: <Redirect to={DASHBOARD_ROUTE} />
+  DASHBOARD: <Redirect push to={DASHBOARD_ROUTE} />
 };
 
 /** The initial state for the hackathon overview. */

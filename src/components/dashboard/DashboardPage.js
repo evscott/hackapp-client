@@ -24,9 +24,9 @@ import NoHackathonCard from "./NoHackathonsCard";
 /** The routes that we might redirect to by clicking a button. */
 const REDIRECT = {
   NONE: "",
-  CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />,
-  VIEW: hackathon => <Redirect to={viewHackathonRouteFor(hackathon.hid)} />,
-  SETUP: <Redirect to={SETUP_ROUTE} />
+  CREATE: <Redirect push to={CREATE_HACKATHON_ROUTE} />,
+  VIEW: hackathon => <Redirect push to={viewHackathonRouteFor(hackathon.hid)} />,
+  SETUP: <Redirect push to={SETUP_ROUTE} />
 };
 
 /**

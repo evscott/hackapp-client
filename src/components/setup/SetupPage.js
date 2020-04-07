@@ -19,7 +19,7 @@ const SET_ORGANIZATION = 1;
 /** The index for the redirect to the dashboard. */
 const REDIRECT = {
   NONE: "",
-  DASHBOARD: <Redirect to={DASHBOARD_ROUTE} />
+  DASHBOARD: <Redirect push to={DASHBOARD_ROUTE} />
 };
 
 /**

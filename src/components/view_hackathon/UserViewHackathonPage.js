@@ -31,7 +31,7 @@ import { convertAnswersFromReduxToUI } from "../../redux/util/answerAdapter";
 /** Where to redirect to, if applicable */
 const REDIRECT = {
   NONE: "",
-  DASHBOARD: <Redirect to={DASHBOARD_ROUTE} />
+  DASHBOARD: <Redirect push to={DASHBOARD_ROUTE} />
 };
 
 /**
