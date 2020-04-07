@@ -1,9 +1,13 @@
-import { UPDATE_ORG_IN_STATE, FAILURE_GET_ORG } from "../actions/actionTypes";
+import {
+  UPDATE_ORG_IN_STATE,
+  FAILURE_GET_ORG,
+  GETTING_ORG
+} from "../actions/actionTypes";
 
 /** The initial state for this branch of the Redux store tree */
 const initialState = {
   loading: true,
-  name: "HackApp"
+  name: undefined
 };
 
 /**
@@ -14,11 +18,16 @@ const initialState = {
  * @param action {Object} The action with what to change in the store
  */
 export default function org(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case UPDATE_ORG_IN_STATE:
       return {
         loading: false,
         name: action.name
+      };
+    case GETTING_ORG:
+      return {
+        loading: true,
+        name: undefined
       };
     case FAILURE_GET_ORG:
       return {

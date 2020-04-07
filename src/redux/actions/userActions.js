@@ -97,6 +97,7 @@ export const updateUser = user => (dispatch, getState) => {
     .then(res => {
       console.log(res);
       dispatch(updateUserInState(user));
+      dispatch(showNotification("User updated. Woot woot!"));
     })
     .catch(err => {
       dispatch(showError(`Failed to update user: ${err.message}`));

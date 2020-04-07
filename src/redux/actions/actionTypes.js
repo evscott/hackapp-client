@@ -1,5 +1,7 @@
 /** Updates the organization name in the state */
 export const UPDATE_ORG_IN_STATE = "UPDATE_ORG_IN_STATE";
+/** Indicates we're currently getting/updating org */
+export const GETTING_ORG = "GETTING_ORG";
 /** Indicates failed to get the organization name */
 export const FAILURE_GET_ORG = "FAILURE_GET_ORG";
 

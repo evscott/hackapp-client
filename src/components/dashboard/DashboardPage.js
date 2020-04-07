@@ -7,7 +7,11 @@ import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import HackathonCard from "./HackathonCard";
-import { CREATE_HACKATHON_ROUTE, viewHackathonRouteFor } from "../../routes";
+import {
+  CREATE_HACKATHON_ROUTE,
+  viewHackathonRouteFor,
+  SETUP_ROUTE
+} from "../../routes";
 import { connect } from "react-redux";
 import {
   sortDraftHackathons,
@@ -15,12 +19,14 @@ import {
   sortPrevHackathons
 } from "../../redux/util/sortHackathons";
 import LoadingCard from "../reusable/LoadingCard";
+import NoHackathonCard from "./NoHackathonsCard";
 
 /** The routes that we might redirect to by clicking a button. */
 const REDIRECT = {
   NONE: "",
   CREATE: <Redirect to={CREATE_HACKATHON_ROUTE} />,
-  VIEW: hackathon => <Redirect to={viewHackathonRouteFor(hackathon.hid)} />
+  VIEW: hackathon => <Redirect to={viewHackathonRouteFor(hackathon.hid)} />,
+  SETUP: <Redirect to={SETUP_ROUTE} />
 };
 
 /**
@@ -56,21 +62,38 @@ const useStyles = makeStyles(theme => {
 function DashboardPage(props) {
   const classes = useStyles();
   const [redirect, setRedirect] = React.useState(REDIRECT.NONE);
+  if (redirect) return redirect;
+
+  // Also redirect if we're admin and no org
+  if (props.admin && !props.orgLoading && !props.org) return REDIRECT.SETUP;
 
   /**
    * Shows a list of hackathons.
    *
    * @param hackathonList A list of hackathons
    * @param listType The type of hackathons in the list (draft, upcoming, past)
+   * @param showOnEmpty If it should show a message when the hackathonList
+   * is empty
    * @returns {*} List of hackathon cards
    */
-  const showHackathons = (hackathonList, listType) => {
-    if (hackathonList.length > 0) {
+  const showHackathons = (hackathonList, listType, showOnEmpty = false) => {
+
+    const getHackathonCard = () => {
+      if(hackathonList.length === 0) return (
+        <NoHackathonCard
+          admin={props.admin}
+          createHackathon={() => setRedirect(REDIRECT.CREATE)}
+        />
+      );
+    };
+
+    if (hackathonList.length > 0 || showOnEmpty) {
       return (
         <React.Fragment>
           <Typography className={classes.subheader} variant="h4" component="h2">
             {listType} Hackathons
           </Typography>
+          {getHackathonCard()}
           {hackathonList.map(hackathon => (
             <HackathonCard
               overview={hackathon.overview}
@@ -107,11 +130,10 @@ function DashboardPage(props) {
    * a LoadingCard.
    */
   const getPageContents = () => {
-    if(redirect) return redirect;
-    if(props.loading) return <LoadingCard />;
+    if (props.loading) return <LoadingCard />;
     return (
       <React.Fragment>
-        {showHackathons(props.upcomingHackathons, "Upcoming")}
+        {showHackathons(props.upcomingHackathons, "Upcoming", true)}
         {props.admin ? showHackathons(props.draftHackathons, "Draft") : ""}
         {showHackathons(props.pastHackathons, "Past")}
         {getFab()}
@@ -120,7 +142,7 @@ function DashboardPage(props) {
   };
 
   return (
-    <Page title="HackApp">
+    <Page title={props.orgLoading ? "Loading..." : props.org || "HackApp"}>
       {getPageContents()}
     </Page>
   );
@@ -133,13 +155,17 @@ const mapStateToProps = state => {
   const pastHackathons = sortPrevHackathons(hackArr);
   const upcomingHackathons = sortNextHackathons(hackArr);
   const draftHackathons = sortDraftHackathons(hackArr);
+  const org = state.org.name;
+  const orgLoading = state.org.loading;
   const admin = state.user.loggedIn && state.user.user.admin;
   return {
     loading,
     pastHackathons,
     upcomingHackathons,
     draftHackathons,
-    admin
+    admin,
+    org,
+    orgLoading
   };
 };
 

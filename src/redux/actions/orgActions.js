@@ -1,4 +1,8 @@
-import { UPDATE_ORG_IN_STATE, FAILURE_GET_ORG } from "./actionTypes";
+import {
+  UPDATE_ORG_IN_STATE,
+  FAILURE_GET_ORG,
+  GETTING_ORG
+} from "./actionTypes";
 import { CREATE_ORG_PATH, GET_ORG_PATH } from "../apiPaths";
 import { showError } from "./notificationActions";
 import fetch from "../fetchWithTimeout";
@@ -8,6 +12,9 @@ const updateOrgInState = name => ({
   type: UPDATE_ORG_IN_STATE,
   name
 });
+
+/** Action for when we're in the process of getting org */
+const gettingOrg = () => ({ type: GETTING_ORG });
 
 /** Action for when fail to get an org (because not created) */
 const failGetOrg = () => ({ type: FAILURE_GET_ORG });
@@ -19,6 +26,7 @@ const failGetOrg = () => ({ type: FAILURE_GET_ORG });
  */
 export const createOrg = name => (dispatch, getState) => {
   const state = getState();
+  dispatch(gettingOrg());
   return fetch(CREATE_ORG_PATH, {
     method: "POST",
     headers: {
@@ -32,16 +40,17 @@ export const createOrg = name => (dispatch, getState) => {
       return res.json();
     })
     .then(res => {
-      console.log(res);
       dispatch(updateOrgInState(res.name));
     })
     .catch(err => {
+      dispatch(failGetOrg());
       dispatch(showError(`Failed to create organization: ${err.message}`));
     });
 };
 
 /** Action for getting the organization */
-export const getOrg = () => (dispatch) => {
+export const getOrg = () => dispatch => {
+  dispatch(gettingOrg());
   return fetch(GET_ORG_PATH, {
     method: "GET",
     headers: {
@@ -50,7 +59,7 @@ export const getOrg = () => (dispatch) => {
   })
     .then(res => {
       if (!res.ok) {
-        if(res.status === 404) dispatch(failGetOrg());
+        if (res.status === 404) dispatch(failGetOrg());
         throw new Error(res.statusText);
       }
       return res.json();
@@ -60,5 +69,5 @@ export const getOrg = () => (dispatch) => {
     })
     .catch(err => {
       dispatch(showError(`Failed to get organization: ${err.message}`));
-    })
+    });
 };

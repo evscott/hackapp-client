@@ -5,8 +5,12 @@ import Container from "@material-ui/core/Container";
 import { Redirect } from "react-router-dom";
 import SetupOrgForm from "./SetupOrgForm";
 import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { updateUser } from "../../redux/actions/userActions";
+import { createOrg } from "../../redux/actions/orgActions";
 import { DASHBOARD_ROUTE } from "../../routes";
 import UserForm from "../signin_forms/UserForm";
+import AlertSnackbar from "../reusable/Snackbar";
 
 /** The index for the register a new admin page. */
 const REGISTER_ADMIN_PAGE = 0;
@@ -57,7 +61,7 @@ const useStyles = makeStyles(theme => {
  * be seen upon first launching the application on the server; after
  * that, users can make modifications on their dashboard.
  */
-export default function SetupPage() {
+function SetupPage(props) {
   const classes = useStyles();
 
   // Sets the current page to the admin registration page.
@@ -69,9 +73,9 @@ export default function SetupPage() {
    * Validates the administrator's credentials, communicates with the
    * server, and moves to the next page
    */
-  const handleCreateAdmin = () => {
+  const handleCreateAdmin = user => {
     // @TODO: Validate the given credentials
-    // @TODO: Communicate with server and update state
+    props.updateUser(user);
     setCurrPage(SET_ORGANIZATION);
   };
 
@@ -79,9 +83,9 @@ export default function SetupPage() {
    * Validates the organization name, communicates with the server,
    * and pushes a new route
    */
-  const handleCreateOrg = () => {
+  const handleCreateOrg = name => {
     // @TODO: Validate org name
-    // @TODO: Communicate with database and update state
+    props.createOrg(name);
     setRedirect(REDIRECT.DASHBOARD);
   };
 
@@ -129,6 +133,9 @@ export default function SetupPage() {
           </Container>
         </Slide>
       </Container>
+      <AlertSnackbar/>
     </Container>
   );
 }
+
+export default connect(null, { updateUser, createOrg })(SetupPage);
