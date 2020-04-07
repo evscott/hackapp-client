@@ -28,12 +28,10 @@ export const UPDATE_USER_IN_STATE = "UPDATE_USER_IN_STATE";
 /** Action type for removing user info from the app */
 export const REMOVE_USER_FROM_STATE = "REMOVE_USER_FROM_STATE";
 
-/** Action type for registering a user for a hackthon */
-export const ADD_REGISTRATION = "ADD_REGISTRATION";
-/** Action type for updating a user's registration for a hackthon */
-export const UPDATE_REGISTRATION = "UPDATE_REGISTRATION";
-/** Action type for removing a user's registration for a hackthon */
-export const DELETE_REGISTRATION = "DELETE_REGISTRATION";
+/** Action type for adding a user's registration info to the state */
+export const UPDATE_REGISTRATION_IN_STATE = "UPDATE_REGISTRATION_IN_STATE";
+/** Action type for removing a user's registration for a hackathon */
+export const DELETE_REGISTRATION_FROM_STATE = "DELETE_REGISTRATION_FROM_STATE";
 
 /** Action type for an error */
 export const ERROR = "ERROR";

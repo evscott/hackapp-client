@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import {
+  getRegistration,
   addRegistration,
   updateRegistration,
   deleteRegistration
 } from "../../redux/actions/registrationActions";
+import { QUESTION_TYPE } from "../hack_forms/questions/QuestionType";
 import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
 import { getHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
 import Typography from "@material-ui/core/Typography";
@@ -24,6 +26,7 @@ import LoadingCard from "../reusable/LoadingCard";
 import UserRegFab from "./UserRegFab";
 import { convertDetailsFromReduxToUI } from "../../redux/util/detailsAdapter";
 import { convertQuestionsFromReduxToUI } from "../../redux/util/questionsAdapter";
+import { convertAnswersFromReduxToUI } from "../../redux/util/answerAdapter";
 
 /** Where to redirect to, if applicable */
 const REDIRECT = {
@@ -39,9 +42,15 @@ const REDIRECT = {
 function UserViewHackathonPage(props) {
   // Load in the data on mount
   useEffect(() => {
-    if(!props.details) props.getHackathonDetails(props.hid);
-    if(!props.questions) props.getHackathonQuestions(props.hid);
-  }, [props]); // Reload if there are changes to the props
+    if (!props.details) props.getHackathonDetails(props.hid);
+    if (!props.questions) props.getHackathonQuestions(props.hid);
+    if (!props.oldRegistration) props.getRegistration(props.hid);
+  }, [props.overview]); // Reload if overview changes
+
+  useEffect(() => {
+    if (!props.oldRegistration && props.loggedIn)
+      props.getRegistration(props.hid);
+  }, [props.overview, props.loggedIn]); // Only reload overview or log in
 
   // Redirect when certain buttons are pressed
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
@@ -51,9 +60,36 @@ function UserViewHackathonPage(props) {
   const [signUp, setSignUp] = useState(false);
   // Hold answers to the registration questions
   // Initializes to an array of empty arrays
-  const [answers, setAnswers] = useState(
-    Array.from(props.questions || [], () => [])
-  );
+  const [answers, setAnswers] = useState([]);
+
+  useEffect(() => {
+    if (props.questions) {
+      if (props.registered) {
+        setAnswers(props.oldRegistration);
+      } else {
+        // Get a clean slate of options
+        const newAnswers = props.questions.map(question => {
+          // Depending on the question type, we have different props for an ans
+          if (question.type === QUESTION_TYPE.TXT) {
+            return {
+              qid: question.qid,
+              answer: ""
+            };
+          } else {
+            return {
+              qid: question.qid,
+              oid: []
+            };
+          }
+        });
+        setAnswers(newAnswers);
+      }
+    }
+  }, [props.questions]);
+
+  useEffect(() => {
+    if (props.registered) setAnswers(props.oldRegistration);
+  }, [props.registered]);
 
   // Auto-redirect if don't have permission to view
   const draft = (props.overview || {}).draft;
@@ -86,12 +122,6 @@ function UserViewHackathonPage(props) {
    * could get messy if things are loaded in too late).
    */
   const openModal = () => {
-    // Reset the answers
-    setAnswers(Array.from(props.questions || [], () => []));
-    // But if already registered, use the old registration
-    if (props.registered) {
-      setAnswers(props.oldRegistration);
-    }
     setModalOpen(true);
   };
 
@@ -197,18 +227,24 @@ UserViewHackathonPage.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const hackathon = state.hackathons.byHID[ownProps.hid] || {};
+  const questions = convertQuestionsFromReduxToUI(hackathon.questions);
+  const qidList = (questions || []).map(q => q.qid);
   return {
     overview: hackathon.overview,
     details: convertDetailsFromReduxToUI(hackathon.details),
-    questions: convertQuestionsFromReduxToUI(hackathon.questions),
+    questions,
     registered: state.registrations.byHID[ownProps.hid] !== undefined,
-    oldRegistration: state.registrations.byHID[ownProps.hid],
+    oldRegistration: convertAnswersFromReduxToUI(
+      state.registrations.byHID[ownProps.hid],
+      qidList
+    ),
     loggedIn: state.user.loggedIn
   };
 };
 
 export default connect(mapStateToProps, {
   addRegistration,
+  getRegistration,
   updateRegistration,
   deleteRegistration,
   getHackathonDetails,

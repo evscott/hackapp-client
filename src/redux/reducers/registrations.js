@@ -1,7 +1,6 @@
 import {
-  ADD_REGISTRATION,
-  DELETE_REGISTRATION,
-  UPDATE_REGISTRATION
+  UPDATE_REGISTRATION_IN_STATE,
+  DELETE_REGISTRATION_FROM_STATE
 } from "../actions/actionTypes";
 
 /**
@@ -21,21 +20,14 @@ const initialState = {
  */
 export default function registrations(state = initialState, action) {
   switch (action.type) {
-    case ADD_REGISTRATION:
+    case UPDATE_REGISTRATION_IN_STATE:
       return {
         byHID: {
           ...state.byHID,
           [action.hid]: action.registration
         }
       };
-    case UPDATE_REGISTRATION:
-      return {
-        byHID: {
-          ...state.byHID,
-          [action.hid]: action.registration
-        }
-      };
-    case DELETE_REGISTRATION:
+    case DELETE_REGISTRATION_FROM_STATE:
       const byHID = state.byHID;
       delete byHID[action.hid];
       return { byHID };

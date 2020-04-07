@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -58,7 +58,11 @@ export default function RegQuestionEditor(props) {
   // instead; this state is thrown away and just used when a user
   // wants to demo the question. We might want to reuse this component
   // later and allow the options to be saved with the prop.
-  const [answers, setAnswers] = React.useState([]);
+  const [answers, setAnswers] = React.useState({
+    qid: props.question.qid,
+    answer: "",
+    oid: []
+  });
 
   /** Updates a question's property with some new value. */
   const updateQuestion = (property, value) => {

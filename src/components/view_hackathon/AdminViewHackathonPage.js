@@ -6,6 +6,7 @@ import { updateAllHackathonDetails } from "../../redux/actions/hackDetailsAction
 import { updateAllHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
 import { getHackathonDetails } from "../../redux/actions/hackDetailsActions";
 import { getHackathonQuestions } from "../../redux/actions/hackQuestionsActions";
+import { getCSV } from "../../redux/actions/registrationActions";
 import { deleteHackathon, publishHackathon } from "../../redux/actions/hackathonActions";
 import { convertDetailsFromReduxToUI } from "../../redux/util/detailsAdapter";
 import {
@@ -106,7 +107,7 @@ function AdminViewHackathonPage(props) {
       icon: <CloudDownloadIcon />,
       text: "Download Registration CSV",
       onClick: () => {
-        console.log("Not implemented");
+        props.getCSV(props.hid);
       }
     },
     {
@@ -240,5 +241,6 @@ export default connect(mapStateToProps, {
   updateAllHackathonDetails,
   updateAllHackathonQuestions,
   getHackathonQuestions,
-  publishHackathon
+  publishHackathon,
+  getCSV
 })(AdminViewHackathonPage);

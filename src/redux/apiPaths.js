@@ -36,3 +36,13 @@ export const UPDATE_HACK_QUESTIONS_PATH = `${process.env.REACT_APP_API_ADDRESS}/
 
 /** The path for publishing a hackathon */
 export const PUBLISH_HACK_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/hacks/pub/`;
+
+
+/** The path for registering a user to a hackathon */
+export const CREATE_REG_ANSWERS_PATH = `${process.env.REACT_APP_API_ADDRESS}/u/hacks/reg/ans/`;
+/** The path for updating a user's registration to a hackathon */
+export const UPDATE_REG_ANSWERS_PATH = `${process.env.REACT_APP_API_ADDRESS}/u/hacks/reg/ans/`;
+/** The path for getting a user's registration to a hackathon */
+export const getGetRegAnswersPath = hid => `${process.env.REACT_APP_API_ADDRESS}/u/hacks/reg/ans/search?hid=${hid}`;
+/** The path for getting the registration CSV */
+export const getGetRegCSVPath = hid => `${process.env.REACT_APP_API_ADDRESS}/a/hacks/reg/ans/csv/search?hid=${hid}`;

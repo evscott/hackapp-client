@@ -38,25 +38,31 @@ export default function RegQuestionViewer(props) {
   const createCKOptions = () => {
     return (
       <FormGroup>
-        {props.question.options.map((item, idx) => (
+        {props.question.options.map(item => (
           <FormControlLabel
             control={
               <Checkbox
-                checked={props.answers.includes(item.option)}
+                checked={props.answers.oid.includes(item.oid)}
                 onChange={event => {
-                  if (props.answers.includes(event.target.checked)) {
-                    props.setAnswers(
-                      props.answers.filter(ans => ans !== event.target.value)
-                    );
+                  if (props.answers.oid.includes(event.target.value)) {
+                    props.setAnswers({
+                      ...props.answers,
+                      oid: props.answers.oid.filter(
+                        oid => oid !== event.target.value
+                      )
+                    });
                   } else {
-                    props.setAnswers([...props.answers, event.target.value]);
+                    props.setAnswers({
+                      ...props.answers,
+                      oid: [...props.answers.oid, event.target.value]
+                    });
                   }
                 }}
-                value={item.option}
+                value={item.oid}
               />
             }
             label={item.option}
-            key={idx}
+            key={item.oid}
           />
         ))}
       </FormGroup>
@@ -68,15 +74,17 @@ export default function RegQuestionViewer(props) {
     return (
       <RadioGroup
         name={`Options for ${props.question.question}`}
-        value={props.answers[0]}
-        onChange={event => props.setAnswers([event.target.value])}
+        value={props.answers.oid[0]}
+        onChange={event =>
+          props.setAnswers({ ...props.answers, oid: [event.target.value] })
+        }
       >
-        {props.question.options.map((item, idx) => (
+        {props.question.options.map(item => (
           <FormControlLabel
             control={<Radio />}
             label={item.option}
-            key={idx}
-            value={item.option}
+            key={item.oid}
+            value={item.oid}
           />
         ))}
       </RadioGroup>
@@ -92,8 +100,11 @@ export default function RegQuestionViewer(props) {
         rows="3"
         label="Answer"
         required={props.question.required}
-        value={props.answers[0]}
-        onChange={event => props.setAnswers([event.target.value])}
+        value={props.answers.answer}
+        onChange={event =>
+          // Update the answer
+          props.setAnswers({ ...props.answers, answer: event.target.value })
+        }
       />
     );
   };
@@ -136,7 +147,7 @@ RegQuestionViewer.propTypes = {
     type: PropTypes.string.isRequired
   }).isRequired,
   // The answers the user has selected for the question
-  answers: PropTypes.array.isRequired,
+  answers: PropTypes.object.isRequired,
   // A setter for the answers a user has selected for the question
   setAnswers: PropTypes.func.isRequired
 };
