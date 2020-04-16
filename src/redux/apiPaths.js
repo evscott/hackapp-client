@@ -2,6 +2,8 @@
 export const AUTH_PATH = `${process.env.REACT_APP_API_ADDRESS}/auth/`;
 /** The path for updating a user */
 export const UPDATE_USER_PATH = `${process.env.REACT_APP_API_ADDRESS}/u/users`;
+/** The path for getting a user's info */
+export const GET_USER_PATH = `${process.env.REACT_APP_API_ADDRESS}/u/users`;
 
 /** The path for creating an organization */
 export const CREATE_ORG_PATH = `${process.env.REACT_APP_API_ADDRESS}/a/org/`;
