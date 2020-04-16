@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/evscott/hackapp-client/issues"
   },
-  "homepage": "https://github.com/evscott/hackapp-client#readme",
+  "homepage": "https://mta-hacks.web.app/",
   "eslintConfig": {
     "extends": "react-app"
   },
