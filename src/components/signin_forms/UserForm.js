@@ -127,6 +127,13 @@ export default function UserForm(props) {
         label="Password"
         margin="normal"
         value={password}
+        onKeyPress={e => {
+          // If press enter, submit the form
+          if(e.charCode === 13) {
+            e.preventDefault();
+            onComplete();
+          }
+        }}
         onChange={e => setPassword(e.target.value)}
       />
       <RightButtonBar>
