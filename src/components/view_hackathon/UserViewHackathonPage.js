@@ -40,18 +40,34 @@ const REDIRECT = {
  * hackathon.
  */
 function UserViewHackathonPage(props) {
-  // Load in the data on mount
-  useEffect(() => {
-    if (!props.details) props.getHackathonDetails(props.hid);
-    if (!props.questions) props.getHackathonQuestions(props.hid);
-    if (!props.oldRegistration && props.loggedIn)
-      props.getRegistration(props.hid);
-  }, [props.overview]); // Reload if overview changes
+  // Destructure props to use React.useEffect without warnings.
+  const {
+    getHackathonDetails,
+    getHackathonQuestions,
+    getRegistration,
+    details,
+    registered,
+    questions,
+    oldRegistration,
+    loggedIn,
+    hid,
+    overview
+  } = props;
 
+  // Load in the details after the overview is loaded
   useEffect(() => {
-    if (!props.oldRegistration && props.loggedIn)
-      props.getRegistration(props.hid);
-  }, [props.overview, props.loggedIn]); // Only reload overview or log in
+    if (!details && overview) getHackathonDetails(hid);
+  }, [details, getHackathonDetails, hid, overview]);
+
+  // Load in the questions after the overview is loaded, too
+  useEffect(() => {
+    if (!questions && overview) getHackathonQuestions(hid);
+  }, [questions, getHackathonQuestions, hid, overview]);
+
+  // Finally, load in the registration sometime
+  useEffect(() => {
+    if (!oldRegistration && loggedIn) getRegistration(hid);
+  }, [oldRegistration, loggedIn, getRegistration, hid]);
 
   // Redirect when certain buttons are pressed
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
@@ -63,13 +79,14 @@ function UserViewHackathonPage(props) {
   // Initializes to an array of empty arrays
   const [answers, setAnswers] = useState([]);
 
+  // Load in the answers to questions if we registered previously
   useEffect(() => {
-    if (props.questions) {
-      if (props.registered) {
-        setAnswers(props.oldRegistration);
+    if (questions) {
+      if (registered) {
+        setAnswers(oldRegistration);
       } else {
         // Get a clean slate of options
-        const newAnswers = props.questions.map(question => {
+        const newAnswers = questions.map(question => {
           // Depending on the question type, we have different props for an ans
           if (question.type === QUESTION_TYPE.TXT) {
             return {
@@ -86,11 +103,7 @@ function UserViewHackathonPage(props) {
         setAnswers(newAnswers);
       }
     }
-  }, [props.questions]);
-
-  useEffect(() => {
-    if (props.registered) setAnswers(props.oldRegistration);
-  }, [props.registered]);
+  }, [questions, oldRegistration, registered]);
 
   // Auto-redirect if don't have permission to view
   const draft = (props.overview || {}).draft;
@@ -184,7 +197,7 @@ function UserViewHackathonPage(props) {
   };
 
   /** Gets the details for the hackathon, if loaded */
-  const getHackathonDetails = () => {
+  const getHackathonDetailCards = () => {
     if (props.details) {
       return (
         <ReorderableCardForm
@@ -210,7 +223,7 @@ function UserViewHackathonPage(props) {
     >
       {getRegistrationModal()}
       {getHackathonCard()}
-      {getHackathonDetails()}
+      {getHackathonDetailCards()}
       <UserRegFab
         openModal={openModal}
         loading={props.questions === undefined}
