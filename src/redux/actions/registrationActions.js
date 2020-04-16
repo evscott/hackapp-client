@@ -56,7 +56,7 @@ export const updateRegistration = (hid, answers) => (dispatch, getState) => {
     // Check if it's a create, update, or neither
     if (ans.answer !== null) {
       // Find the old one
-      const oldAns = oldAnswers[ans.qid].answer;
+      const oldAns = (oldAnswers[ans.qid] || {}).answer;
       if (oldAns === undefined) {
         // Then, create!
         toCreate.push(ans);
@@ -173,6 +173,7 @@ export const deleteRegistration = hid => (dispatch, getState) => {
   })
     .then(res => {
       if (!res.ok) throw new Error(res.statusText);
+      dispatch(showNotification("Registration cancelled."));
       dispatch(deleteRegistrationInState(hid));
     })
     .catch(err => {
