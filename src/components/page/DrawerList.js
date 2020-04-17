@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => {
     spacer: theme.mixins.toolbar,
     header: {
       height: 200,
-      backgroundColor: theme.palette.primary.light,
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
       color: "white",
       display: "flex",
       flexDirection: "column",
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => {
       padding: 20
     },
     highlighted: {
-      backgroundColor: theme.palette.grey[200]
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.background.default : theme.palette.grey[200]
     },
     highlightedText: {
       fontWeight: 700

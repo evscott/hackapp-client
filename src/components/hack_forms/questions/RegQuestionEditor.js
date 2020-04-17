@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => {
       padding: theme.spacing(2),
       paddingLeft: 26,
       position: "relative",
-      backgroundColor: theme.palette.grey[100]
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.grey[900] : theme.palette.grey[100]
     },
     content: {
       padding: theme.spacing(4)
@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => {
     },
     options: {
       padding: theme.spacing(2),
-      backgroundColor: theme.palette.grey[50]
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.grey[900] : theme.palette.grey[50]
     }
   };
 });

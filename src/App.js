@@ -18,16 +18,18 @@ import {
 } from "./routes";
 import ViewHackathonPage from "./components/view_hackathon/ViewHackathonPage";
 import Startup from "./components/Startup";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 /**
  * The application. Has a theme and routes.
  * @returns {*} The application (JSX)
  */
 function App() {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   return (
     <Startup>
       <Router>
-        <MuiThemeProvider theme={theme}>
+        <MuiThemeProvider theme={theme(prefersDarkMode)}>
           <MuiPickersUtilsProvider utils={DayJsUtils}>
             <CssBaseline />
             <Switch>

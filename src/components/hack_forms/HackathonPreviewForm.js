@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => {
       position: "static",
       marginTop: 20,
       borderRadius: 4,
-      backgroundColor: theme.palette.grey[100],
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.grey[900] : theme.palette.grey[100],
       [theme.breakpoints.up("md")]: {
         left: largeDrawerWidth + theme.spacing(3)
       }

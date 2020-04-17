@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => {
     },
     options: {
       padding: 25,
-      backgroundColor: theme.palette.grey[50]
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.grey[900] : theme.palette.grey[50]
     },
     desc: {
       marginTop: 10

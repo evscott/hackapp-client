@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme => {
     },
     secondaryDetails: {
       textAlign: "center",
-      backgroundColor: theme.palette.grey[100]
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.grey[900] : theme.palette.grey[100],
     }
   };
 });
