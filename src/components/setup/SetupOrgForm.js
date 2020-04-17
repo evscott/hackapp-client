@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import RightButtonBar from "../reusable/RightButtonBar";
@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => {
  */
 export default function SetupOrgForm(props) {
   const classes = useStyles();
+  const [name, setName] = useState("HackApp");
 
   return (
     <form className={classes.form} noValidate>
@@ -37,12 +38,14 @@ export default function SetupOrgForm(props) {
         label={"Organization Name"}
         name={"org-name"}
         margin={"normal"}
+        value={name}
+        onChange={e => setName(e.target.value)}
       />
       <RightButtonBar>
         <Button
           variant="contained"
           color="primary"
-          onClick={props.handleCreateOrg}
+          onClick={() => props.handleCreateOrg(name)}
         >
           Create Organization
         </Button>

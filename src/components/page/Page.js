@@ -7,6 +7,7 @@ import Drawer from "./Drawer";
 import { largeDrawerWidth } from "./Drawer";
 import PropTypes from "prop-types";
 import DrawerList from "./DrawerList";
+import AlertSnackbar from "../reusable/Snackbar";
 
 /**
  * The styles for a page in the UI.
@@ -27,6 +28,11 @@ const useStyles = makeStyles(theme => {
         marginLeft: `calc(${largeDrawerWidth}px + ((50% - ${0.5 *
           largeDrawerWidth}px) - 325px))`
       }
+    },
+    contentNoDrawer: {
+      marginTop: 75,
+      maxWidth: 650,
+      marginBottom: 100
     },
     title: {
       paddingTop: 50
@@ -53,33 +59,43 @@ export default function Page(props) {
     setDrawerOpen(!drawerOpen);
   };
 
+  /** Gets the drawer, if we need one for the page (based on props). */
+  const getDrawer = () => {
+    if (props.drawerPrimary) {
+      return (
+        <Drawer isOpen={drawerOpen} setIsOpen={toggleDrawer}>
+          <DrawerList
+            header={props.drawerHeader}
+            primaryButtons={props.drawerPrimary}
+            secondaryButtons={props.drawerSecondary}
+          />
+        </Drawer>
+      );
+    }
+  };
+
   return (
     <div>
       <Container className={classes.appBarContainer}>
-        <AppBar title={props.title} onClickMenu={toggleDrawer} />
+        <AppBar title={props.title} onClickMenu={toggleDrawer} noMenu={props.drawerPrimary === undefined} />
       </Container>
-      <Drawer
-        className={classes.drawer}
-        isOpen={drawerOpen}
-        setIsOpen={toggleDrawer}
+      {getDrawer()}
+      <Container
+        className={
+          props.drawerPrimary ? classes.content : classes.contentNoDrawer
+        }
       >
-        <DrawerList
-          header={props.drawerHeader}
-          primaryButtons={props.drawerPrimary}
-          secondaryButtons={props.drawerSecondary}
-        />
-      </Drawer>
-      <Container className={classes.content}>
         <Typography variant="h2" component="h1" className={classes.title}>
           {props.title}
         </Typography>
         {props.children}
       </Container>
+      <AlertSnackbar/>
     </div>
   );
 }
 
-Drawer.propTypes = {
+Page.propTypes = {
   // A page must have some content
   children: PropTypes.any.isRequired,
   // The header components in the drawer
@@ -90,5 +106,5 @@ Drawer.propTypes = {
   // A list of all the secondary (less important) buttons.
   drawerSecondary: PropTypes.array,
   // The title of the page.
-  title: PropTypes.string
+  title: PropTypes.string.isRequired
 };

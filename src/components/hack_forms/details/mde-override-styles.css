@@ -38,6 +38,9 @@
   transition: all 0.2s;
 }
 
+/*
+ Makes the buttons for text formatting respond on hover.
+ */
 .mde-header ul.mde-header-group li.mde-header-item button.mde-mui-button:hover {
   opacity: 0.5;
 }
@@ -48,6 +51,13 @@
  */
 .mde-preview .mde-preview-content {
   padding: 30px;
+}
+
+/*
+ Adds a border to the popup selector for the font style.
+ */
+.mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown {
+  border-radius: 5px;
 }
 
 /*
@@ -64,4 +74,37 @@
 .mde-textarea-wrapper textarea.mde-text {
   font-size: 16px;
   padding: 25px;
+}
+
+/*
+ When we have dark mode, change the colours!
+ */
+@media (prefers-color-scheme: dark) {
+  .mde-header {
+    background-color: #212121;
+    border-bottom: 1px solid #000;
+  }
+
+  .mde-header ul.mde-header-group li.mde-header-item button {
+    color: #dddddd;
+  }
+
+  .mde-textarea-wrapper textarea.mde-text {
+    background-color: #424242;
+    color: #ffffff;
+  }
+
+  .react-mde .grip {
+    background-color: #212121;
+    border-top: 1px solid #000;
+  }
+
+  .mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown {
+    background-color: #212121;
+    border: 1px solid #555555;
+  }
+
+  .mde-header ul.mde-header-group li.mde-header-item ul.react-mde-dropdown::after {
+    border-bottom-color: #555555;
+  }
 }

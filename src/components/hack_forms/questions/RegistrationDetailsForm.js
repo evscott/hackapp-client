@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import SubjectIcon from "@material-ui/icons/Subject";
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import RegQuestionEditor from "./questions/RegQuestionEditor";
-import { QUESTION_TYPE } from "./questions/QuestionType";
-import ReorderableCardForm from "../reusable/ReorderableCardForm";
+import RegQuestionEditor from "./RegQuestionEditor";
+import { QUESTION_TYPE } from "./QuestionType";
+import ReorderableCardForm from "../../reusable/ReorderableCardForm";
 
 /**
  * The form that asks the user to select the registration questions
  * that will be given to the user.
  */
 export default function RegistrationDetailsForm(props) {
-  // When in view mode, we'll get to preview and not edit anything
-  const [viewMode, setViewMode] = useState(false);
-
   /**
    * All available options for creating new items on the form.
    * These are available through a popup menu on the right called
@@ -61,8 +58,6 @@ export default function RegistrationDetailsForm(props) {
     <ReorderableCardForm
       array={props.questions}
       setArray={props.setQuestions}
-      prvPage={props.prvPage}
-      nextPage={props.nextPage}
       getCardContents={index => (
         <RegQuestionEditor
           question={props.questions[index]}
@@ -71,13 +66,11 @@ export default function RegistrationDetailsForm(props) {
             newQuestions[index] = newQuestion;
             props.setQuestions(newQuestions);
           }}
-          viewMode={viewMode}
+          viewMode={props.viewMode}
         />
       )}
       speedDialItems={speedDialItems}
-      speedDialHidden={viewMode}
-      viewMode={viewMode}
-      setViewMode={setViewMode}
+      viewMode={props.viewMode}
     />
   );
 }
@@ -89,15 +82,13 @@ RegistrationDetailsForm.propTypes = {
     PropTypes.shape({
       question: PropTypes.string.isRequired,
       desc: PropTypes.string.isRequired,
-      options: PropTypes.arrayOf(PropTypes.string).isRequired,
+      options: PropTypes.array.isRequired,
       required: PropTypes.bool.isRequired,
       type: PropTypes.string.isRequired
     })
   ).isRequired,
   // The function to update the questions
   setQuestions: PropTypes.func.isRequired,
-  // The function for going to the previous page
-  prvPage: PropTypes.func.isRequired,
-  // The function for going to the next page
-  nextPage: PropTypes.func.isRequired
+  // Whether the form is in view-only mode or not
+  viewMode: PropTypes.bool
 };

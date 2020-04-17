@@ -45,9 +45,12 @@ export default function RegQuestionOptionEditor(props) {
   const handleEdit = (event, index) => {
     const newOptions = [...props.options];
     if (index === props.options.length) {
-      newOptions.push(event.target.value);
+      newOptions.push({ option: event.target.value });
     } else {
-      newOptions[index] = event.target.value;
+      newOptions[index] = {
+        ...props.options[index],
+        option: event.target.value
+      };
     }
     props.setRegOptions(newOptions);
   };
@@ -62,7 +65,7 @@ export default function RegQuestionOptionEditor(props) {
     const newOptions = [...props.options];
     if (index === props.options.length) {
       // Add new option
-      newOptions.push("");
+      newOptions.push({ option: "" });
     } else {
       // Delete the option
       newOptions.splice(index, 1);
@@ -75,10 +78,9 @@ export default function RegQuestionOptionEditor(props) {
     return (
       <TextField
         className={classes.textField}
-        id={`option-${index + 1}`}
         name={`option-${index + 1}`}
         label={`Option ${index + 1}`}
-        value={index < props.options.length ? props.options[index] : ""}
+        value={index < props.options.length ? props.options[index].option : ""}
         onChange={event => handleEdit(event, index)}
       />
     );
@@ -99,6 +101,8 @@ export default function RegQuestionOptionEditor(props) {
    * one is there for creating new ones.
    */
   const createCKOptions = () => {
+    // Displays all options, plus one extra (the empty string) which is for
+    // adding additional options in the editor
     return (
       <FormGroup>
         {[...props.options, ""].map((option, idx) => (
@@ -119,6 +123,8 @@ export default function RegQuestionOptionEditor(props) {
    * There is one extra option visible, which is for adding more options.
    */
   const createRDOptions = () => {
+    // Displays all options, plus one extra (the empty string) which is for
+    // adding additional options in the editor
     return (
       <RadioGroup>
         {[...props.options, ""].map((option, idx) => (
@@ -149,7 +155,7 @@ RegQuestionOptionEditor.propTypes = {
   // The type of the question (radio button, checkbox, text)
   type: PropTypes.string.isRequired,
   // The options for the question
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  options: PropTypes.array.isRequired,
   // A setter for the options of the question
   setRegOptions: PropTypes.func.isRequired
 };

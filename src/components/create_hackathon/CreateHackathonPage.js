@@ -1,35 +1,27 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  createHackathon,
+  createPublishedHackathon
+} from "../../redux/actions/hackathonActions";
 import Page from "../page/Page";
 import Typography from "@material-ui/core/Typography";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import SaveIcon from "@material-ui/icons/Save";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import DeleteIcon from "@material-ui/icons/Delete";
-import HackathonOverviewForm from "../hack_forms/HackathonOverviewForm";
-import HackathonDetailsForm from "../hack_forms/HackathonDetailsForm";
+import OverviewEditor from "../hack_forms/overview/OverviewEditor";
+import HackathonDetailsForm from "../hack_forms/details/HackathonDetailsForm";
 import { DASHBOARD_ROUTE } from "../../routes";
-import RegistrationDetailsForm from "../hack_forms/RegistrationDetailsForm";
+import RegistrationDetailsForm from "../hack_forms/questions/RegistrationDetailsForm";
 import { QUESTION_TYPE } from "../hack_forms/questions/QuestionType";
+import { PAGES, PAGE_TITLES, PAGES_LIST } from "./CreateHackathonSubpages";
+import HackathonPreviewForm from "../hack_forms/HackathonPreviewForm";
+import FabNav from "../reusable/FabNav";
 
-/** The distinct pages for creating hackathons, in order. */
-const PAGES = {
-  OVERVIEW: 1,
-  DETAILS: 2,
-  REGISTRATION: 3,
-  PREVIEW: 4
-};
-
-/**
- * The titles for each page. Can be indexed using PAGE_TITLES[page],
- * where page is an integer.
- */
-const PAGE_TITLES = {
-  [PAGES.OVERVIEW]: "Overview",
-  [PAGES.DETAILS]: "Details",
-  [PAGES.REGISTRATION]: "Registration",
-  [PAGES.PREVIEW]: "Preview"
-};
+/** The pages which have preview functionality **/
+const PREVIEW_PAGES = [PAGES.DETAILS, PAGES.REGISTRATION];
 
 /**
  * The possible redirects from this page for React Router.
@@ -37,7 +29,7 @@ const PAGE_TITLES = {
  */
 const REDIRECT = {
   NONE: "",
-  DASHBOARD: <Redirect to={DASHBOARD_ROUTE} />
+  DASHBOARD: <Redirect push to={DASHBOARD_ROUTE} />
 };
 
 /** The initial state for the hackathon overview. */
@@ -46,7 +38,7 @@ const overviewState = {
   startDate: new Date(),
   endDate: new Date(),
   location: "",
-  maxRegistrants: 100,
+  maxReg: 100,
   regDeadline: new Date()
 };
 
@@ -54,7 +46,7 @@ const overviewState = {
  * The initial state for the hackathon details page.
  * It's a list of markdown strings.
  */
-const detailsState = ["# What the Hack?"];
+const detailsState = [{ detail: "# What the Hack?" }];
 
 /** The initial set of questions for registration. */
 const questionsState = [
@@ -71,17 +63,31 @@ const questionsState = [
  * The page for creating a hackathon. It has forms for editing the
  * hackathon overview, details, and registration questions.
  */
-export default function CreateHackathonPage() {
+function CreateHackathonPage(props) {
   // The overview data for the hackathon
   const [overview, setOverview] = useState(overviewState);
   // The details data for the hackathon (array of markdown)
   const [details, setDetails] = useState(detailsState);
   // The questions for registration
   const [questions, setQuestions] = useState(questionsState);
+  // Whether we are in preview mode or not
+  const [viewMode, setViewMode] = useState(false);
   // The page we are currently looking at
   const [page, setPage] = useState(PAGES.OVERVIEW);
   // When we redirect, we set the state here
   const [redirect, setRedirect] = useState(REDIRECT.NONE);
+
+  /**
+   * Save the hackathon (update it if we were passed a
+   * hackathon as a parameter, or add it otherwise)
+   *
+   * @param draft Whether to mark the hackathon as a draft.
+   */
+  const saveHackathon = draft => {
+    const hackathon = { overview, details, questions };
+    if(draft) props.createHackathon(hackathon);
+    else props.createPublishedHackathon(hackathon);
+  };
 
   /**
    * The primary buttons in the left drawer. These have links
@@ -90,9 +96,7 @@ export default function CreateHackathonPage() {
    * and an onClick function to call. This is passed as input
    * to the Page, which styles it according to its template.
    */
-  const drawerPrimary = Object.entries(PAGES).map(k => {
-    // Get the page from the 2-tuple output
-    const pg = k[1];
+  const drawerPrimary = PAGES_LIST.map(pg => {
     return {
       icon: page > pg ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />,
       text: PAGE_TITLES[pg],
@@ -107,16 +111,16 @@ export default function CreateHackathonPage() {
    */
   const drawerSecondary = [
     {
-      icon: <SaveIcon />,
-      text: "Save and Exit",
+      icon: <ArrowBackIcon />,
+      text: "Return to Dashboard",
       onClick: () => {
-        // @TODO: Actually save
+        saveHackathon(true);
         setRedirect(REDIRECT.DASHBOARD);
       }
     },
     {
       icon: <DeleteIcon />,
-      text: "Discard and Exit",
+      text: "Discard Hackathon",
       onClick: () => setRedirect(REDIRECT.DASHBOARD)
     }
   ];
@@ -143,21 +147,13 @@ export default function CreateHackathonPage() {
   const currPage = () => {
     switch (page) {
       case PAGES.OVERVIEW:
-        return (
-          <HackathonOverviewForm
-            overview={overview}
-            setOverview={setOverview}
-            nextPage={() => setPage(PAGES.DETAILS)}
-            discardAndExit={() => setRedirect(REDIRECT.DASHBOARD)}
-          />
-        );
+        return <OverviewEditor overview={overview} setOverview={setOverview} />;
       case PAGES.DETAILS:
         return (
           <HackathonDetailsForm
             details={details}
             setDetails={setDetails}
-            prvPage={() => setPage(PAGES.OVERVIEW)}
-            nextPage={() => setPage(PAGES.REGISTRATION)}
+            viewMode={viewMode}
           />
         );
       case PAGES.REGISTRATION:
@@ -165,13 +161,51 @@ export default function CreateHackathonPage() {
           <RegistrationDetailsForm
             questions={questions}
             setQuestions={setQuestions}
-            prvPage={() => setPage(PAGES.DETAILS)}
-            nextPage={() => setPage(PAGES.PREVIEW)}
+            viewMode={viewMode}
+          />
+        );
+      case PAGES.PREVIEW:
+        return (
+          <HackathonPreviewForm
+            questions={questions}
+            details={details}
+            overview={overview}
           />
         );
       default:
         return "";
     }
+  };
+
+  /** Gets the navigation component for moving between pages */
+  const getNav = () => {
+    return (
+      <FabNav
+        // Go back a page and reset view mode (or redirect to dashboard)
+        onClickBack={() => {
+          if (page === PAGES.OVERVIEW) {
+            saveHackathon(true);
+            setRedirect(REDIRECT.DASHBOARD);
+          } else setPage(page - 1);
+          setViewMode(false);
+        }}
+        // Go forward a page and reset view mode (or redirect to dashboard)
+        onClickNext={() => {
+          if (page === PAGES.PREVIEW) {
+            saveHackathon(false);
+            setRedirect(REDIRECT.DASHBOARD);
+          } else setPage(page + 1);
+          setViewMode(false);
+        }}
+        backText={page === PAGES.OVERVIEW ? "Return to Dashboard" : "Back"}
+        nextText={page === PAGES.PREVIEW ? "Save and Publish" : "Next"}
+        // If the page has preview functionality, show it! Otherwise, don't
+        onClickPreview={
+          PREVIEW_PAGES.includes(page) ? () => setViewMode(!viewMode) : null
+        }
+        viewMode={viewMode}
+      />
+    );
   };
 
   return (
@@ -183,6 +217,12 @@ export default function CreateHackathonPage() {
     >
       {redirect}
       {currPage()}
+      {getNav()}
     </Page>
   );
 }
+
+// Connects redux store to add hackathons
+export default connect(null, { createHackathon, createPublishedHackathon })(
+  CreateHackathonPage
+);

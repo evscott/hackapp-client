@@ -40,22 +40,32 @@ export default function MdEditor(props) {
       }}
       value={props.text}
       onChange={props.setText}
-      selectedTab={props.view ? "preview" : "write"}
+      selectedTab={props.viewMode ? "preview" : "write"}
       onTabChange={() => {} /* do nothing, tabs are disabled */}
       generateMarkdownPreview={markdown =>
         Promise.resolve(converter.makeHtml(markdown))
       }
       getIcon={iconName => getIcon(iconName)}
-      commands={props.view ? [] : mdeCommands}
+      commands={props.viewMode ? [] : mdeCommands}
     />
   );
 }
 
 MdEditor.propTypes = {
   // The text to edit/preview
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   // The function for changing the text
-  setText: PropTypes.func.isRequired,
+  setText: (props, propName) => {
+    // Type check to ensure we have a function defined when viewMode is true
+    if (
+      props["viewMode"] === false &&
+      (props[propName] === undefined || typeof props[propName] !== "function")
+    ) {
+      return new Error(
+        "MdEditor must have a setter for the text when viewMode is false"
+      );
+    }
+  },
   // Whether we should be previewing the result or editing it
-  view: PropTypes.bool
+  viewMode: PropTypes.bool
 };

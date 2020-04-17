@@ -9,32 +9,49 @@ import { theme } from "./theme";
 import SetupPage from "./components/setup/SetupPage";
 import DashboardPage from "./components/dashboard/DashboardPage";
 import CreateHackathonPage from "./components/create_hackathon/CreateHackathonPage";
-import { CREATE_HACKATHON_ROUTE, DASHBOARD_ROUTE, SETUP_ROUTE } from "./routes";
+import {
+  CREATE_HACKATHON_PREXISTING_ROUTE,
+  CREATE_HACKATHON_ROUTE,
+  DASHBOARD_ROUTE,
+  SETUP_ROUTE,
+  VIEW_HACKATHON_ROUTE
+} from "./routes";
+import ViewHackathonPage from "./components/view_hackathon/ViewHackathonPage";
+import Startup from "./components/Startup";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 /**
  * The application. Has a theme and routes.
  * @returns {*} The application (JSX)
  */
 function App() {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   return (
-    <Router>
-      <MuiThemeProvider theme={theme}>
-        <MuiPickersUtilsProvider utils={DayJsUtils}>
-          <CssBaseline />
-          <Switch>
-            <Route path={SETUP_ROUTE}>
-              <SetupPage />
-            </Route>
-            <Route path={DASHBOARD_ROUTE}>
-              <DashboardPage />
-            </Route>
-            <Route path={CREATE_HACKATHON_ROUTE}>
-              <CreateHackathonPage />
-            </Route>
-          </Switch>
-        </MuiPickersUtilsProvider>
-      </MuiThemeProvider>
-    </Router>
+    <Startup>
+      <Router>
+        <MuiThemeProvider theme={theme(prefersDarkMode)}>
+          <MuiPickersUtilsProvider utils={DayJsUtils}>
+            <CssBaseline />
+            <Switch>
+              <Route path={SETUP_ROUTE} component={SetupPage} />
+              <Route
+                path={CREATE_HACKATHON_PREXISTING_ROUTE}
+                component={CreateHackathonPage}
+              />
+              <Route
+                path={CREATE_HACKATHON_ROUTE}
+                component={CreateHackathonPage}
+              />
+              <Route
+                path={VIEW_HACKATHON_ROUTE}
+                component={ViewHackathonPage}
+              />
+              <Route path={DASHBOARD_ROUTE} component={DashboardPage} />
+            </Switch>
+          </MuiPickersUtilsProvider>
+        </MuiThemeProvider>
+      </Router>
+    </Startup>
   );
 }
 

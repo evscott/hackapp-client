@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => {
       padding: theme.spacing(2),
       paddingLeft: 26,
       position: "relative",
-      backgroundColor: theme.palette.grey[100]
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.grey[900] : theme.palette.grey[100]
     },
     content: {
       padding: theme.spacing(4)
@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => {
     },
     options: {
       padding: theme.spacing(2),
-      backgroundColor: theme.palette.grey[50]
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.grey[900] : theme.palette.grey[50]
     }
   };
 });
@@ -58,7 +58,11 @@ export default function RegQuestionEditor(props) {
   // instead; this state is thrown away and just used when a user
   // wants to demo the question. We might want to reuse this component
   // later and allow the options to be saved with the prop.
-  const [answers, setAnswers] = React.useState([]);
+  const [answers, setAnswers] = React.useState({
+    qid: props.question.qid,
+    answer: "",
+    oid: []
+  });
 
   /** Updates a question's property with some new value. */
   const updateQuestion = (property, value) => {
@@ -100,7 +104,6 @@ export default function RegQuestionEditor(props) {
             }}
             required
             fullWidth
-            id="reg-question-title"
             label="Question"
             name="question"
             value={props.question.question}
@@ -111,7 +114,6 @@ export default function RegQuestionEditor(props) {
             fullWidth
             multiline
             rows="2"
-            id="reg-question-description"
             label="Description"
             name="description"
             value={props.question.desc}
@@ -139,14 +141,24 @@ RegQuestionEditor.propTypes = {
     // The description of the question
     desc: PropTypes.string.isRequired,
     // The options to choose from for the question
-    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    options: PropTypes.array.isRequired,
     // Whether filling out the question is required
     required: PropTypes.bool.isRequired,
     // The type of the question (multiple choice, radio, text)
     type: PropTypes.string.isRequired
   }).isRequired,
   // Function for setting the data for a question
-  setQuestion: PropTypes.func.isRequired,
+  setQuestion: (props, propName) => {
+    // Type check to ensure we have a function defined when viewMode is true
+    if (
+      props["viewMode"] === false &&
+      (props[propName] === undefined || typeof props[propName] !== "function")
+    ) {
+      return new Error(
+        "RegQuestionEditor must have a setter for the question when viewMode is false"
+      );
+    }
+  },
   // If we should just view rather than edit the question
   viewMode: PropTypes.bool,
   // The answers (options) chosen when viewing the question. Not required
